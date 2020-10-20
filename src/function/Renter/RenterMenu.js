@@ -9,13 +9,13 @@ const useStyles = makeStyles((theme) => ({
 		width: "100%",
 	},
 }));
-function MenuApartMent() {
+function RenterMenu() {
 	const classes = useStyles();
 	return (
 		<div>
 			<Container maxWidth="md" align="center">
-				<h1>Menu</h1>
-				<Link to="/createroom">
+				<h1>เมนู</h1>
+				<Link to="/createrenter">
 					<Button
 						variant="contained"
 						color="primary"
@@ -25,7 +25,7 @@ function MenuApartMent() {
 						Function 1
 					</Button>
 				</Link>
-                <Link to="/editroom">
+				<Link to="/editrenter">
 					<Button
 						variant="contained"
 						color="primary"
@@ -35,10 +35,9 @@ function MenuApartMent() {
 						Function 1
 					</Button>
 				</Link>
- 
 			</Container>
 		</div>
 	);
 }
 
-export default MenuApartMent;
+export default RenterMenu;

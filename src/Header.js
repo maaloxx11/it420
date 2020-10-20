@@ -93,7 +93,7 @@ export default function PersistentDrawerLeft() {
 			<CssBaseline />
 			<AppBar
 				position="fixed"
-				color="secondary"
+				color="primary"
 				className={clsx(classes.appBar, {
 					[classes.appBarShift]: open,
 				})}
@@ -202,7 +202,7 @@ export default function PersistentDrawerLeft() {
 				})}
 			>
 
-				
+				<br></br>
 			</main>
 		</div>
 	);
