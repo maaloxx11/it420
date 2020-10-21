@@ -15,7 +15,7 @@ function MenuRoom() {
 	return (
 		<div>
 			<Container maxWidth="md" align="center">
-				<h1>เมนู</h1>
+				<h1>ปรับเปลี่ยนข้อมูลห้องพัก</h1>
 				<Link to="/createroom">
 					<Button
 						variant="contained"
@@ -23,7 +23,7 @@ function MenuRoom() {
 						size="large"
 						className={classes.marginButton}
 					>
-						Function 1
+						เพิ่มข้อมูลห้องพัก
 					</Button>
 				</Link>
                 <Link to="/editroom">
@@ -33,7 +33,7 @@ function MenuRoom() {
 						size="large"
 						className={classes.marginButton}
 					>
-						Function 1
+						เพิ่มขอมูลผู้เช่า
 					</Button>
 				</Link>
  

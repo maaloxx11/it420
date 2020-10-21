@@ -7,6 +7,9 @@ import MenuRoom from "./function/Room/RoomMenu.js"
 import CreateRoom from "./function/Room/CreateRoom"
 import EditRoom from "./function/Room/EditRoom"
 import RenterMenu from "./function/Renter/RenterMenu.js"
+import CreateRenter from "./function/Renter/CreateRenter.js"
+import EditRenter from "./function/Renter/EditRenter.js"
+import ServiceRate from "./function/ServiceRate/ServiceRate.js"
 function App() {
 	return (
 		<div className="App">
@@ -34,6 +37,18 @@ function App() {
 							<Route exact path="/rentermenu">
 								<Header></Header>
 								<RenterMenu></RenterMenu>
+							</Route>
+							<Route exact path="/createrenter">
+								<Header></Header>
+								<CreateRenter></CreateRenter>
+							</Route>
+							<Route exact path="/editrenter">
+								<Header></Header>
+								<EditRenter></EditRenter>
+							</Route>
+							<Route exact path="/servicerate">
+								<Header></Header>
+								<ServiceRate></ServiceRate>
 							</Route>
 						</Switch>
 					</div>

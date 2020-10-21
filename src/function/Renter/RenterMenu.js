@@ -14,7 +14,7 @@ function RenterMenu() {
 	return (
 		<div>
 			<Container maxWidth="md" align="center">
-				<h1>เมนู</h1>
+				<h1>ปรับเปลี่ยนข้อมูลผู้เช่า</h1>
 				<Link to="/createrenter">
 					<Button
 						variant="contained"
@@ -22,7 +22,7 @@ function RenterMenu() {
 						size="large"
 						className={classes.marginButton}
 					>
-						Function 1
+						เพิ่มข้อมูลผู้เช่า
 					</Button>
 				</Link>
 				<Link to="/editrenter">
@@ -32,7 +32,7 @@ function RenterMenu() {
 						size="large"
 						className={classes.marginButton}
 					>
-						Function 1
+						แก้ไขข้อมูลผู้เช่า
 					</Button>
 				</Link>
 			</Container>

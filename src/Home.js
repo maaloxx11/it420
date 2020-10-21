@@ -24,7 +24,7 @@ function Home() {
 						size="large"
 						className={classes.marginButton}
 					>
-						Function 1
+						จัดการทะเบียนห้องพัก
 					</Button>
 				</Link>
 				<Link to="/rentermenu">
@@ -34,18 +34,19 @@ function Home() {
 						size="large"
 						className={classes.marginButton}
 					>
-						Function 2
+						จัดการทะเบียนผู้เช่า
 					</Button>
 				</Link>
-				<Button
-					variant="contained"
-					color="primary"
-					size="large"
-					className={classes.marginButton}
-				>
-					Function 3
-				</Button>
-
+				<Link to="/servicerate">
+					<Button
+						variant="contained"
+						color="primary"
+						size="large"
+						className={classes.marginButton}
+					>
+						กำหนดอัตราค่าบริการ
+					</Button>
+				</Link>
 				<Button
 					variant="contained"
 					color="primary"

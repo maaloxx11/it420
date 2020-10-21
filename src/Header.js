@@ -15,7 +15,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import DraftsIcon from "@material-ui/icons/Drafts";
-
+import { NavLink } from "react-router-dom";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -108,8 +108,11 @@ export default function PersistentDrawerLeft() {
 					>
 						<MenuIcon />
 					</IconButton>
-					<Typography variant="h6" noWrap>
-						Niran Apartment
+
+					<Typography variant="h6" color="inherit">
+						<NavLink to="/" underline="none" activeStyle={{ color: "white" ,textDecoration: 'none' }}>
+							Niran Apartment
+						</NavLink>
 					</Typography>
 				</Toolbar>
 			</AppBar>
@@ -201,7 +204,6 @@ export default function PersistentDrawerLeft() {
 					[classes.contentShift]: open,
 				})}
 			>
-
 				<br></br>
 			</main>
 		</div>
