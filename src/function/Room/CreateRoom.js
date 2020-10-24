@@ -5,9 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import SaveIcon from "@material-ui/icons/Save";
 
-const timeElapsed = Date.now();
-const today = new Date(timeElapsed);
-const date = today.toISOString().split("T")[0];
+
 
 function CreateRoom() {
 	return (
@@ -35,14 +33,7 @@ function CreateRoom() {
 							label="มิเตอร์น้ำประปาปัจจุบัน"
 						/>
 					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							disabled
-							id="standard-basic"
-							label="วันที่เพิ่มข้อมูล"
-							defaultValue={date}
-						/>
-					</Grid>
+
 					<Grid item xs={12} sm={6}></Grid>
 					<Grid item xs={12} sm={6}></Grid>
 					<Grid item xs={12} sm={6}>

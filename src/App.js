@@ -3,14 +3,16 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Header from "./Header.js";
 import Home from "./Home.js";
-import MenuRoom from "./function/Room/RoomMenu.js"
-import CreateRoom from "./function/Room/CreateRoom"
-import EditRoom from "./function/Room/EditRoom"
-import RenterMenu from "./function/Renter/RenterMenu.js"
-import CreateRenter from "./function/Renter/CreateRenter.js"
-import EditRenter from "./function/Renter/EditRenter.js"
-import ServiceRate from "./function/ServiceRate/ServiceRate.js"
-import MoveIn from "./function/MoveInMoveOut/MovieIn"
+import MenuRoom from "./function/Room/RoomMenu.js";
+import CreateRoom from "./function/Room/CreateRoom";
+import EditRoom from "./function/Room/EditRoom";
+import RenterMenu from "./function/Renter/RenterMenu.js";
+import CreateRenter from "./function/Renter/CreateRenter.js";
+import EditRenter from "./function/Renter/EditRenter.js";
+import ServiceRate from "./function/ServiceRate/ServiceRate.js";
+import MoveIn from "./function/MoveInMoveOut/MovieIn.js";
+import MoveOut from "./function/MoveInMoveOut/MoveOut.js"
+import ServiceRecord from "./function/RecordBill/ServiceRecord.js"
 function App() {
 	return (
 		<div className="App">
@@ -18,7 +20,6 @@ function App() {
 				<Router>
 					<div className="app">
 						<Switch>
-						
 							<Route exact path="/">
 								<Header></Header>
 								<Home></Home>
@@ -54,6 +55,14 @@ function App() {
 							<Route exact path="/movein">
 								<Header></Header>
 								<MoveIn></MoveIn>
+							</Route>
+							<Route exact path="/moveout">
+								<Header></Header>
+								<MoveOut></MoveOut>
+							</Route>
+							<Route exact path="/servicerecord">
+								<Header></Header>
+								<ServiceRecord></ServiceRecord>
 							</Route>
 						</Switch>
 					</div>

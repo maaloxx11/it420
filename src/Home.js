@@ -47,24 +47,36 @@ function Home() {
 						กำหนดอัตราค่าบริการ
 					</Button>
 				</Link>
-				<Button
-					variant="contained"
-					color="primary"
-					size="large"
-					className={classes.marginButton}
-				>
-					Function 4
-				</Button>
-
-				<Button
-					variant="contained"
-					color="primary"
-					size="large"
-					className={classes.marginButton}
-				>
-					Function 5
-				</Button>
-
+				<Link to="/movein">
+					<Button
+						variant="contained"
+						color="primary"
+						size="large"
+						className={classes.marginButton}
+					>
+						บันทึกการเข้าพัก
+					</Button>
+				</Link>
+				<Link to="/moveout">
+					<Button
+						variant="contained"
+						color="primary"
+						size="large"
+						className={classes.marginButton}
+					>
+						บันทึกการย้ายออก
+					</Button>
+				</Link>
+				<Link to="/servicerecord">
+					<Button
+						variant="contained"
+						color="primary"
+						size="large"
+						className={classes.marginButton}
+					>
+						บันทึกการใช้บริการ และจัดพิมพ์ใบแจ้งหนี้
+					</Button>
+				</Link>
 				<Button
 					variant="contained"
 					color="primary"
