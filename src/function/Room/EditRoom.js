@@ -26,31 +26,24 @@ function EditRoom() {
 					</Grid>
 
 					<Grid item xs={12} sm={6}>
-						<TextField required id="standard-basic" label="ราคาห้องพัก" />
+						<TextField  id="standard-basic" label="ประเภทห้องพัก" />
 					</Grid>
 					<Grid item xs={12} sm={6}>
 						<TextField
-							required
+							
 							id="standard-basic"
 							label="มิเตอร์ไฟฟ้าปัจจุบัน"
 						/>
 					</Grid>
 					<Grid item xs={12} sm={6}>
 						<TextField
-							required
+							
 							id="standard-basic"
 							label="มิเตอร์น้ำประปาปัจจุบัน"
 						/>
 					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							disabled
-							id="standard-basic"
-							label="วันที่แก้ไขข้อมูลล่าสุด"
-							defaultValue={date}
-						/>
-					</Grid>
-					<Grid item xs={12} sm={6}></Grid>
+
+			
 					<Grid item xs={12} sm={6}></Grid>
 					<Grid item xs={12} sm={6}>
 						<Button

@@ -85,16 +85,7 @@ function CreateRoom() {
 							label="เบอร์โทร"
 						/>
 					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							disabled
-							id="standard-basic"
-							label="วันที่เพิ่มข้อมูล"
-							defaultValue={date}
-						/>
-					</Grid>
-					<Grid item xs={12} sm={6}></Grid>
-					<Grid item xs={12} sm={6}></Grid>
+
 					<Grid item xs={12} sm={6}>
 						<Button
 							variant="contained"

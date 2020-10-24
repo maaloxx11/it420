@@ -17,7 +17,7 @@ function CreateRoom() {
 						<TextField required id="standard-basic" label="รหัสห้องพัก" />
 					</Grid>
 					<Grid item xs={12} sm={6}>
-						<TextField required id="standard-basic" label="ราคาห้องพัก" />
+						<TextField required id="standard-basic" label="ประเภทห้องพัก" />
 					</Grid>
 					<Grid item xs={12} sm={6}>
 						<TextField
@@ -34,7 +34,7 @@ function CreateRoom() {
 						/>
 					</Grid>
 
-					<Grid item xs={12} sm={6}></Grid>
+
 					<Grid item xs={12} sm={6}></Grid>
 					<Grid item xs={12} sm={6}>
 						<Button

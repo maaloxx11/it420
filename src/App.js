@@ -13,6 +13,7 @@ import ServiceRate from "./function/ServiceRate/ServiceRate.js";
 import MoveIn from "./function/MoveInMoveOut/MovieIn.js";
 import MoveOut from "./function/MoveInMoveOut/MoveOut.js"
 import ServiceRecord from "./function/RecordBill/ServiceRecord.js"
+import AddBill from "./function/RecordBill/AddBill.js"
 function App() {
 	return (
 		<div className="App">
@@ -63,6 +64,10 @@ function App() {
 							<Route exact path="/servicerecord">
 								<Header></Header>
 								<ServiceRecord></ServiceRecord>
+							</Route>
+							<Route exact path="/addbill">
+								<Header></Header>
+								<AddBill></AddBill>
 							</Route>
 						</Switch>
 					</div>

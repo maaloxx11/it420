@@ -28,7 +28,7 @@ function ServiceRecord() {
 							<TableCell component="th" scope="row" align="center">
 								601
 							</TableCell>
-							<TableCell align="center">24/10/2020</TableCell>
+							<TableCell align="center">24/9/2020</TableCell>
 							<TableCell align="center">
 								<a href="#ๅ">เพิ่มข้อมูลค่าบริการ</a>
 							</TableCell>
@@ -40,7 +40,7 @@ function ServiceRecord() {
 							<TableCell component="th" scope="row" align="center">
 								602
 							</TableCell>
-							<TableCell align="center">24/10/2020</TableCell>
+							<TableCell align="center">24/9/2020</TableCell>
 							<TableCell align="center">
 								<a href="#-">เพิ่มข้อมูลค่าบริการ</a>
 							</TableCell>
@@ -52,7 +52,7 @@ function ServiceRecord() {
 							<TableCell component="th" scope="row" align="center">
 								603
 							</TableCell>
-							<TableCell align="center">24/10/2020</TableCell>
+							<TableCell align="center">24/9/2020</TableCell>
 							<TableCell align="center">
 								<a href="#พ">เพิ่มข้อมูลค่าบริการ</a>
 							</TableCell>
@@ -64,7 +64,7 @@ function ServiceRecord() {
 							<TableCell component="th" scope="row" align="center">
 								604
 							</TableCell>
-							<TableCell align="center">24/10/2020</TableCell>
+							<TableCell align="center">24/9/2020</TableCell>
 							<TableCell align="center">
 								<a href="#ำ">เพิ่มข้อมูลค่าบริการ</a>
 							</TableCell>
@@ -76,7 +76,7 @@ function ServiceRecord() {
 							<TableCell component="th" scope="row" align="center">
 								605
 							</TableCell>
-							<TableCell align="center">24/10/2020</TableCell>
+							<TableCell align="center">24/9/2020</TableCell>
 							<TableCell align="center">
 								<a href="#ะ">เพิ่มข้อมูลค่าบริการ</a>
 							</TableCell>
@@ -88,7 +88,7 @@ function ServiceRecord() {
 							<TableCell component="th" scope="row" align="center">
 								606
 							</TableCell>
-							<TableCell align="center">24/10/2020</TableCell>
+							<TableCell align="center">24/9/2020</TableCell>
 							<TableCell align="center">
 								<a href="พ#">เพิ่มข้อมูลค่าบริการ</a>
 							</TableCell>
@@ -100,7 +100,7 @@ function ServiceRecord() {
 							<TableCell component="th" scope="row" align="center">
 								607
 							</TableCell>
-							<TableCell align="center">24/10/2020</TableCell>
+							<TableCell align="center">24/9/2020</TableCell>
 							<TableCell align="center">
 								<a href="#พ">เพิ่มข้อมูลค่าบริการ</a>
 							</TableCell>
