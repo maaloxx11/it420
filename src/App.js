@@ -10,6 +10,7 @@ import RenterMenu from "./function/Renter/RenterMenu.js"
 import CreateRenter from "./function/Renter/CreateRenter.js"
 import EditRenter from "./function/Renter/EditRenter.js"
 import ServiceRate from "./function/ServiceRate/ServiceRate.js"
+import MoveIn from "./function/MoveInMoveOut/MovieIn"
 function App() {
 	return (
 		<div className="App">
@@ -49,6 +50,10 @@ function App() {
 							<Route exact path="/servicerate">
 								<Header></Header>
 								<ServiceRate></ServiceRate>
+							</Route>
+							<Route exact path="/movein">
+								<Header></Header>
+								<MoveIn></MoveIn>
 							</Route>
 						</Switch>
 					</div>
