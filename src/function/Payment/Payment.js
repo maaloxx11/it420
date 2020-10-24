@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const timeElapsed = Date.now();
 const today = new Date(timeElapsed);
 const date = today.toISOString().split("T")[0];
-function AddBill() {
+function Payment() {
 	const classes = useStyles();
 	const [age, setAge] = React.useState("");
 
@@ -33,55 +33,43 @@ function AddBill() {
 	return (
 		<div>
 			<Container maxWidth="md">
-				<h1 align="center">บันทึกค่าบริการ</h1>
+				<h1 align="center">รับชำระค่าบริการ</h1>
 
 				<Grid container spacing={3}>
 					<Grid item xs={12} sm={6}>
-						<FormControl className={classes.formControl}>
-							<InputLabel id="demo-simple-select-label">รหัสห้องพัก</InputLabel>
-							<Select
-								labelId="demo-simple-select-label"
-								id="demo-simple-select"
-								value={age}
-								onChange={handleChange}
-							>
-								<MenuItem value={10}>Tenrrrrrrrrrrrrrrr</MenuItem>
-								<MenuItem value={20}>Twenty</MenuItem>
-								<MenuItem value={30}>Thirty</MenuItem>
-							</Select>
-							<FormHelperText></FormHelperText>
-						</FormControl>
+						<TextField required id="standard-basic" label="รหัสห้องพัก" />
+
+						<Button
+							variant="contained"
+							color="primary"
+							size="large"
+							startIcon={<SearchIcon />}
+						></Button>
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<TextField disabled id="standard-basic" label="ประเภทห้องพัก" />
 					</Grid>
                     <Grid item xs={12} sm={6}>
 						<TextField
 							disabled
 							id="standard-basic"
-							label="วันที่บันทึกข้อมูลล่าสุด"
-							defaultValue={"2020-9-24"}
-						/>
-					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField disabled id="standard-basic" label="ประเภทห้องพัก" />
-					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							required
-							id="standard-basic"
-							label="มิเตอร์ไฟฟ้าปัจจุบัน"
-						/>
-					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							required
-							id="standard-basic"
-							label="มิเตอร์น้ำประปาปัจจุบัน"
+							label="กำหนดชำระค่าบริการ"
+							defaultValue={""}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={6}>
 						<TextField
 							disabled
 							id="standard-basic"
-							label="วันที่บันทึกข้อมูลปัจจุบัน"
+                            label="ค่าบริการรวม"
+						/>
+					</Grid>
+
+					<Grid item xs={12} sm={6}>
+						<TextField
+							disabled
+							id="standard-basic"
+							label="วันที่ชำระค่าบริการ"
 							defaultValue={date}
 						/>
 					</Grid>
@@ -103,4 +91,4 @@ function AddBill() {
 	);
 }
 
-export default AddBill;
+export default Payment;

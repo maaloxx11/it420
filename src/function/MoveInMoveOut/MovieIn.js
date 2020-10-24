@@ -15,7 +15,7 @@ import Select from "@material-ui/core/Select";
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
-		minWidth: 160,
+		minWidth: 210,
 	},
 	selectEmpty: {
 		marginTop: theme.spacing(2),
@@ -35,7 +35,7 @@ function MovieIn() {
 	return (
 		<div>
 			<Container maxWidth="md">
-				<h1 align="center">แก้ไขข้อมูลห้องพัก</h1>
+				<h1 align="center">บันทึกข้อมูลการเข้าพัก</h1>
 				<Grid container spacing={3}>
 					<Grid item xs={12} sm={6}>
 						<TextField required id="standard-basic" label="รหัสผู้เช่า" />
@@ -55,6 +55,24 @@ function MovieIn() {
 							id="standard-basic"
 							label="ชื่อผู้เช่า"
 						/>
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<FormControl className={classes.formControl}>
+							<InputLabel id="demo-simple-select-label">
+								ประเภทห้องที่ต้องการเข้าพัก
+							</InputLabel>
+							<Select
+								labelId="demo-simple-select-label"
+								id="demo-simple-select"
+								value={age}
+								onChange={handleChange}
+							>
+								<MenuItem value={10}>Tenrrrrrrrrrrrrrrr</MenuItem>
+								<MenuItem value={20}>Twenty</MenuItem>
+								<MenuItem value={30}>Thirty</MenuItem>
+							</Select>
+							<FormHelperText></FormHelperText>
+						</FormControl>
 					</Grid>
 					<Grid item xs={12} sm={6}>
 						<FormControl className={classes.formControl}>

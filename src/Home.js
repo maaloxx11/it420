@@ -77,24 +77,26 @@ function Home() {
 						บันทึกการใช้บริการ และจัดพิมพ์ใบแจ้งหนี้
 					</Button>
 				</Link>
-				<Button
-					variant="contained"
-					color="primary"
-					size="large"
-					className={classes.marginButton}
-				>
-					Function 6
-				</Button>
-
-				<Button
-					variant="contained"
-					color="primary"
-					size="large"
-					className={classes.marginButton}
-				>
-					Function 7
-				</Button>
-
+				<Link to="/payment">
+					<Button
+						variant="contained"
+						color="primary"
+						size="large"
+						className={classes.marginButton}
+					>
+						รับชำระค่าบริการ
+					</Button>
+				</Link>
+				<Link to="/search">
+					<Button
+						variant="contained"
+						color="primary"
+						size="large"
+						className={classes.marginButton}
+					>
+						สืบค้นข้อมูล
+					</Button>
+				</Link>
 				<Button
 					variant="contained"
 					color="primary"

@@ -33,7 +33,7 @@ function MenuRoom() {
 						size="large"
 						className={classes.marginButton}
 					>
-						เพิ่มขอมูลผู้เช่า
+					 แก้ไขข้อมูลห้องพัก
 					</Button>
 				</Link>
  

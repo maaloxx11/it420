@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const timeElapsed = Date.now();
 const today = new Date(timeElapsed);
 const date = today.toISOString().split("T")[0];
-function AddBill() {
+function Search() {
 	const classes = useStyles();
 	const [age, setAge] = React.useState("");
 
@@ -33,12 +33,14 @@ function AddBill() {
 	return (
 		<div>
 			<Container maxWidth="md">
-				<h1 align="center">บันทึกค่าบริการ</h1>
+				<h1 align="center">สืบค้นข้อมูล</h1>
 
 				<Grid container spacing={3}>
-					<Grid item xs={12} sm={6}>
+					<Grid item xs={12} sm={4}>
 						<FormControl className={classes.formControl}>
-							<InputLabel id="demo-simple-select-label">รหัสห้องพัก</InputLabel>
+							<InputLabel id="demo-simple-select-label">
+								เรื่องที่ต้องการสืบค้น
+							</InputLabel>
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
@@ -52,55 +54,23 @@ function AddBill() {
 							<FormHelperText></FormHelperText>
 						</FormControl>
 					</Grid>
-                    <Grid item xs={12} sm={6}>
-						<TextField
-							disabled
-							id="standard-basic"
-							label="วันที่บันทึกข้อมูลล่าสุด"
-							defaultValue={"2020-9-24"}
-						/>
+					<Grid item xs={12} sm={4}>
+						<TextField  id="standard-basic" label="รหัส" />
 					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField disabled id="standard-basic" label="ประเภทห้องพัก" />
-					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							required
-							id="standard-basic"
-							label="มิเตอร์ไฟฟ้าปัจจุบัน"
-						/>
-					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							required
-							id="standard-basic"
-							label="มิเตอร์น้ำประปาปัจจุบัน"
-						/>
-					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							disabled
-							id="standard-basic"
-							label="วันที่บันทึกข้อมูลปัจจุบัน"
-							defaultValue={date}
-						/>
-					</Grid>
-					<Grid item xs={12} sm={6}></Grid>
-					<Grid item xs={12} sm={6}></Grid>
-					<Grid item xs={12} sm={6}>
+					<Grid item xs={12} sm={4}>
+
 						<Button
 							variant="contained"
 							color="primary"
 							size="large"
-							startIcon={<SaveIcon />}
-						>
-							Save
-						</Button>
+							startIcon={<SearchIcon />}
+						></Button>
 					</Grid>
+				
 				</Grid>
 			</Container>
 		</div>
 	);
 }
 
-export default AddBill;
+export default Search;

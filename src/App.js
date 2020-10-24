@@ -14,6 +14,8 @@ import MoveIn from "./function/MoveInMoveOut/MovieIn.js";
 import MoveOut from "./function/MoveInMoveOut/MoveOut.js"
 import ServiceRecord from "./function/RecordBill/ServiceRecord.js"
 import AddBill from "./function/RecordBill/AddBill.js"
+import Payment from "./function/Payment/Payment.js"
+import Search from "./function/Search/Search.js"
 function App() {
 	return (
 		<div className="App">
@@ -68,6 +70,14 @@ function App() {
 							<Route exact path="/addbill">
 								<Header></Header>
 								<AddBill></AddBill>
+							</Route>
+							<Route exact path="/payment">
+								<Header></Header>
+								<Payment></Payment>
+							</Route>
+							<Route exact path="/search">
+								<Header></Header>
+								<Search></Search>
 							</Route>
 						</Switch>
 					</div>
