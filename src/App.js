@@ -19,6 +19,9 @@ import Search from "./function/Search/Search.js"
 import Problem from "./function/Problem/Problem.js"
 import ProblemMenu from "./function/Problem/ProblemMenu.js"
 import ProblemView from "./function/Problem/ProblemView.js"
+import ReportMenu from "./function/Report/ReportMenu.js"
+import ReportBill from "./function/Report/ReportBill.js"
+import ReportTransition from "./function/Report/ReportTransition.js"
 function App() {
 	return (
 		<div className="App">
@@ -93,6 +96,18 @@ function App() {
 							<Route exact path="/problemview">
 								<Header></Header>
 								<ProblemView></ProblemView>
+							</Route>
+							<Route exact path="/reportmenu">
+								<Header></Header>
+								<ReportMenu></ReportMenu>
+							</Route>
+							<Route exact path="/reportbill">
+								<Header></Header>
+								<ReportBill></ReportBill>
+							</Route>
+							<Route exact path="/reporttransition">
+								<Header></Header>
+								<ReportTransition></ReportTransition>
 							</Route>
 						</Switch>
 					</div>

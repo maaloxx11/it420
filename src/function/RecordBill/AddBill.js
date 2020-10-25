@@ -45,7 +45,7 @@ function AddBill() {
 								value={age}
 								onChange={handleChange}
 							>
-								<MenuItem value={10}>Tenrrrrrrrrrrrrrrr</MenuItem>
+								<MenuItem value={10}>609</MenuItem>
 								<MenuItem value={20}>Twenty</MenuItem>
 								<MenuItem value={30}>Thirty</MenuItem>
 							</Select>
@@ -61,7 +61,7 @@ function AddBill() {
 						/>
 					</Grid>
 					<Grid item xs={12} sm={6}>
-						<TextField disabled id="standard-basic" label="ประเภทห้องพัก" />
+						<TextField disabled id="standard-basic" label="ประเภทห้องพัก" defaultValue={"1"}/>
 					</Grid>
 					<Grid item xs={12} sm={6}>
 						<TextField
@@ -75,6 +75,14 @@ function AddBill() {
 							required
 							id="standard-basic"
 							label="มิเตอร์น้ำประปาปัจจุบัน"
+						/>
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<TextField
+							disabled
+							id="standard-basic"
+							label="กำหนดชำระ"
+							defaultValue={"2020-11-5"}
 						/>
 					</Grid>
 					<Grid item xs={12} sm={6}>

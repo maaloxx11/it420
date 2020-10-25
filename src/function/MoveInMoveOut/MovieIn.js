@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -11,7 +11,13 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-
+import DateFnsUtils from "@date-io/date-fns";
+import "date-fns";
+import {
+	MuiPickersUtilsProvider,
+	KeyboardTimePicker,
+	KeyboardDatePicker,
+} from "@material-ui/pickers";
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
@@ -31,6 +37,11 @@ function MovieIn() {
 	const handleChange = (event) => {
 		setAge(event.target.value);
 	};
+	const [selectedDate, setSelectedDate] = useState(new Date());
+
+	const handleDateChange = (date) => {
+		setSelectedDate(date);
+	};
 
 	return (
 		<div>
@@ -49,12 +60,7 @@ function MovieIn() {
 					</Grid>
 
 					<Grid item xs={12} sm={6}>
-						<TextField
-							disabled
-
-							id="standard-basic"
-							label="ชื่อผู้เช่า"
-						/>
+						<TextField disabled id="standard-basic" label="ชื่อผู้เช่า" />
 					</Grid>
 					<Grid item xs={12} sm={6}>
 						<FormControl className={classes.formControl}>
@@ -94,12 +100,21 @@ function MovieIn() {
 					</Grid>
 
 					<Grid item xs={12} sm={6}>
-						<TextField
-							disabled
-							id="standard-basic"
-							label="เข้าพักวันที่"
-							defaultValue={date}
-						/>
+						<MuiPickersUtilsProvider utils={DateFnsUtils}>
+							<KeyboardDatePicker
+								disableToolbar
+								variant="inline"
+								format="dd/MM/yyyy"
+								margin="normal"
+								id="date-picker-inline"
+								label="ระบุวันเข้าพัก "
+								value={selectedDate}
+								onChange={handleDateChange}
+								KeyboardButtonProps={{
+									"aria-label": "change date",
+								}}
+							/>
+						</MuiPickersUtilsProvider>
 					</Grid>
 					<Grid item xs={12} sm={6}></Grid>
 					<Grid item xs={12} sm={6}></Grid>

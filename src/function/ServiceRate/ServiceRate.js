@@ -37,12 +37,6 @@ function ServiceRate() {
 							label="อัตราค่าปรับเนื่องจากชำระค่าบริการล่าช้า(บาท/วัน)"
 						/>
 					</Grid>
-					<Grid item xs={12}>
-						<TextField id="standard-basic" label="อัตราค่าสึกหรอ(บาท)" />
-					</Grid>
-					<Grid item xs={12}>
-						<TextField id="standard-basic" label="อัตราค่าทำความสะอาด(บาท)" />
-					</Grid>
 
 					<Grid item xs={12}>
 						<Button

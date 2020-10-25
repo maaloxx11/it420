@@ -7,11 +7,12 @@ import TableRow from "@material-ui/core/TableRow";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import PrintIcon from '@material-ui/icons/Print';
+import PrintIcon from "@material-ui/icons/Print";
 function ServiceRecord() {
 	return (
 		<div>
 			<Container maxWidth="md">
+				<h1 align="center">บันทึกการใช้บริการ และจัดพิมพ์ใบแจ้งหนี้</h1>
 				<Table aria-label="simple table">
 					<TableHead>
 						<TableRow>
@@ -72,20 +73,19 @@ function ServiceRecord() {
 								<a href="#พ">พิมพ์ใบแจ้งหนี้</a>
 							</TableCell>
 						</TableRow>
-					
 					</TableBody>
 				</Table>
-                <br></br>
-                <Grid item xs={12} align="right">
-						<Button
-							variant="contained"
-							color="primary"
-							size="large"
-							startIcon={<PrintIcon />}
-						>
-							พิมพ์ใบแจ้งหนี้ทั้งหมด
-						</Button>
-					</Grid>
+				<br></br>
+				<Grid item xs={12} align="right">
+					<Button
+						variant="contained"
+						color="primary"
+						size="large"
+						startIcon={<PrintIcon />}
+					>
+						พิมพ์ใบแจ้งหนี้ทั้งหมด
+					</Button>
+				</Grid>
 			</Container>
 		</div>
 	);

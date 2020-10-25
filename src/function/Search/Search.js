@@ -11,6 +11,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
@@ -39,7 +44,7 @@ function Search() {
 					<Grid item xs={12} sm={4}>
 						<FormControl className={classes.formControl}>
 							<InputLabel id="demo-simple-select-label">
-								เรื่องที่ต้องการสืบค้น
+								หัวข้อที่ต้องการสืบค้น
 							</InputLabel>
 							<Select
 								labelId="demo-simple-select-label"
@@ -47,7 +52,7 @@ function Search() {
 								value={age}
 								onChange={handleChange}
 							>
-								<MenuItem value={10}>Tenrrrrrrrrrrrrrrr</MenuItem>
+								<MenuItem value={10}>ห้องพัก</MenuItem>
 								<MenuItem value={20}>Twenty</MenuItem>
 								<MenuItem value={30}>Thirty</MenuItem>
 							</Select>
@@ -55,10 +60,9 @@ function Search() {
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} sm={4}>
-						<TextField  id="standard-basic" label="รหัส" />
+						<TextField id="standard-basic" label="รหัส" />
 					</Grid>
 					<Grid item xs={12} sm={4}>
-
 						<Button
 							variant="contained"
 							color="primary"
@@ -66,7 +70,31 @@ function Search() {
 							startIcon={<SearchIcon />}
 						></Button>
 					</Grid>
+					<Table aria-label="simple table">
+						<TableHead>
+							<TableRow>
+								<TableCell align="center">รหัสห้อง</TableCell>
+								<TableCell align="center">
+									ประเภทห้อง
+								</TableCell>
+								<TableCell align="center">สถานะ</TableCell>
+					
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							<TableRow align="center">
+								<TableCell component="th" scope="row" align="center">
+									601
+								</TableCell>
+								<TableCell align="center">ห้องแอร์</TableCell>
+								<TableCell align="center">
+									ว่าง
+								</TableCell>
 				
+							</TableRow>
+							
+						</TableBody>
+					</Table>
 				</Grid>
 			</Container>
 		</div>

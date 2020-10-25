@@ -12,6 +12,7 @@ function ProblemView() {
 	return (
 		<div>
 			<Container maxWidth="md">
+            <h1 align="center"> ดูข้อมูลเรื่องร้องเรียน-ปัญหา</h1>
 				<Table aria-label="simple table">
 					<TableHead>
 						<TableRow>
@@ -20,6 +21,13 @@ function ProblemView() {
 								วันที่บันทึกข้อมูล
 							</TableCell>
 							<TableCell align="center">รายละเอียดเรื่องร้องเรียน-ปัญหา</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell align="center">601</TableCell>
+							<TableCell align="center">
+								2020-10-25
+							</TableCell>
+							<TableCell align="center">แอร์ไม่เย็น</TableCell>
 						</TableRow>
 					</TableHead>
 					

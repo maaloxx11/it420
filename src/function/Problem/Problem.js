@@ -26,6 +26,7 @@ function Problem() {
 					</Grid>
 					<Grid item xs={12}>
 						<TextField
+							required
 							id="standard-full-width"
 							label="รายละเอียดเรื่องร้องเรียนปัญหา"
 							multiline
@@ -38,7 +39,7 @@ function Problem() {
 							}}
 						/>
 					</Grid>
-                    <Grid item xs={12} sm={6}>
+					<Grid item xs={12} sm={6}>
 						<TextField
 							disabled
 							id="standard-basic"
@@ -47,10 +48,9 @@ function Problem() {
 						/>
 					</Grid>
 					<Grid item xs={12} sm={6}></Grid>
-                    <Grid item xs={12} sm={6}></Grid>
+					<Grid item xs={12} sm={6}></Grid>
 					<Grid item xs={12} sm={6} align="right">
 						<Button
-							
 							variant="contained"
 							color="primary"
 							size="large"
