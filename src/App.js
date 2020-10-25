@@ -16,6 +16,9 @@ import ServiceRecord from "./function/RecordBill/ServiceRecord.js"
 import AddBill from "./function/RecordBill/AddBill.js"
 import Payment from "./function/Payment/Payment.js"
 import Search from "./function/Search/Search.js"
+import Problem from "./function/Problem/Problem.js"
+import ProblemMenu from "./function/Problem/ProblemMenu.js"
+import ProblemView from "./function/Problem/ProblemView.js"
 function App() {
 	return (
 		<div className="App">
@@ -78,6 +81,18 @@ function App() {
 							<Route exact path="/search">
 								<Header></Header>
 								<Search></Search>
+							</Route>
+							<Route exact path="/problem">
+								<Header></Header>
+								<Problem></Problem>
+							</Route>
+							<Route exact path="/problemmenu">
+								<Header></Header>
+								<ProblemMenu></ProblemMenu>
+							</Route>
+							<Route exact path="/problemview">
+								<Header></Header>
+								<ProblemView></ProblemView>
 							</Route>
 						</Switch>
 					</div>

@@ -97,22 +97,26 @@ function Home() {
 						สืบค้นข้อมูล
 					</Button>
 				</Link>
+				<Link to="/problemmenu">
 				<Button
 					variant="contained"
 					color="primary"
 					size="large"
 					className={classes.marginButton}
 				>
-					Function 8
+					จัดการเรื่องร้องเรียน-ปัญหา
 				</Button>
+				</Link>
+				<Link to="/reportmenu">
 				<Button
 					variant="contained"
 					color="primary"
 					size="large"
 					className={classes.marginButton}
 				>
-					Function 9
+					จัดพิมพ์รายงานแสดงผลการดำเนินงาน
 				</Button>
+				</Link>
 			</Container>
 		</div>
 	);

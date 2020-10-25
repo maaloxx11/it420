@@ -4,35 +4,30 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import SaveIcon from "@material-ui/icons/Save";
-
+import SearchIcon from "@material-ui/icons/Search";
 const timeElapsed = Date.now();
 const today = new Date(timeElapsed);
 const date = today.toISOString().split("T")[0];
-
-function CreateRoom() {
+function Problem() {
 	return (
 		<div>
-			<Container maxWidth="md" >
-				<h1 align="center">เพิ่มข้อมูลผู้เช่า</h1>
+			<Container maxWidth="md">
+				<h1 align="center"> เพิ่มข้อมูลเรื่องร้องเรียน-ปัญหา</h1>
 				<Grid container spacing={3}>
-					<Grid item xs={12} >
-						<TextField required id="standard-basic" label="รหัสผู้เช่า" />
+					<Grid item xs={12}>
+						<TextField required id="standard-basic" label="รหัสห้องพัก" />
+
+						<Button
+							variant="contained"
+							color="primary"
+							size="large"
+							startIcon={<SearchIcon />}
+						></Button>
 					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField required id="standard-basic" label="ชื่อผูู้เช่า" />
-					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							required
-							id="standard-basic"
-							label="นามสกุลผู้เช่า"
-						/>
-					</Grid>
-                    
 					<Grid item xs={12}>
 						<TextField
 							id="standard-full-width"
-							label="ที่อยู่ผู้เช่า"
+							label="รายละเอียดเรื่องร้องเรียนปัญหา"
 							multiline
 							rowsMax={4}
 							style={{ margin: 8 }}
@@ -45,14 +40,17 @@ function CreateRoom() {
 					</Grid>
                     <Grid item xs={12} sm={6}>
 						<TextField
-							required
-                            id="standard-basic"
-							label="เบอร์โทร"
+							disabled
+							id="standard-basic"
+							label="วันที่บันทึกข้อมูล"
+							defaultValue={date}
 						/>
 					</Grid>
-
-					<Grid item xs={12} sm={6}>
+					<Grid item xs={12} sm={6}></Grid>
+                    <Grid item xs={12} sm={6}></Grid>
+					<Grid item xs={12} sm={6} align="right">
 						<Button
+							
 							variant="contained"
 							color="primary"
 							size="large"
@@ -67,4 +65,4 @@ function CreateRoom() {
 	);
 }
 
-export default CreateRoom;
+export default Problem;

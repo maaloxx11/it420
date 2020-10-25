@@ -9,14 +9,14 @@ const timeElapsed = Date.now();
 const today = new Date(timeElapsed);
 const date = today.toISOString().split("T")[0];
 function EditRenter() {
-    return (
-        <div>
-            <Container maxWidth="md" >
+	return (
+		<div>
+			<Container maxWidth="md">
 				<h1 align="center">แก้ไขข้อมูลผู้เช่า</h1>
 				<Grid container spacing={3}>
-					<Grid item xs={12} >
+					<Grid item xs={12}>
 						<TextField required id="standard-basic" label="รหัสผู้เช่า" />
-                        <Button
+						<Button
 							variant="contained"
 							color="primary"
 							size="large"
@@ -24,73 +24,31 @@ function EditRenter() {
 						></Button>
 					</Grid>
 					<Grid item xs={12} sm={6}>
-						<TextField  id="standard-basic" label="ชื่อผูู้เช่า" />
+						<TextField id="standard-basic" label="ชื่อผูู้เช่า" />
 					</Grid>
 					<Grid item xs={12} sm={6}>
-						<TextField
-							
-							id="standard-basic"
-							label="นามสกุลผู้เช่า"
-						/>
-					</Grid>
-                    
-					<Grid item xs={12} sm={6}>
-						<TextField
-							
-                            id="standard-basic"
-							label="บ้านเลขที่"
-						/>
-					</Grid>
-                    <Grid item xs={12} sm={6}>
-						<TextField
-							
-                            id="standard-basic"
-							label="หมู่"
-						/>
-					</Grid>
-                    <Grid item xs={12} sm={6}>
-						<TextField
-							
-                            id="standard-basic"
-							label="ถนน"
-						/>
-					</Grid>
-                    <Grid item xs={12} sm={6}>
-						<TextField
-							
-                            id="standard-basic"
-							label="แขวง/ตำบล"
-						/>
-					</Grid>
-                    <Grid item xs={12} sm={6}>
-						<TextField
-							
-                            id="standard-basic"
-							label="เขต/อำเภอ"
-						/>
-					</Grid>
-                    <Grid item xs={12} sm={6}>
-						<TextField
-							
-                            id="standard-basic"
-							label="จังหวัด"
-						/>
-					</Grid>
-                    <Grid item xs={12} sm={6}>
-						<TextField
-							
-                            id="standard-basic"
-							label="รหัสไปรษณีย์"
-						/>
-					</Grid>
-                    <Grid item xs={12} sm={6}>
-						<TextField
-							
-                            id="standard-basic"
-							label="เบอร์โทร"
-						/>
+						<TextField id="standard-basic" label="นามสกุลผู้เช่า" />
 					</Grid>
 
+					<Grid item xs={12}>
+						<TextField
+							id="standard-full-width"
+							label="ที่อยู่ผู้เช่า"
+							multiline
+							rowsMax={4}
+							style={{ margin: 8 }}
+							fullWidth
+							margin="normal"
+							InputLabelProps={{
+								shrink: true,
+							}}
+						/>
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<TextField id="standard-basic" label="เบอร์โทร" />
+					</Grid>
+
+					<Grid item xs={12} sm={6}></Grid>
 					<Grid item xs={12} sm={6}></Grid>
 					<Grid item xs={12} sm={6}>
 						<Button
@@ -104,8 +62,8 @@ function EditRenter() {
 					</Grid>
 				</Grid>
 			</Container>
-        </div>
-    )
+		</div>
+	);
 }
 
-export default EditRenter
+export default EditRenter;

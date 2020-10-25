@@ -72,42 +72,7 @@ function ServiceRecord() {
 								<a href="#พ">พิมพ์ใบแจ้งหนี้</a>
 							</TableCell>
 						</TableRow>
-						<TableRow align="center">
-							<TableCell component="th" scope="row" align="center">
-								605
-							</TableCell>
-							<TableCell align="center">24/9/2020</TableCell>
-							<TableCell align="center">
-								<a href="#ะ">เพิ่มข้อมูลค่าบริการ</a>
-							</TableCell>
-							<TableCell align="center">
-								<a href="เ">พิมพ์ใบแจ้งหนี้</a>
-							</TableCell>
-						</TableRow>
-						<TableRow align="center">
-							<TableCell component="th" scope="row" align="center">
-								606
-							</TableCell>
-							<TableCell align="center">24/9/2020</TableCell>
-							<TableCell align="center">
-								<a href="พ#">เพิ่มข้อมูลค่าบริการ</a>
-							</TableCell>
-							<TableCell align="center">
-								<a href="พ">พิมพ์ใบแจ้งหนี้</a>
-							</TableCell>
-						</TableRow>
-						<TableRow align="center">
-							<TableCell component="th" scope="row" align="center">
-								607
-							</TableCell>
-							<TableCell align="center">24/9/2020</TableCell>
-							<TableCell align="center">
-								<a href="#พ">เพิ่มข้อมูลค่าบริการ</a>
-							</TableCell>
-							<TableCell align="center">
-								<a href="พ#">พิมพ์ใบแจ้งหนี้</a>
-							</TableCell>
-						</TableRow>
+					
 					</TableBody>
 				</Table>
                 <br></br>

@@ -35,7 +35,7 @@ function MovieOut() {
 	return (
 		<div>
 			<Container maxWidth="md">
-				<h1 align="center">แก้ไขข้อมูลห้องพัก</h1>
+				<h1 align="center">บันทึกข้อมูลการย้ายออก</h1>
 				<Grid container spacing={3}>
 					<Grid item xs={12} sm={6}>
 						<TextField required id="standard-basic" label="รหัสผู้เช่า" />
@@ -78,7 +78,7 @@ function MovieOut() {
 						<TextField
 							disabled
 							id="standard-basic"
-							label="เข้าพักวันที่"
+							label="ย้ายออกวันที่"
 							defaultValue={date}
 						/>
 					</Grid>

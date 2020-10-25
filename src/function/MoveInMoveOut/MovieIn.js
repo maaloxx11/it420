@@ -92,9 +92,7 @@ function MovieIn() {
 							<FormHelperText></FormHelperText>
 						</FormControl>
 					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField disabled  id="standard-basic" label="ราคาห้อง" />
-					</Grid>
+
 					<Grid item xs={12} sm={6}>
 						<TextField
 							disabled
