@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
 function Home() {
 	const classes = useStyles();
 	return (
+		
 		<div>
 			<Container maxWidth="md" align="center">
 				<h1>Function</h1>
