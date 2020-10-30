@@ -15,7 +15,6 @@ import DateFnsUtils from "@date-io/date-fns";
 import "date-fns";
 import {
 	MuiPickersUtilsProvider,
-	KeyboardTimePicker,
 	KeyboardDatePicker,
 } from "@material-ui/pickers";
 const useStyles = makeStyles((theme) => ({
@@ -27,9 +26,7 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: theme.spacing(2),
 	},
 }));
-const timeElapsed = Date.now();
-const today = new Date(timeElapsed);
-const date = today.toISOString().split("T")[0];
+
 function MovieOut() {
 	const classes = useStyles();
 	const [age, setAge] = React.useState("");

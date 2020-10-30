@@ -5,9 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import SaveIcon from "@material-ui/icons/Save";
 
-const timeElapsed = Date.now();
-const today = new Date(timeElapsed);
-const date = today.toISOString().split("T")[0];
+
 
 function CreateRoom() {
 	return (

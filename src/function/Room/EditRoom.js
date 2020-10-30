@@ -20,9 +20,7 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: theme.spacing(2),
 	},
 }));
-const timeElapsed = Date.now();
-const today = new Date(timeElapsed);
-const date = today.toISOString().split("T")[0];
+
 function EditRoom() {
 	const classes = useStyles();
 	const [age, setAge] = React.useState("");

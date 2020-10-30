@@ -4,22 +4,12 @@ import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import PrintIcon from "@material-ui/icons/Print";
-import { makeStyles } from "@material-ui/core/styles";
 import DateFnsUtils from "@date-io/date-fns";
 import {
 	MuiPickersUtilsProvider,
-	KeyboardTimePicker,
 	KeyboardDatePicker,
 } from "@material-ui/pickers";
-const useStyles = makeStyles((theme) => ({
-	formControl: {
-		margin: theme.spacing(0),
-		minWidth: 170,
-	},
-	selectEmpty: {
-		marginTop: theme.spacing(2),
-	},
-}));
+
 function ReportBill() {
 	const [selectedDate, setSelectedDate] = useState(new Date());
 
