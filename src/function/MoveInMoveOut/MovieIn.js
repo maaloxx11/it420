@@ -13,9 +13,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import DateFnsUtils from "@date-io/date-fns";
 import { API } from "../../api-service";
-import Moment from "moment";
 import "date-fns";
-import format from "date-fns/format";
 import {
 	MuiPickersUtilsProvider,
 	KeyboardDatePicker,
@@ -32,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MovieIn() {
 	const classes = useStyles();
-
+	const [date, setSelectedDate] = useState(new Date());
 	const [renter, setRenter] = useState([]);
 	const [renter_id, setRenterID] = useState("");
 	const [room_id, setRoomID] = useState("");
@@ -51,7 +49,6 @@ function MovieIn() {
 	const handleChange = (evt) => {
 		setRoomID(evt.target.value);
 	};
-	const [result, setSelectedDate] = useState(new Date());
 
 	const handleDateChange = (date) => {
 		setSelectedDate(date);
@@ -60,9 +57,9 @@ function MovieIn() {
 		setRoomType(evt.target.value);
 		setRoomID("");
 	};
-
+	const room_status = 1;
 	const searchRenter = () => {
-		API.searchRenter({ renter_id })
+		API.searchRenter({ renter_id ,room_status})
 			.then((resp) => resp.json())
 			.then((resp) => setRenter(resp))
 			.catch((error) => console.log(error));
@@ -75,17 +72,14 @@ function MovieIn() {
 			move_in_date,
 		})
 			.then((resp) => console.log(resp))
+			.then(API.updateRoomStatus(room_id,{room_id,room_status,room_type,}))
 			.then(setRenterID(""), setRoomID(""), setRoomType(""))
 			.catch((error) => console.log(error));
 	};
-	console.log(result);
+
 	let move_in_date =
-		result.getFullYear() +
-		"-" +
-		(result.getMonth() + 1) +
-		"-" +
-		result.getDate();
-	console.log(move_in_date);
+		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -173,7 +167,7 @@ function MovieIn() {
 								margin="normal"
 								id="date-picker-inline"
 								label="วันเข้าพัก "
-								value={result}
+								value={date}
 								onChange={handleDateChange}
 								KeyboardButtonProps={{
 									"aria-label": "change date",

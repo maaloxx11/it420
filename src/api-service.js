@@ -51,4 +51,30 @@ export class API {
 			body: JSON.stringify(body),
 		}).then((resp) => resp.json());
 	}
+	static searchRoom(room_id) {
+		return fetch(`http://127.0.0.1:8000/api/room/${room_id}/`, {
+			method: "GET",
+			headers: {
+				"content-Type": "application/json",
+			},
+		})
+	}
+	static updateRoomStatus(room_id,body) {
+		return fetch(`http://127.0.0.1:8000/api/room/${room_id.room_id}/`, {
+			method: "PUT",
+			headers: {
+				"content-Type": "application/json",
+			},
+			body: JSON.stringify(body),
+		}).then((resp) => resp.json());
+	}
+	static editRoom(room_id,body) {
+		return fetch(`http://127.0.0.1:8000/api/room/${room_id}/`, {
+			method: "PUT",
+			headers: {
+				"content-Type": "application/json",
+			},
+			body: JSON.stringify(body),
+		}).then((resp) => resp.json());
+	}
 }
