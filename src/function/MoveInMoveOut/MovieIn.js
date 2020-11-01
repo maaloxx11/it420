@@ -12,6 +12,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import DateFnsUtils from "@date-io/date-fns";
+import { API } from "../../api-service";
 import "date-fns";
 import {
 	MuiPickersUtilsProvider,
@@ -29,50 +30,72 @@ const useStyles = makeStyles((theme) => ({
 
 function MovieIn() {
 	const classes = useStyles();
-	const [age, setAge] = React.useState("");
 
+	const [renter, setRenter] = useState([]);
+	const [renter_id, setRenterID] = useState("");
+	const [room_id, setRoomID] = useState("");
+	const [room_type, setRoomType] = useState("");
 	const handleChange = (event) => {
-		setAge(event.target.value);
+		setRoomID(event.target.value);
 	};
 	const [selectedDate, setSelectedDate] = useState(new Date());
 
 	const handleDateChange = (date) => {
 		setSelectedDate(date);
 	};
-
+	const searchRenter = () => {
+		API.searchRenter({ renter_id })
+			.then((resp) => resp.json())
+			.then((resp) => setRenter(resp))
+			.catch((error) => console.log(error));
+	};
+	console.log(renter);
 	return (
 		<div>
 			<Container maxWidth="md">
 				<h1 align="center">บันทึกข้อมูลการเข้าพัก</h1>
 				<Grid container spacing={3}>
 					<Grid item xs={12} sm={6}>
-						<TextField required id="standard-basic" label="รหัสผู้เช่า" />
-
-						<Button
-							variant="contained"
-							color="primary"
-							size="large"
-							startIcon={<SearchIcon />}
-						></Button>
+						<Grid item xs={12}>
+							<TextField
+								required
+								id="renter_id"
+								label="รหัสผู้เช่า"
+								value={renter_id}
+								onChange={(evt) => setRenterID(evt.target.value)}
+							/>
+							<Button
+								variant="contained"
+								color="primary"
+								size="large"
+								startIcon={<SearchIcon />}
+								onClick={searchRenter}
+							></Button>
+						</Grid>
 					</Grid>
 
-					<Grid item xs={12} sm={6}>
-						<TextField disabled id="standard-basic" label="ชื่อผู้เช่า" />
+					<Grid key={renter.renter_id} item xs={12} sm={6}>
+						<TextField
+							disabled
+							id="name"
+							label="ชื่อผู้เช่า"
+							value={renter.firstname}
+						/>
 					</Grid>
+
 					<Grid item xs={12} sm={6}>
 						<FormControl className={classes.formControl}>
-							<InputLabel id="demo-simple-select-label">
-								ประเภทห้องที่ต้องการเข้าพัก
-							</InputLabel>
+							<InputLabel id="room_type">ประเภทห้องที่เข้าพัก</InputLabel>
 							<Select
-								labelId="demo-simple-select-label"
-								id="demo-simple-select"
-								value={age}
-								onChange={handleChange}
+								labelId="room_type_s"
+								id="room_type_select"
+								value={room_type}
+								onChange={(evt) => setRoomType(evt.target.value)}
 							>
-								<MenuItem value={10}>Tenrrrrrrrrrrrrrrr</MenuItem>
-								<MenuItem value={20}>Twenty</MenuItem>
-								<MenuItem value={30}>Thirty</MenuItem>
+								<MenuItem value={1}>ห้องเปล่า</MenuItem>
+								<MenuItem value={2}>ห้องเปล่า+เฟอร์นิเจอร์</MenuItem>
+								<MenuItem value={3}>ห้องแอร์</MenuItem>
+								<MenuItem value={4}>ห้องเฟอร์นิเจอร์+แอร์</MenuItem>
 							</Select>
 							<FormHelperText></FormHelperText>
 						</FormControl>
@@ -85,7 +108,7 @@ function MovieIn() {
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
-								value={age}
+								value={room_id}
 								onChange={handleChange}
 							>
 								<MenuItem value={10}>Tenrrrrrrrrrrrrrrr</MenuItem>
@@ -104,7 +127,7 @@ function MovieIn() {
 								format="dd/MM/yyyy"
 								margin="normal"
 								id="date-picker-inline"
-								label="ระบุวันเข้าพัก "
+								label="วันเข้าพัก "
 								value={selectedDate}
 								onChange={handleDateChange}
 								KeyboardButtonProps={{
@@ -122,7 +145,7 @@ function MovieIn() {
 							size="large"
 							startIcon={<SaveIcon />}
 						>
-							Save
+							บันทึก
 						</Button>
 					</Grid>
 				</Grid>

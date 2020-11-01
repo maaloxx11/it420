@@ -38,7 +38,7 @@ function Home() {
 						จัดการทะเบียนผู้เช่า
 					</Button>
 				</Link>
-				<Link to="/servicerate">
+				<Link to="/serviceratemenu">
 					<Button
 						variant="contained"
 						color="primary"

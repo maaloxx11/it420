@@ -10,6 +10,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import { API } from "../../api-service.js";
+
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
@@ -20,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function CreateRoom() {
+function CreateRoom(props) {
 	const classes = useStyles();
 
 	const [room_id, setRoomID] = useState("");
@@ -28,6 +30,19 @@ function CreateRoom() {
 	const [electric_meter_new, setEMeterN] = useState("");
 	const [water_meter_new, setWMeterN] = useState("");
 
+	const room_status = 0;
+	const CreateClicked = () => {
+		API.createRoom({
+			room_id,
+			room_type,
+			electric_meter_new,
+			water_meter_new,
+			room_status,
+		})
+			.then((resp) => console.log(resp))
+			.then(setRoomID(""), setRoomType(""),setEMeterN(""),setWMeterN(""))
+			.catch((error) => console.log(error));
+	};
 
 	return (
 		<div>
@@ -45,9 +60,7 @@ function CreateRoom() {
 					</Grid>
 					<Grid item xs={12} sm={6}>
 						<FormControl className={classes.formControl}>
-							<InputLabel  id="room_type">
-								ประเภทห้องพัก
-							</InputLabel>
+							<InputLabel id="room_type">ประเภทห้องพัก</InputLabel>
 							<Select
 								labelId="room_type_s"
 								id="room_type_select"
@@ -87,6 +100,7 @@ function CreateRoom() {
 							variant="contained"
 							color="primary"
 							size="large"
+							onClick={CreateClicked}
 							startIcon={<SaveIcon />}
 						>
 							บันทึก

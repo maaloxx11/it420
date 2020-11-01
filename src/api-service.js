@@ -8,4 +8,30 @@ export class API {
 			body: JSON.stringify(body),
 		}).then((resp) => resp.json());
 	}
+	static createRenter(body) {
+		return fetch(`http://127.0.0.1:8000/api/renter/`, {
+			method: "POST",
+			headers: {
+				"content-Type": "application/json",
+			},
+			body: JSON.stringify(body),
+		}).then((resp) => resp.json());
+	}
+	static updatePrice(price_id,body) {
+		return fetch(`http://127.0.0.1:8000/api/price/${price_id}/`, {
+			method: "PUT",
+			headers: {
+				"content-Type": "application/json",
+			},
+			body: JSON.stringify(body),
+		}).then((resp) => resp.json());
+	}
+	static searchRenter(renter_id) {
+		return fetch(`http://127.0.0.1:8000/api/renter/${renter_id.renter_id}/`, {
+			method: "GET",
+			headers: {
+				"content-Type": "application/json",
+			},
+		})
+	}
 }

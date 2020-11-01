@@ -1,5 +1,4 @@
-import React from "react";
-import "./App.css";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Header from "./Header.js";
 import Home from "./Home.js";
@@ -9,6 +8,7 @@ import EditRoom from "./function/Room/EditRoom";
 import RenterMenu from "./function/Renter/RenterMenu.js";
 import CreateRenter from "./function/Renter/CreateRenter.js";
 import EditRenter from "./function/Renter/EditRenter.js";
+import ServiceRateMenu from "./function/ServiceRate/ServiceRateMenu.js";
 import ServiceRate from "./function/ServiceRate/ServiceRate.js";
 import MoveIn from "./function/MoveInMoveOut/MovieIn.js";
 import MoveOut from "./function/MoveInMoveOut/MoveOut.js"
@@ -22,7 +22,13 @@ import ProblemView from "./function/Problem/ProblemView.js"
 import ReportMenu from "./function/Report/ReportMenu.js"
 import ReportBill from "./function/Report/ReportBill.js"
 import ReportTransition from "./function/Report/ReportTransition.js"
+
 function App() {
+	const [selectedPrice,setSelectedPrice] = useState(null);
+	const loadPrice = (price) => {
+		setSelectedPrice(price);
+		console.log(price)
+	};
 	return (
 		<div className="App">
 			<header className="App-header">
@@ -57,9 +63,14 @@ function App() {
 								<Header></Header>
 								<EditRenter></EditRenter>
 							</Route>
-							<Route exact path="/servicerate">
+							<Route exact path="/serviceratemenu">
 								<Header></Header>
-								<ServiceRate></ServiceRate>
+								<ServiceRateMenu 
+								priceClicked={loadPrice}></ServiceRateMenu>
+							</Route>
+							<Route exact path="/servicerate/:servicerateId">
+								<Header></Header>
+								<ServiceRate price={selectedPrice}></ServiceRate>
 							</Route>
 							<Route exact path="/movein">
 								<Header></Header>
