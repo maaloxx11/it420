@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -13,7 +13,9 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import DateFnsUtils from "@date-io/date-fns";
 import { API } from "../../api-service";
+import Moment from "moment";
 import "date-fns";
+import format from "date-fns/format";
 import {
 	MuiPickersUtilsProvider,
 	KeyboardDatePicker,
@@ -35,21 +37,55 @@ function MovieIn() {
 	const [renter_id, setRenterID] = useState("");
 	const [room_id, setRoomID] = useState("");
 	const [room_type, setRoomType] = useState("");
-	const handleChange = (event) => {
-		setRoomID(event.target.value);
+	const [rooms, setRoom] = useState([]);
+
+	useEffect(() => {
+		if (room_type !== "") {
+			API.roomCheck({ room_type })
+				.then((resp) => resp.json())
+				.then((resp) => setRoom(resp))
+				.catch((error) => console.log(error));
+		}
+	}, [room_type]);
+	console.log(rooms);
+	const handleChange = (evt) => {
+		setRoomID(evt.target.value);
 	};
-	const [selectedDate, setSelectedDate] = useState(new Date());
+	const [result, setSelectedDate] = useState(new Date());
 
 	const handleDateChange = (date) => {
 		setSelectedDate(date);
 	};
+	const handleRoomType = (evt) => {
+		setRoomType(evt.target.value);
+		setRoomID("");
+	};
+
 	const searchRenter = () => {
 		API.searchRenter({ renter_id })
 			.then((resp) => resp.json())
 			.then((resp) => setRenter(resp))
 			.catch((error) => console.log(error));
 	};
-	console.log(renter);
+
+	const CreateMoveIn = () => {
+		API.MoveinCreate({
+			room_id,
+			renter_id,
+			move_in_date,
+		})
+			.then((resp) => console.log(resp))
+			.then(setRenterID(""), setRoomID(""), setRoomType(""))
+			.catch((error) => console.log(error));
+	};
+	console.log(result);
+	let move_in_date =
+		result.getFullYear() +
+		"-" +
+		(result.getMonth() + 1) +
+		"-" +
+		result.getDate();
+	console.log(move_in_date);
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -86,35 +122,44 @@ function MovieIn() {
 					<Grid item xs={12} sm={6}>
 						<FormControl className={classes.formControl}>
 							<InputLabel id="room_type">ประเภทห้องที่เข้าพัก</InputLabel>
+
 							<Select
 								labelId="room_type_s"
 								id="room_type_select"
 								value={room_type}
-								onChange={(evt) => setRoomType(evt.target.value)}
+								onChange={handleRoomType}
 							>
 								<MenuItem value={1}>ห้องเปล่า</MenuItem>
-								<MenuItem value={2}>ห้องเปล่า+เฟอร์นิเจอร์</MenuItem>
+								<MenuItem value={2}>ห้องเฟอร์นิเจอร์</MenuItem>
 								<MenuItem value={3}>ห้องแอร์</MenuItem>
 								<MenuItem value={4}>ห้องเฟอร์นิเจอร์+แอร์</MenuItem>
 							</Select>
+
 							<FormHelperText></FormHelperText>
 						</FormControl>
 					</Grid>
+
 					<Grid item xs={12} sm={6}>
 						<FormControl className={classes.formControl}>
 							<InputLabel id="demo-simple-select-label">
 								ห้องที่ต้องการเข้าพัก
 							</InputLabel>
+
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
 								value={room_id}
 								onChange={handleChange}
 							>
-								<MenuItem value={10}>Tenrrrrrrrrrrrrrrr</MenuItem>
-								<MenuItem value={20}>Twenty</MenuItem>
-								<MenuItem value={30}>Thirty</MenuItem>
+								{rooms.map((room) => {
+									return (
+										<MenuItem key={room.room_id} value={room.room_id}>
+											{room.room_id}
+										</MenuItem>
+									);
+								})}
 							</Select>
+
 							<FormHelperText></FormHelperText>
 						</FormControl>
 					</Grid>
@@ -124,11 +169,11 @@ function MovieIn() {
 							<KeyboardDatePicker
 								disableToolbar
 								variant="inline"
-								format="dd/MM/yyyy"
+								format="yyyy/MM/dd"
 								margin="normal"
 								id="date-picker-inline"
 								label="วันเข้าพัก "
-								value={selectedDate}
+								value={result}
 								onChange={handleDateChange}
 								KeyboardButtonProps={{
 									"aria-label": "change date",
@@ -144,6 +189,7 @@ function MovieIn() {
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
+							onClick={CreateMoveIn}
 						>
 							บันทึก
 						</Button>

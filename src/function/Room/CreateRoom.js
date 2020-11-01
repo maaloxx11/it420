@@ -68,7 +68,7 @@ function CreateRoom(props) {
 								onChange={(evt) => setRoomType(evt.target.value)}
 							>
 								<MenuItem value={1}>ห้องเปล่า</MenuItem>
-								<MenuItem value={2}>ห้องเปล่า+เฟอร์นิเจอร์</MenuItem>
+								<MenuItem value={2}>ห้องเฟอร์นิเจอร์</MenuItem>
 								<MenuItem value={3}>ห้องแอร์</MenuItem>
 								<MenuItem value={4}>ห้องเฟอร์นิเจอร์+แอร์</MenuItem>
 							</Select>
