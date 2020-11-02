@@ -18,6 +18,7 @@ import {
 	MuiPickersUtilsProvider,
 	KeyboardDatePicker,
 } from "@material-ui/pickers";
+
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 function MovieIn() {
 	const classes = useStyles();
 	const [date, setSelectedDate] = useState(new Date());
-	const [renter, setRenter] = useState([]);
+	const [renter, setRenter] = useState("");
 	const [renter_id, setRenterID] = useState("");
 	const [room_id, setRoomID] = useState("");
 	const [room_type, setRoomType] = useState("");
@@ -46,23 +47,28 @@ function MovieIn() {
 		}
 	}, [room_type]);
 	console.log(rooms);
+
 	const handleChange = (evt) => {
 		setRoomID(evt.target.value);
 	};
 
 	const handleDateChange = (date) => {
 		setSelectedDate(date);
+		
 	};
+
 	const handleRoomType = (evt) => {
 		setRoomType(evt.target.value);
 		setRoomID("");
 	};
 	const room_status = 1;
 	const searchRenter = () => {
-		API.searchRenter({ renter_id ,room_status})
+		API.searchRenter({ renter_id, room_status })
 			.then((resp) => resp.json())
 			.then((resp) => setRenter(resp))
 			.catch((error) => console.log(error));
+			
+		
 	};
 
 	const CreateMoveIn = () => {
@@ -72,7 +78,8 @@ function MovieIn() {
 			move_in_date,
 		})
 			.then((resp) => console.log(resp))
-			.then(API.updateRoomStatus(room_id,{room_id,room_status,room_type,}))
+			.then(API.updateRoomStatus(room_id, { room_id, room_status, room_type }))
+			.then(API.CreateServiceCharge({room_id}))
 			.then(setRenterID(""), setRoomID(""), setRoomType(""))
 			.catch((error) => console.log(error));
 	};
@@ -175,8 +182,10 @@ function MovieIn() {
 							/>
 						</MuiPickersUtilsProvider>
 					</Grid>
+
 					<Grid item xs={12} sm={6}></Grid>
 					<Grid item xs={12} sm={6}></Grid>
+
 					<Grid item xs={12} sm={6}>
 						<Button
 							variant="contained"
@@ -188,6 +197,7 @@ function MovieIn() {
 							บันทึก
 						</Button>
 					</Grid>
+
 				</Grid>
 			</Container>
 		</div>

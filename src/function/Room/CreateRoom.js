@@ -26,7 +26,7 @@ function CreateRoom(props) {
 	const classes = useStyles();
 
 	const [room_id, setRoomID] = useState("");
-	const [room_type, setRoomType] = useState("");
+	const [room_type, setRoomType] = useState(1);
 	const [electric_meter_new, setEMeterN] = useState("");
 	const [water_meter_new, setWMeterN] = useState("");
 
@@ -62,6 +62,7 @@ function CreateRoom(props) {
 						<FormControl className={classes.formControl}>
 							<InputLabel id="room_type">ประเภทห้องพัก</InputLabel>
 							<Select
+							
 								labelId="room_type_s"
 								id="room_type_select"
 								value={room_type}

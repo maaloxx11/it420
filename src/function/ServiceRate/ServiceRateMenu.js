@@ -31,7 +31,7 @@ function ServiceRateMenu(props) {
 	return (
 		<div>
 			<Container maxWidth="md" align="center">
-				<h1>ปรับเปลี่ยนอัตราค่บริการ</h1>
+				<h1>ปรับเปลี่ยนอัตราค่าบริการ</h1>
 				{prices.map((price) => {
 					return (
 						<div key={price.price_id} className="movie-item">
