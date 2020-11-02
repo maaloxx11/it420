@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	// Redirect,
+	// useHistory,
+	// useLocation,
+} from "react-router-dom";
 import Header from "./Header.js";
 import Home from "./Home.js";
 import MenuRoom from "./function/Room/RoomMenu.js";
@@ -11,23 +18,23 @@ import EditRenter from "./function/Renter/EditRenter.js";
 import ServiceRateMenu from "./function/ServiceRate/ServiceRateMenu.js";
 import ServiceRate from "./function/ServiceRate/ServiceRate.js";
 import MoveIn from "./function/MoveInMoveOut/MovieIn.js";
-import MoveOut from "./function/MoveInMoveOut/MoveOut.js"
-import ServiceRecord from "./function/RecordBill/ServiceRecord.js"
-import AddBill from "./function/RecordBill/AddBill.js"
-import Payment from "./function/Payment/Payment.js"
-import Search from "./function/Search/Search.js"
-import Problem from "./function/Problem/Problem.js"
-import ProblemMenu from "./function/Problem/ProblemMenu.js"
-import ProblemView from "./function/Problem/ProblemView.js"
-import ReportMenu from "./function/Report/ReportMenu.js"
-import ReportBill from "./function/Report/ReportBill.js"
-import ReportTransition from "./function/Report/ReportTransition.js"
+import MoveOut from "./function/MoveInMoveOut/MoveOut.js";
+import ServiceRecord from "./function/RecordBill/ServiceRecord.js";
+import AddBill from "./function/RecordBill/AddBill.js";
+import Payment from "./function/Payment/Payment.js";
+import Search from "./function/Search/Search.js";
+import Problem from "./function/Problem/Problem.js";
+import ProblemMenu from "./function/Problem/ProblemMenu.js";
+import ProblemView from "./function/Problem/ProblemView.js";
+import ReportMenu from "./function/Report/ReportMenu.js";
+import ReportBill from "./function/Report/ReportBill.js";
+import ReportTransition from "./function/Report/ReportTransition.js";
 
 function App() {
-	const [selectedPrice,setSelectedPrice] = useState(null);
+	const [selectedPrice, setSelectedPrice] = useState(null);
 	const loadPrice = (price) => {
 		setSelectedPrice(price);
-		console.log(price)
+		console.log(price);
 	};
 	return (
 		<div className="App">
@@ -35,6 +42,9 @@ function App() {
 				<Router>
 					<div className="app">
 						<Switch>
+							{/* <Route path="/login">
+								<LoginPage />
+							</Route> */}
 							<Route exact path="/">
 								<Header></Header>
 								<Home></Home>
@@ -65,8 +75,7 @@ function App() {
 							</Route>
 							<Route exact path="/serviceratemenu">
 								<Header></Header>
-								<ServiceRateMenu 
-								priceClicked={loadPrice}></ServiceRateMenu>
+								<ServiceRateMenu priceClicked={loadPrice}></ServiceRateMenu>
 							</Route>
 							<Route exact path="/servicerate/:servicerateId">
 								<Header></Header>
@@ -127,5 +136,73 @@ function App() {
 		</div>
 	);
 }
+// const fakeAuth = {
+// 	isAuthenticated: false,
+// 	authenticate(cb) {
+// 		fakeAuth.isAuthenticated = true;
+// 		setTimeout(cb, 100); // fake async
+// 	},
+// 	signout(cb) {
+// 		fakeAuth.isAuthenticated = false;
+// 		setTimeout(cb, 100);
+// 	},
+// };
+
+// function AuthButton() {
+// 	let history = useHistory();
+
+// 	return fakeAuth.isAuthenticated ? (
+// 		<p>
+// 			Welcome!{" "}
+// 			<button
+// 				onClick={() => {
+// 					fakeAuth.signout(() => history.push("/"));
+// 				}}
+// 			>
+// 				Sign out
+// 			</button>
+// 		</p>
+// 	) : (
+// 		<p>You are not logged in.</p>
+// 	);
+// }
+// function PrivateRoute({ children, ...rest }) {
+// 	return (
+// 		<Route
+// 			{...rest}
+// 			render={({ location }) =>
+// 				fakeAuth.isAuthenticated ? (
+// 					children
+// 				) : (
+// 					<Redirect
+// 						to={{
+// 							pathname: "/login",
+// 							state: { from: location },
+// 						}}
+// 					/>
+// 				)
+// 			}
+// 		/>
+// 	);
+// }
+
+// function LoginPage() {
+// 	let history = useHistory();
+// 	let location = useLocation();
+
+// 	let { from } = location.state || { from: { pathname: "/" } };
+// 	let login = () => {
+// 		fakeAuth.authenticate(() => {
+// 			history.replace(from);
+// 		});
+// 	};
+
+// 	return (
+// 		<div>
+// 			<p>You must log in to view the page at {from.pathname}</p>
+// 			<button onClick={login}>Log in</button>
+// 		</div>
+// 	);
+// }
 
 export default App;

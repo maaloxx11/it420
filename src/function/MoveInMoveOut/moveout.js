@@ -45,16 +45,34 @@ function MovieOut() {
 		setRenter(null);
 		setServicecharge(null);
 		setFirstname("");
-		setRoom([])
-		setDebt("")
-		setMovein("")
-
+		setRoom([]);
+		setDebt("");
+		setMovein("");
 	};
+
 	const handleChange = (event) => {
 		setRoomID(event.target.value);
 	};
+	const EditRoom = () => {
+		API.updateMoveOut(id, {
+			room_id,
+			renter_id,
+			move_in_date,
+			move_out_date,
+		})
+			.then((resp) => console.log(resp))
+			.then(Reset())
+			.then()
+			.catch((error) => console.log(error));
+	};
 	let move_out_date =
 		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+
+	let move_in1 = new Date(move_in);
+
+	let move_in_date =
+	move_in1.getFullYear() + "-" + (move_in1.getMonth() + 1) + "-" + move_in1.getDate();
+
 
 	let debt_status = { 1: "คุณมียอดค้างชำระ", 0: "คุณไม่มียอดค้างชำระ" };
 
@@ -84,7 +102,7 @@ function MovieOut() {
 				let roomdate;
 				if (room.room_id === room_id) {
 					roomdate = room.move_in_date;
-					setID(room.id)
+					setID(room.id);
 				}
 				return roomdate;
 			});
@@ -93,9 +111,9 @@ function MovieOut() {
 				.then((resp) => resp.json())
 				.then((resp) => setServicecharge(resp))
 				.catch((error) => console.log(error));
-			
 		}
 	}, [renter, room_id, rooms]);
+	
 	useEffect(() => {
 		if (service !== null) {
 			setDebt(debt_status[service[0].payment_status]);
@@ -210,6 +228,7 @@ function MovieOut() {
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
+							onClick={EditRoom}
 						>
 							บันทึก
 						</Button>
