@@ -17,7 +17,7 @@ export class API {
 			body: JSON.stringify(body),
 		}).then((resp) => resp.json());
 	}
-	static updatePrice(price_id,body) {
+	static updatePrice(price_id, body) {
 		return fetch(`http://127.0.0.1:8000/api/price/${price_id}/`, {
 			method: "PUT",
 			headers: {
@@ -32,15 +32,20 @@ export class API {
 			headers: {
 				"content-Type": "application/json",
 			},
-		})
+		});
 	}
 	static roomCheck(room_type) {
-		return fetch(`http://127.0.0.1:8000/api/room/?room_type=${room_type.room_type}&room_status=${0}`, {
-			method: "GET",
-			headers: {
-				"content-Type": "application/json",
+		return fetch(
+			`http://127.0.0.1:8000/api/room/?room_type=${
+				room_type.room_type
+			}&room_status=${0}`,
+			{
+				method: "GET",
+				headers: {
+					"content-Type": "application/json",
+				},
 			}
-		})
+		);
 	}
 	static MoveinCreate(body) {
 		return fetch(`http://127.0.0.1:8000/api/transition/`, {
@@ -57,9 +62,9 @@ export class API {
 			headers: {
 				"content-Type": "application/json",
 			},
-		})
+		}).then((resp) => resp.json())
 	}
-	static updateRoomStatus(room_id,body) {
+	static updateRoomStatus(room_id, body) {
 		return fetch(`http://127.0.0.1:8000/api/room/${room_id}/`, {
 			method: "PUT",
 			headers: {
@@ -68,7 +73,7 @@ export class API {
 			body: JSON.stringify(body),
 		}).then((resp) => resp.json());
 	}
-	static editRoom(room_id,body) {
+	static editRoom(room_id, body) {
 		return fetch(`http://127.0.0.1:8000/api/room/${room_id}/`, {
 			method: "PUT",
 			headers: {
@@ -77,7 +82,7 @@ export class API {
 			body: JSON.stringify(body),
 		}).then((resp) => resp.json());
 	}
-	static editRenter(renter_id,body) {
+	static editRenter(renter_id, body) {
 		return fetch(`http://127.0.0.1:8000/api/renter/${renter_id}/`, {
 			method: "PUT",
 			headers: {
@@ -96,22 +101,28 @@ export class API {
 		}).then((resp) => resp.json());
 	}
 	static searchRenterTs(renter_id) {
-		return fetch(`http://127.0.0.1:8000/api/transition/?renter_id=${renter_id.renter_id}&move_out_date=true`, {
-			method: "GET",
-			headers: {
-				"content-Type": "application/json",
-			},
-		})
+		return fetch(
+			`http://127.0.0.1:8000/api/transition/?renter_id=${renter_id.renter_id}&move_out_date=true`,
+			{
+				method: "GET",
+				headers: {
+					"content-Type": "application/json",
+				},
+			}
+		);
 	}
 	static searchDebt(room_id) {
-		return fetch(`http://127.0.0.1:8000/api/servicecharge/?room_id=${room_id}`, {
-			method: "GET",
-			headers: {
-				"content-Type": "application/json",
-			},
-		})
+		return fetch(
+			`http://127.0.0.1:8000/api/servicecharge/?room_id=${room_id}`,
+			{
+				method: "GET",
+				headers: {
+					"content-Type": "application/json",
+				},
+			}
+		);
 	}
-	static updateMoveOut(id,body) {
+	static updateMoveOut(id, body) {
 		return fetch(`http://127.0.0.1:8000/api/transition/${id}/`, {
 			method: "PUT",
 			headers: {
@@ -126,7 +137,7 @@ export class API {
 			headers: {
 				"content-Type": "application/json",
 			},
-		})
+		});
 	}
 	static DeleteRecord(id) {
 		return fetch(`http://127.0.0.1:8000/api/servicecharge/${id}/`, {
@@ -134,6 +145,17 @@ export class API {
 			headers: {
 				"content-Type": "application/json",
 			},
-		})
+		});
+	}
+	static Total(room_id) {
+		return fetch(
+			`http://127.0.0.1:8000/api/room/${room_id}/addservicecharge/`,
+			{
+				method: "POST",
+				headers: {
+					"content-Type": "application/json",
+				},
+			}
+		).then((resp) => resp.json());
 	}
 }

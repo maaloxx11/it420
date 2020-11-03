@@ -37,6 +37,9 @@ function MovieIn() {
 	const [room_id, setRoomID] = useState("");
 	const [room_type, setRoomType] = useState("");
 	const [rooms, setRoom] = useState([]);
+	const [errorSearch, setErrorSearch] = useState(false);
+	const [errorSearchDetail, setErrorSearchDeatail] = useState("");
+
 
 	useEffect(() => {
 		if (room_type !== "") {
@@ -45,8 +48,11 @@ function MovieIn() {
 				.then((resp) => setRoom(resp))
 				.catch((error) => console.log(error));
 		}
-	}, [room_type]);
-	console.log(rooms);
+		if (renter.detail === "Not found.") {
+			setErrorSearch(true)
+			setErrorSearchDeatail("ไม่พบข้อมูลในระบบ")
+		}
+	}, [room_type, renter]);
 
 	const handleChange = (evt) => {
 		setRoomID(evt.target.value);
@@ -54,25 +60,23 @@ function MovieIn() {
 
 	const handleDateChange = (date) => {
 		setSelectedDate(date);
-		
 	};
 
 	const handleRoomType = (evt) => {
 		setRoomType(evt.target.value);
 		setRoomID("");
 	};
-	
+
 	const room_status = 1;
 
 	const searchRenter = () => {
+		setErrorSearch(false)
+		setErrorSearchDeatail("")
 		API.searchRenter({ renter_id, room_status })
 			.then((resp) => resp.json())
 			.then((resp) => setRenter(resp))
 			.catch((error) => console.log(error));
-			
-		
 	};
-
 	const CreateMoveIn = () => {
 		API.MoveinCreate({
 			room_id,
@@ -81,7 +85,7 @@ function MovieIn() {
 		})
 			.then((resp) => console.log(resp))
 			.then(API.updateRoomStatus(room_id, { room_id, room_status, room_type }))
-			.then(API.CreateServiceCharge({room_id}))
+			.then(API.CreateServiceCharge({ room_id }))
 			.then(setRenterID(""), setRoomID(""), setRoomType(""))
 			.catch((error) => console.log(error));
 	};
@@ -98,11 +102,14 @@ function MovieIn() {
 						<Grid item xs={12}>
 							<TextField
 								required
+								error={errorSearch}
 								id="renter_id"
 								label="รหัสผู้เช่า"
 								value={renter_id}
+								helperText={errorSearchDetail}
 								onChange={(evt) => setRenterID(evt.target.value)}
 							/>
+						
 							<Button
 								variant="contained"
 								color="primary"
@@ -111,6 +118,7 @@ function MovieIn() {
 								onClick={searchRenter}
 							></Button>
 						</Grid>
+						<br></br>
 					</Grid>
 
 					<Grid key={renter.renter_id} item xs={12} sm={6}>
@@ -199,7 +207,6 @@ function MovieIn() {
 							บันทึก
 						</Button>
 					</Grid>
-
 				</Grid>
 			</Container>
 		</div>

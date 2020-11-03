@@ -93,10 +93,10 @@ function AddBill(props) {
 		setEMeterN("");
 		setRoom(null);
 		setEMeterO("");
-		setAddDateLast("")
-		setRoomTypeDef("")
-		setServiceCharge([])
-		setSelServiceCharge(null)
+		setAddDateLast("");
+		setRoomTypeDef("");
+		setServiceCharge([]);
+		setSelServiceCharge(null);
 	};
 
 	const CreateBill = () => {
@@ -110,6 +110,7 @@ function AddBill(props) {
 			electric_meter_old,
 		})
 			.then((resp) => console.log(resp))
+			.then(API.Total(room_id))
 			.then(Reset())
 			.catch((error) => console.log(error));
 	};
