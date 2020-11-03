@@ -35,11 +35,13 @@ function MovieOut() {
 	const [id, setID] = useState("");
 	const [renter, setRenter] = useState(null);
 	const [service, setServicecharge] = useState(null);
+	const [serviceid, setServicechargeID] = useState("");
 	const [firstname, setFirstname] = useState("");
 	const [move_in, setMovein] = useState("");
 	const [debt, setDebt] = useState("");
 	const [date, setSelectedDate] = useState(new Date());
 	const [rooms, setRoom] = useState([]);
+	const [Selroom, setSelRoom] = useState(null);
 	const Reset = () => {
 		setRoomID("");
 		setRenter(null);
@@ -53,7 +55,7 @@ function MovieOut() {
 	const handleChange = (event) => {
 		setRoomID(event.target.value);
 	};
-	const EditRoom = () => {
+	const UpdateMoveOut = () => {
 		API.updateMoveOut(id, {
 			room_id,
 			renter_id,
@@ -62,7 +64,8 @@ function MovieOut() {
 		})
 			.then((resp) => console.log(resp))
 			.then(Reset())
-			.then()
+			.then(setRenterID(""))
+			.then(API.DeleteRecord(serviceid).catch((error) => console.log(error)))
 			.catch((error) => console.log(error));
 	};
 	let move_out_date =
@@ -71,8 +74,11 @@ function MovieOut() {
 	let move_in1 = new Date(move_in);
 
 	let move_in_date =
-	move_in1.getFullYear() + "-" + (move_in1.getMonth() + 1) + "-" + move_in1.getDate();
-
+		move_in1.getFullYear() +
+		"-" +
+		(move_in1.getMonth() + 1) +
+		"-" +
+		move_in1.getDate();
 
 	let debt_status = { 1: "คุณมียอดค้างชำระ", 0: "คุณไม่มียอดค้างชำระ" };
 
@@ -98,31 +104,31 @@ function MovieOut() {
 			setFirstname(renter.firstname);
 		}
 		if (room_id !== "") {
-			let room_in = rooms.map((room) => {
-				let roomdate;
-				if (room.room_id === room_id) {
-					roomdate = room.move_in_date;
-					setID(room.id);
-				}
-				return roomdate;
-			});
-			setMovein(room_in);
+	
+			setID(Selroom.id);
+			setMovein(Selroom.move_in_date);
 			API.searchDebt(room_id)
 				.then((resp) => resp.json())
 				.then((resp) => setServicecharge(resp))
 				.catch((error) => console.log(error));
 		}
-	}, [renter, room_id, rooms]);
-	
+	}, [renter, room_id, rooms,Selroom]);
+
 	useEffect(() => {
 		if (service !== null) {
 			setDebt(debt_status[service[0].payment_status]);
+			setServicechargeID(service[0].id);
 		}
 	}, [service, debt_status]);
 	const handleRoomChange = (evt) => {
 		setRoomID(evt.target.value);
 	};
-
+	const handleClicked = (room) => (evt) => {
+		setSelRoom(room);
+		
+	};
+	
+	console.log(Selroom);
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -168,7 +174,7 @@ function MovieOut() {
 								>
 									{rooms.map((room) => {
 										return (
-											<MenuItem key={room.room_id} value={room.room_id}>
+											<MenuItem key={room.room_id} value={room.room_id} onClick={handleClicked(room)}>
 												{room.room_id}
 											</MenuItem>
 										);
@@ -228,7 +234,7 @@ function MovieOut() {
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
-							onClick={EditRoom}
+							onClick={UpdateMoveOut}
 						>
 							บันทึก
 						</Button>

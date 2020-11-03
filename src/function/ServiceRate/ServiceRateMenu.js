@@ -24,9 +24,9 @@ function ServiceRateMenu(props) {
 			.then((resp) => setPrice(resp))
 			.catch((error) => console.log(error));
 	}, []);
-    const priceClicked = (price) => (evt) => {
-        props.priceClicked(price)
-    }
+	const priceClicked = (price) => (evt) => {
+		props.priceClicked(price);
+	};
 	const classes = useStyles();
 	return (
 		<div>

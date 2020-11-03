@@ -61,7 +61,9 @@ function MovieIn() {
 		setRoomType(evt.target.value);
 		setRoomID("");
 	};
+	
 	const room_status = 1;
+
 	const searchRenter = () => {
 		API.searchRenter({ renter_id, room_status })
 			.then((resp) => resp.json())

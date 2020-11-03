@@ -120,4 +120,20 @@ export class API {
 			body: JSON.stringify(body),
 		}).then((resp) => resp.json());
 	}
+	static searchServiceCharge() {
+		return fetch(`http://127.0.0.1:8000/api/servicecharge/`, {
+			method: "GET",
+			headers: {
+				"content-Type": "application/json",
+			},
+		})
+	}
+	static DeleteRecord(id) {
+		return fetch(`http://127.0.0.1:8000/api/servicecharge/${id}/`, {
+			method: "DELETE",
+			headers: {
+				"content-Type": "application/json",
+			},
+		})
+	}
 }

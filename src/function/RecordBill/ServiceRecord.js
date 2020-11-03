@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,7 +8,20 @@ import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import PrintIcon from "@material-ui/icons/Print";
-function ServiceRecord() {
+import { API } from "../../api-service";
+import { Link } from "react-router-dom";
+function ServiceRecord(props) {
+	const [records, SetRecord] = useState([]);
+
+	useEffect(() => {
+		API.searchServiceCharge()
+			.then((resp) => resp.json())
+			.then((resp) => SetRecord(resp))
+			.catch((error) => console.log(error));
+	}, []);
+	const recordClicked = (servicecharge) => (evt) => {
+        props.recordClicked(servicecharge)
+    }
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -25,54 +38,27 @@ function ServiceRecord() {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						<TableRow align="center">
-							<TableCell component="th" scope="row" align="center">
-								601
-							</TableCell>
-							<TableCell align="center">24/9/2020</TableCell>
-							<TableCell align="center">
-								<a href="#ๅ">เพิ่มข้อมูลค่าบริการ</a>
-							</TableCell>
-							<TableCell align="center">
-								<a href="#/">พิมพ์ใบแจ้งหนี้</a>
-							</TableCell>
-						</TableRow>
-						<TableRow align="center">
-							<TableCell component="th" scope="row" align="center">
-								602
-							</TableCell>
-							<TableCell align="center">24/9/2020</TableCell>
-							<TableCell align="center">
-								<a href="#-">เพิ่มข้อมูลค่าบริการ</a>
-							</TableCell>
-							<TableCell align="center">
-								<a href="#ภ">พิมพ์ใบแจ้งหนี้</a>
-							</TableCell>
-						</TableRow>
-						<TableRow align="center">
-							<TableCell component="th" scope="row" align="center">
-								603
-							</TableCell>
-							<TableCell align="center">24/9/2020</TableCell>
-							<TableCell align="center">
-								<a href="#พ">เพิ่มข้อมูลค่าบริการ</a>
-							</TableCell>
-							<TableCell align="center">
-								<a href="#ไ">พิมพ์ใบแจ้งหนี้</a>
-							</TableCell>
-						</TableRow>
-						<TableRow align="center">
-							<TableCell component="th" scope="row" align="center">
-								604
-							</TableCell>
-							<TableCell align="center">24/9/2020</TableCell>
-							<TableCell align="center">
-								<a href="#ำ">เพิ่มข้อมูลค่าบริการ</a>
-							</TableCell>
-							<TableCell align="center">
-								<a href="#พ">พิมพ์ใบแจ้งหนี้</a>
-							</TableCell>
-						</TableRow>
+						{records.map((servicecharge) => {
+							return (
+								<TableRow key={servicecharge.id}>
+									<TableCell component="th" scope="row" align="center">
+										{servicecharge.room_id}
+									</TableCell>
+									<TableCell align="center">{servicecharge.add_date}</TableCell>
+									<TableCell align="center" >
+										<Link to={`/addbill/`}>
+											
+											<span onClick={recordClicked(servicecharge)}>เพิ่มข้อมูลค่าบริการ</span>
+										</Link>
+									</TableCell>
+									<TableCell align="center">
+										<Link to={`/servicecharge_add/${servicecharge.room_id}`}>
+											พิมพ์ใบแจ้งหนี้
+										</Link>
+									</TableCell>
+								</TableRow>
+							);
+						})}
 					</TableBody>
 				</Table>
 				<br></br>

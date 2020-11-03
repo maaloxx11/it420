@@ -32,10 +32,14 @@ import ReportTransition from "./function/Report/ReportTransition.js";
 
 function App() {
 	const [selectedPrice, setSelectedPrice] = useState(null);
+	const [selectedRecord, setSelectedRecord] = useState(null);
 	const loadPrice = (price) => {
 		setSelectedPrice(price);
-		console.log(price);
 	};
+	const loadRecord = (record) => {
+		setSelectedRecord(record);
+	};
+	
 	return (
 		<div className="App">
 			<header className="App-header">
@@ -91,11 +95,11 @@ function App() {
 							</Route>
 							<Route exact path="/servicerecord">
 								<Header></Header>
-								<ServiceRecord></ServiceRecord>
+								<ServiceRecord recordClicked={loadRecord}></ServiceRecord>
 							</Route>
-							<Route exact path="/addbill">
+							<Route exact path="/addbill/">
 								<Header></Header>
-								<AddBill></AddBill>
+								<AddBill servicecharge={selectedRecord}></AddBill>
 							</Route>
 							<Route exact path="/payment">
 								<Header></Header>
