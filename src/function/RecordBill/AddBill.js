@@ -31,6 +31,7 @@ function AddBill(props) {
 	const date = new Date();
 	const classes = useStyles();
 	const [room_id, setRoomId] = useState("");
+	const [id, setId] = useState("");
 	const [electric_meter_new, setEMeterN] = useState("");
 	const [electric_meter_old, setEMeterO] = useState("");
 	const [water_meter_new, setWMeterN] = useState("");
@@ -40,6 +41,7 @@ function AddBill(props) {
 	const [room_typedef, setRoomTypeDef] = useState("");
 	const [servicecharges, setServiceCharge] = useState([]);
 	const [Selservicecharges, setSelServiceCharge] = useState(null);
+	const [sendTotal, setsendTotal] = useState(false);
 	const [room, setRoom] = useState(null);
 	let room_status = 1;
 	useEffect(() => {
@@ -67,8 +69,13 @@ function AddBill(props) {
 			setEMeterO(room.electric_meter_new);
 			setWMeterO(room.water_meter_new);
 			setAddDateLast(Selservicecharges.add_date);
+			setId(Selservicecharges.id);
 		}
-	}, [room, room_def, Selservicecharges]);
+		if (sendTotal === true) {
+			API.Total(room_id);
+			Reset();
+		}
+	}, [room, room_def, Selservicecharges, sendTotal, room_id]);
 
 	const handleChange = (evt) => {
 		setRoomId("");
@@ -79,6 +86,7 @@ function AddBill(props) {
 	};
 	let add_date =
 		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+
 	var deadline_date;
 	if (date.getMonth() + 1 === 12) {
 		deadline_date = date.getFullYear() + "-" + 1 + "-" + 5;
@@ -97,6 +105,7 @@ function AddBill(props) {
 		setRoomTypeDef("");
 		setServiceCharge([]);
 		setSelServiceCharge(null);
+		setsendTotal(false);
 	};
 
 	const CreateBill = () => {
@@ -108,13 +117,11 @@ function AddBill(props) {
 			water_meter_old,
 			electric_meter_new,
 			electric_meter_old,
-		})
-			.then((resp) => console.log(resp))
-			.then(API.Total(room_id))
-			.then(Reset())
-			.catch((error) => console.log(error));
+		});
+		API.updateRecord(id, { id, room_id, add_date, deadline_date });
+		setsendTotal(true);
 	};
-	console.log(Selservicecharges);
+
 	return (
 		<div>
 			<Container maxWidth="md">

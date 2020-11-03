@@ -15,9 +15,9 @@ function Home() {
 	const classes = useStyles();
 	return (
 		
-		<div>
+		<div >
 			<Container maxWidth="md" align="center">
-				<h1>Function</h1>
+				<h1>ระบบจัดการอะพาร์ตเมนต์</h1>
 				<Link to="/roommenu">
 					<Button
 						variant="contained"

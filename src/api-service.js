@@ -62,7 +62,7 @@ export class API {
 			headers: {
 				"content-Type": "application/json",
 			},
-		}).then((resp) => resp.json())
+		});
 	}
 	static updateRoomStatus(room_id, body) {
 		return fetch(`http://127.0.0.1:8000/api/room/${room_id}/`, {
@@ -157,5 +157,14 @@ export class API {
 				},
 			}
 		).then((resp) => resp.json());
+	}
+	static updateRecord(id, body) {
+		return fetch(`http://127.0.0.1:8000/api/servicecharge/${id}/`, {
+			method: "PUT",
+			headers: {
+				"content-Type": "application/json",
+			},
+			body: JSON.stringify(body),
+		}).then((resp) => resp.json());
 	}
 }

@@ -15,6 +15,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import DraftsIcon from "@material-ui/icons/Drafts";
+import Box from "@material-ui/core/Box";
 import { NavLink } from "react-router-dom";
 const drawerWidth = 240;
 
@@ -90,122 +91,128 @@ export default function PersistentDrawerLeft() {
 
 	return (
 		<div className={classes.root}>
-			<CssBaseline />
-			<AppBar
-				position="fixed"
-				color="primary"
-				className={clsx(classes.appBar, {
-					[classes.appBarShift]: open,
-				})}
-			>
-				<Toolbar>
-					<IconButton
-						color="inherit"
-						aria-label="open drawer"
-						onClick={handleDrawerOpen}
-						edge="start"
-						className={clsx(classes.menuButton, open && classes.hide)}
-					>
-						<MenuIcon />
-					</IconButton>
+			<Box display="block" displayPrint="none" m={1}>
+				<CssBaseline />
+				<AppBar
+					position="fixed"
+					color="primary"
+					className={clsx(classes.appBar, {
+						[classes.appBarShift]: open,
+					})}
+				>
+					<Toolbar>
+						<IconButton
+							color="inherit"
+							aria-label="open drawer"
+							onClick={handleDrawerOpen}
+							edge="start"
+							className={clsx(classes.menuButton, open && classes.hide)}
+						>
+							<MenuIcon />
+						</IconButton>
 
-					<Typography variant="h6" color="inherit">
-						<NavLink to="/" underline="none" activeStyle={{ color: "white" ,textDecoration: 'none' }}>
-							Niran Apartment
-						</NavLink>
-					</Typography>
-				</Toolbar>
-			</AppBar>
-			<Drawer
-				className={classes.drawer}
-				variant="persistent"
-				anchor="left"
-				open={open}
-				classes={{
-					paper: classes.drawerPaper,
-				}}
-			>
-				<div className={classes.drawerHeader}>
-					<IconButton onClick={handleDrawerClose}>
-						{theme.direction === "ltr" ? (
-							<ChevronLeftIcon />
-						) : (
-							<ChevronRightIcon />
-						)}
-					</IconButton>
-				</div>
+						<Typography variant="h6" color="inherit">
+							<NavLink
+								to="/"
+								underline="none"
+								activeStyle={{ color: "white", textDecoration: "none" }}
+							>
+								Niran Apartment
+							</NavLink>
+						</Typography>
+					</Toolbar>
+				</AppBar>
+				<Drawer
+					className={classes.drawer}
+					variant="persistent"
+					anchor="left"
+					open={open}
+					classes={{
+						paper: classes.drawerPaper,
+					}}
+				>
+					<div className={classes.drawerHeader}>
+						<IconButton onClick={handleDrawerClose}>
+							{theme.direction === "ltr" ? (
+								<ChevronLeftIcon />
+							) : (
+								<ChevronRightIcon />
+							)}
+						</IconButton>
+					</div>
 
-				<Divider />
-				<ListItem button>
-					<ListItemIcon>
-						<DraftsIcon />
-					</ListItemIcon>
-					<ListItemText primary="1" />
-				</ListItem>
-				<Divider />
-				<ListItem button>
-					<ListItemIcon>
-						<DraftsIcon />
-					</ListItemIcon>
-					<ListItemText primary="2" />
-				</ListItem>
-				<Divider />
-				<ListItem button>
-					<ListItemIcon>
-						<DraftsIcon />
-					</ListItemIcon>
-					<ListItemText primary="3" />
-				</ListItem>
-				<Divider />
-				<ListItem button>
-					<ListItemIcon>
-						<DraftsIcon />
-					</ListItemIcon>
-					<ListItemText primary="4" />
-				</ListItem>
-				<Divider />
-				<ListItem button>
-					<ListItemIcon>
-						<DraftsIcon />
-					</ListItemIcon>
-					<ListItemText primary="5" />
-				</ListItem>
-				<Divider />
-				<ListItem button>
-					<ListItemIcon>
-						<DraftsIcon />
-					</ListItemIcon>
-					<ListItemText primary="6" />
-				</ListItem>
-				<Divider />
-				<ListItem button>
-					<ListItemIcon>
-						<DraftsIcon />
-					</ListItemIcon>
-					<ListItemText primary="7" />
-				</ListItem>
-				<Divider />
-				<ListItem button>
-					<ListItemIcon>
-						<DraftsIcon />
-					</ListItemIcon>
-					<ListItemText primary="8" />
-				</ListItem>
-				<Divider />
-				<ListItem button>
-					<ListItemIcon>
-						<DraftsIcon />
-					</ListItemIcon>
-					<ListItemText primary="9" />
-				</ListItem>
-			</Drawer>
-			<main
-				className={clsx(classes.content, {
-					[classes.contentShift]: open,
-				})}
-			>
-				<br></br>
-			</main>
+					<Divider />
+					<ListItem button>
+						<ListItemIcon>
+							<DraftsIcon />
+						</ListItemIcon>
+						<ListItemText primary="1" />
+					</ListItem>
+					<Divider />
+					<ListItem button>
+						<ListItemIcon>
+							<DraftsIcon />
+						</ListItemIcon>
+						<ListItemText primary="2" />
+					</ListItem>
+					<Divider />
+					<ListItem button>
+						<ListItemIcon>
+							<DraftsIcon />
+						</ListItemIcon>
+						<ListItemText primary="3" />
+					</ListItem>
+					<Divider />
+					<ListItem button>
+						<ListItemIcon>
+							<DraftsIcon />
+						</ListItemIcon>
+						<ListItemText primary="4" />
+					</ListItem>
+					<Divider />
+					<ListItem button>
+						<ListItemIcon>
+							<DraftsIcon />
+						</ListItemIcon>
+						<ListItemText primary="5" />
+					</ListItem>
+					<Divider />
+					<ListItem button>
+						<ListItemIcon>
+							<DraftsIcon />
+						</ListItemIcon>
+						<ListItemText primary="6" />
+					</ListItem>
+					<Divider />
+					<ListItem button>
+						<ListItemIcon>
+							<DraftsIcon />
+						</ListItemIcon>
+						<ListItemText primary="7" />
+					</ListItem>
+					<Divider />
+					<ListItem button>
+						<ListItemIcon>
+							<DraftsIcon />
+						</ListItemIcon>
+						<ListItemText primary="8" />
+					</ListItem>
+					<Divider />
+					<ListItem button>
+						<ListItemIcon>
+							<DraftsIcon />
+						</ListItemIcon>
+						<ListItemText primary="9" />
+					</ListItem>
+				</Drawer>
+				<main
+					className={clsx(classes.content, {
+						[classes.contentShift]: open,
+					})}
+				>
+					<br></br>
+				</main>
+			</Box>
 		</div>
 	);
 }

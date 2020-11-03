@@ -29,6 +29,7 @@ import ProblemView from "./function/Problem/ProblemView.js";
 import ReportMenu from "./function/Report/ReportMenu.js";
 import ReportBill from "./function/Report/ReportBill.js";
 import ReportTransition from "./function/Report/ReportTransition.js";
+import CreateBill from "./function/RecordBill/CreateBill.js"
 
 function App() {
 	const [selectedPrice, setSelectedPrice] = useState(null);
@@ -39,6 +40,7 @@ function App() {
 	const loadRecord = (record) => {
 		setSelectedRecord(record);
 	};
+
 	
 	return (
 		<div className="App">
@@ -85,6 +87,7 @@ function App() {
 								<Header></Header>
 								<ServiceRate price={selectedPrice}></ServiceRate>
 							</Route>
+							
 							<Route exact path="/movein">
 								<Header></Header>
 								<MoveIn></MoveIn>
@@ -95,11 +98,15 @@ function App() {
 							</Route>
 							<Route exact path="/servicerecord">
 								<Header></Header>
-								<ServiceRecord recordClicked={loadRecord}></ServiceRecord>
+								<ServiceRecord recordClicked={loadRecord} ></ServiceRecord>
 							</Route>
 							<Route exact path="/addbill/">
 								<Header></Header>
 								<AddBill servicecharge={selectedRecord}></AddBill>
+							</Route>
+							<Route exact path="/createbill/:billId">
+								<Header></Header>
+								<CreateBill servicecharge={selectedRecord}></CreateBill>
 							</Route>
 							<Route exact path="/payment">
 								<Header></Header>

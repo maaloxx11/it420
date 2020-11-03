@@ -52,8 +52,8 @@ function ServiceRecord(props) {
 										</Link>
 									</TableCell>
 									<TableCell align="center">
-										<Link to={`/servicecharge_add/${servicecharge.room_id}`}>
-											พิมพ์ใบแจ้งหนี้
+										<Link to={`/createbill/${servicecharge.room_id}`}>
+											<span onClick={recordClicked(servicecharge)}>สร้างใบแจ้งหนี้</span>
 										</Link>
 									</TableCell>
 								</TableRow>
