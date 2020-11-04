@@ -20,8 +20,9 @@ function ServiceRecord(props) {
 			.catch((error) => console.log(error));
 	}, []);
 	const recordClicked = (servicecharge) => (evt) => {
-        props.recordClicked(servicecharge)
-    }
+		props.recordClicked(servicecharge);
+	};
+	let debt_status = { 1: "มียอดค้างชำระ", 0: "ไม่มียอดค้างชำระ" };
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -33,8 +34,9 @@ function ServiceRecord(props) {
 							<TableCell align="center">
 								วันที่บันทึกข้อมูลค่าบริการล่าสุด
 							</TableCell>
+							<TableCell align="left">สถานะการชำระเงิน</TableCell>
 							<TableCell align="center">บันทึกข้อมูลค่าบริการ</TableCell>
-							<TableCell align="center">พิมพ์ใบแจ้งหนี้</TableCell>
+							<TableCell align="center">สร้างใบแจ้งหนี้</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -45,15 +47,19 @@ function ServiceRecord(props) {
 										{servicecharge.room_id}
 									</TableCell>
 									<TableCell align="center">{servicecharge.add_date}</TableCell>
-									<TableCell align="center" >
+									<TableCell align="left">{debt_status[servicecharge.payment_status]}</TableCell>
+									<TableCell align="center">
 										<Link to={`/addbill/`}>
-											
-											<span onClick={recordClicked(servicecharge)}>เพิ่มข้อมูลค่าบริการ</span>
+											<span onClick={recordClicked(servicecharge)}>
+												เพิ่มข้อมูลค่าบริการ
+											</span>
 										</Link>
 									</TableCell>
 									<TableCell align="center">
 										<Link to={`/createbill/${servicecharge.room_id}`}>
-											<span onClick={recordClicked(servicecharge)}>สร้างใบแจ้งหนี้</span>
+											<span onClick={recordClicked(servicecharge)}>
+												สร้างใบแจ้งหนี้
+											</span>
 										</Link>
 									</TableCell>
 								</TableRow>
@@ -69,7 +75,7 @@ function ServiceRecord(props) {
 						size="large"
 						startIcon={<PrintIcon />}
 					>
-						พิมพ์ใบแจ้งหนี้ทั้งหมด
+						สร้างใบแจ้งหนี้ทั้งหมด
 					</Button>
 				</Grid>
 			</Container>

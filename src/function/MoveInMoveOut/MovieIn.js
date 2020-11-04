@@ -72,7 +72,7 @@ function MovieIn() {
 	const searchRenter = () => {
 		setErrorSearch(false)
 		setErrorSearchDeatail("")
-		API.searchRenter({ renter_id, room_status })
+		API.searchRenter( renter_id)
 			.then((resp) => resp.json())
 			.then((resp) => setRenter(resp))
 			.catch((error) => console.log(error));

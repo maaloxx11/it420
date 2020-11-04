@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-
+import { API } from "../../api-service";
 const useStyles = makeStyles((theme) => ({
 	marginButton: {
 		margin: theme.spacing(2),
@@ -14,12 +14,7 @@ const useStyles = makeStyles((theme) => ({
 function ServiceRateMenu(props) {
 	const [prices, setPrice] = useState([]);
 	useEffect(() => {
-		fetch("http://127.0.0.1:8000/api/price/", {
-			method: "GET",
-			headers: {
-				"content-Type": "application/json",
-			},
-		})
+		API.searchPrice()
 			.then((resp) => resp.json())
 			.then((resp) => setPrice(resp))
 			.catch((error) => console.log(error));

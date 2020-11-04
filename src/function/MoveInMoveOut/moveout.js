@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
 	selectEmpty: {
 		marginTop: theme.spacing(2),
 	},
+	print: {
+		pageBreakAfter: "auto",
+	},
 }));
 
 function MovieOut() {
@@ -91,7 +94,7 @@ function MovieOut() {
 			.then((resp) => resp.json())
 			.then((resp) => setRoom(resp))
 			.then(
-				API.searchRenter({ renter_id })
+				API.searchRenter( renter_id )
 					.then((resp) => resp.json())
 					.then((resp) => setRenter(resp))
 					.catch((error) => console.log(error))
@@ -104,7 +107,6 @@ function MovieOut() {
 			setFirstname(renter.firstname);
 		}
 		if (room_id !== "") {
-	
 			setID(Selroom.id);
 			setMovein(Selroom.move_in_date);
 			API.searchDebt(room_id)
@@ -112,7 +114,7 @@ function MovieOut() {
 				.then((resp) => setServicecharge(resp))
 				.catch((error) => console.log(error));
 		}
-	}, [renter, room_id, rooms,Selroom]);
+	}, [renter, room_id, rooms, Selroom]);
 
 	useEffect(() => {
 		if (service !== null) {
@@ -125,9 +127,8 @@ function MovieOut() {
 	};
 	const handleClicked = (room) => (evt) => {
 		setSelRoom(room);
-		
 	};
-	
+
 	console.log(Selroom);
 	return (
 		<div>
@@ -174,7 +175,11 @@ function MovieOut() {
 								>
 									{rooms.map((room) => {
 										return (
-											<MenuItem key={room.room_id} value={room.room_id} onClick={handleClicked(room)}>
+											<MenuItem
+												key={room.room_id}
+												value={room.room_id}
+												onClick={handleClicked(room)}
+											>
 												{room.room_id}
 											</MenuItem>
 										);
