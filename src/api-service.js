@@ -139,14 +139,7 @@ export class API {
 			},
 		});
 	}
-	static DeleteRecord(id) {
-		return fetch(`http://127.0.0.1:8000/api/servicecharge/${id}/`, {
-			method: "DELETE",
-			headers: {
-				"content-Type": "application/json",
-			},
-		});
-	}
+
 	static Total(room_id) {
 		return fetch(
 			`http://127.0.0.1:8000/api/room/${room_id}/addservicecharge/`,
@@ -243,6 +236,23 @@ export class API {
 	}
 	static searchTSAll() {
 		return fetch(`http://127.0.0.1:8000/api/transition/`, {
+			method: "GET",
+			headers: {
+				"content-Type": "application/json",
+			},
+		});
+	}
+	static ProblemCreate(body) {
+		return fetch(`http://127.0.0.1:8000/api/problem/`, {
+			method: "POST",
+			headers: {
+				"content-Type": "application/json",
+			},
+			body: JSON.stringify(body),
+		}).then((resp) => resp.json());
+	}
+	static ViewProblem() {
+		return fetch(`http://127.0.0.1:8000/api/problem/`, {
 			method: "GET",
 			headers: {
 				"content-Type": "application/json",

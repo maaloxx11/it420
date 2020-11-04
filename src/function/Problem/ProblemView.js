@@ -1,35 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@material-ui/core/Table";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Container from "@material-ui/core/Container";
-
+import { API } from "../../api-service";
+import TableBody from "@material-ui/core/TableBody";
 function ProblemView() {
+	const [problems, setProblem] = useState(null);
+	useEffect(() => {
+		API.ViewProblem()
+			.then((resp) => resp.json())
+			.then((resp) => setProblem(resp))
+			.catch((error) => console.log(error));
+	}, []);
 	return (
 		<div>
 			<Container maxWidth="md">
-            <h1 align="center"> ดูข้อมูลเรื่องร้องเรียน-ปัญหา</h1>
-				<Table aria-label="simple table">
-					<TableHead>
-						<TableRow>
-							<TableCell align="center">รหัสห้อง</TableCell>
-							<TableCell align="center">
-								วันที่บันทึกข้อมูล
-							</TableCell>
-							<TableCell align="center">รายละเอียดเรื่องร้องเรียน-ปัญหา</TableCell>
-						</TableRow>
-						<TableRow>
-							<TableCell align="center">601</TableCell>
-							<TableCell align="center">
-								2020-10-25
-							</TableCell>
-							<TableCell align="center">แอร์ไม่เย็น</TableCell>
-						</TableRow>
-					</TableHead>
-					
-				</Table>
-
+				<h1 align="center"> ดูข้อมูลเรื่องร้องเรียน-ปัญหา</h1>
+				{problems ? (
+					<Table aria-label="simple table">
+						<TableHead>
+							<TableRow>
+								<TableCell align="center">รหัสห้อง</TableCell>
+								<TableCell align="left">วันที่เพิ่มข้อมูล</TableCell>
+								<TableCell align="left">รายละเอียด</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{problems.map((problem) => {
+								return (
+									<TableRow align="center" key={problem.id}>
+										<TableCell component="th" scope="row" align="center">
+											{problem.room_id}
+										</TableCell>
+										<TableCell align="left">
+											{problem.problem_date}
+										</TableCell>
+										<TableCell align="left">
+											{problem.promblem_description}
+										</TableCell>
+									</TableRow>
+								);
+							})}
+						</TableBody>
+					</Table>
+				) : null}
 			</Container>
 		</div>
 	);

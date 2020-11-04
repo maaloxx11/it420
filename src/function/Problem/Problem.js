@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import SaveIcon from "@material-ui/icons/Save";
 import SearchIcon from "@material-ui/icons/Search";
+import { API } from "../../api-service";
 
 function Problem() {
 	const date = new Date();
@@ -13,6 +14,16 @@ function Problem() {
 	const [room_id, SetRoomID] = useState("");
 	const [room, SetRoom] = useState(null);
 	const [promblem_description, SetDescription] = useState("");
+	const SearchRoom = () => {
+		API.searchRoom(room_id)
+			.then((resp) => resp.json())
+			.then((resp) => SetRoom([resp]))
+			.catch((error) => console.log(error));
+	};
+	const Submit = () => {
+		API.ProblemCreate({ room_id, promblem_description, problem_date });
+	};
+	console.log(room)
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -32,6 +43,7 @@ function Problem() {
 							color="primary"
 							size="large"
 							startIcon={<SearchIcon />}
+							onClick={SearchRoom}
 						></Button>
 					</Grid>
 					<Grid item xs={12}>
@@ -67,8 +79,9 @@ function Problem() {
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
+							onClick={Submit}
 						>
-							Save
+							บันทึก
 						</Button>
 					</Grid>
 				</Grid>

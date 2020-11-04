@@ -1,39 +1,33 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import "date-fns";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
+import thLocale from "date-fns/locale/th";
 import Grid from "@material-ui/core/Grid";
-import PrintIcon from "@material-ui/icons/Print";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-	MuiPickersUtilsProvider,
-	KeyboardDatePicker,
-} from "@material-ui/pickers";
+import PrintIcon from "@material-ui/icons/Print";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 
 function ReportBill() {
 	const [selectedDate, setSelectedDate] = useState(new Date());
-
 	const handleDateChange = (date) => {
 		setSelectedDate(date);
 	};
+	console.log(selectedDate)
 	return (
-		<div>
+		<Fragment>
 			<Container maxWidth="md">
 				<h1 align="center"> รายงานสรุปยอดค่าเช่า(รายเดือน)</h1>
 				<Grid container spacing={3}>
-					<MuiPickersUtilsProvider utils={DateFnsUtils}>
-						<KeyboardDatePicker
-							disableToolbar
+					<MuiPickersUtilsProvider utils={DateFnsUtils}locale={thLocale}>
+						<DatePicker
 							variant="inline"
-							format="MM/yyyy"
-							margin="normal"
-							id="date-picker-inline"
-							label="ระบุเดือน/ปี "
+							openTo="year"
+							views={["year", "month"]}
+							label="เดือน/ปี"
+							helperText="Start from year selection"
 							value={selectedDate}
 							onChange={handleDateChange}
-							KeyboardButtonProps={{
-								"aria-label": "change date",
-							}}
 						/>
 					</MuiPickersUtilsProvider>
 					<Grid item xs={12} sm={6}></Grid>
@@ -45,12 +39,12 @@ function ReportBill() {
 							size="large"
 							startIcon={<PrintIcon />}
 						>
-							พิมพ์รายงาน
+							สร้างรายงาน
 						</Button>
 					</Grid>
 				</Grid>
 			</Container>
-		</div>
+		</Fragment>
 	);
 }
 

@@ -107,7 +107,7 @@ function AddBill(props) {
 		setSelServiceCharge(null);
 		setsendTotal(false);
 	};
-
+	let payment_status = 1;
 	const CreateBill = () => {
 		API.editRoom(room_id, {
 			room_id,
@@ -118,7 +118,13 @@ function AddBill(props) {
 			electric_meter_new,
 			electric_meter_old,
 		});
-		API.updateRecord(id, { id, room_id, add_date, deadline_date });
+		API.updateRecord(id, {
+			id,
+			room_id,
+			add_date,
+			deadline_date,
+			payment_status,
+		});
 		setsendTotal(true);
 	};
 

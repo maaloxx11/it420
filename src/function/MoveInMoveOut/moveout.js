@@ -38,7 +38,6 @@ function MovieOut() {
 	const [id, setID] = useState("");
 	const [renter, setRenter] = useState(null);
 	const [service, setServicecharge] = useState(null);
-	const [serviceid, setServicechargeID] = useState("");
 	const [firstname, setFirstname] = useState("");
 	const [move_in, setMovein] = useState("");
 	const [debt, setDebt] = useState("");
@@ -65,10 +64,8 @@ function MovieOut() {
 			move_in_date,
 			move_out_date,
 		})
-			.then((resp) => console.log(resp))
 			.then(Reset())
 			.then(setRenterID(""))
-			.then(API.DeleteRecord(serviceid).catch((error) => console.log(error)))
 			.catch((error) => console.log(error));
 	};
 	let move_out_date =
@@ -94,7 +91,7 @@ function MovieOut() {
 			.then((resp) => resp.json())
 			.then((resp) => setRoom(resp))
 			.then(
-				API.searchRenter( renter_id )
+				API.searchRenter(renter_id)
 					.then((resp) => resp.json())
 					.then((resp) => setRenter(resp))
 					.catch((error) => console.log(error))
@@ -109,7 +106,7 @@ function MovieOut() {
 		if (room_id !== "") {
 			setID(Selroom.id);
 			setMovein(Selroom.move_in_date);
-			API.searchDebt(room_id)
+			API.searchPayment(room_id)
 				.then((resp) => resp.json())
 				.then((resp) => setServicecharge(resp))
 				.catch((error) => console.log(error));
@@ -117,9 +114,10 @@ function MovieOut() {
 	}, [renter, room_id, rooms, Selroom]);
 
 	useEffect(() => {
-		if (service !== null) {
-			setDebt(debt_status[service[0].payment_status]);
-			setServicechargeID(service[0].id);
+		if (service !== null && service.length > 0) {
+			setDebt("คุณมียอดค้าชำระ");
+		} else if (service !== null) {
+			setDebt("คุณไม่มียอดค้าชำระ");
 		}
 	}, [service, debt_status]);
 	const handleRoomChange = (evt) => {
@@ -129,7 +127,6 @@ function MovieOut() {
 		setSelRoom(room);
 	};
 
-	console.log(Selroom);
 	return (
 		<div>
 			<Container maxWidth="md">
