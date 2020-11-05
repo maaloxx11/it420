@@ -21,53 +21,11 @@ function ReportMenu() {
 			.catch((error) => console.log(error));
 	}, []);
 
-	let moth_th = {
-		0: "ม.ค.",
-		1: "ก.พ.",
-		2: "มี.ค.",
-		3: "เม.ย.",
-		4: "พ.ค",
-		5: "มิ.ย.",
-		6: "ก.ค.",
-		7: "ส.ค.",
-		8: "ก.ย. ",
-		9: "ต.ค",
-		10: "พ.ย.",
-		11: "ธ.ค.",
-	};
 
-	var dic_month = [];
-	if (tsl !== null) {
-		for (var i of tsl) {
-			let date = new Date(i.move_in_date);
-			let month = moth_th[date.getMonth()];
-			let list = {
-				id: i.id,
-				month: month,
-			};
-			dic_month.push(list);
-			console.log(typeof i.move_in_date);
-		}
-	}
-	var counts = dic_month.reduce((p, c) => {
-		var name = c.month;
-		if (!p.hasOwnProperty(name)) {
-			p[name] = 0;
-		}
-		p[name]++;
-		return p;
-	}, {});
-	var countsExtended = Object.keys(counts).map((k) => {
-		return { month: k, count: counts[k] };
-	});
-	if (countsExtended !== null) {
-		for (var i of countsExtended) {
-			
-			console.log(i.month);
-		}
-	}
 
-	console.log(countsExtended);
+
+
+
 	const classes = useStyles();
 	return (
 		<div>

@@ -268,4 +268,12 @@ export class API {
 			},
 		});
 	}
+	static SearchDateTS(year,month_st,month_ed,date) {
+		return fetch(`http://127.0.0.1:8000/api/transition/?start_date=${year}-${month_st}-1&end_date=${year}-${month_ed}-${date}`, {
+			method: "GET",
+			headers: {
+				"content-Type": "application/json",
+			},
+		});
+	}
 }

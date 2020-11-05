@@ -31,11 +31,14 @@ import ReportBill from "./function/Report/ReportBill.js";
 import ReportTransition from "./function/Report/ReportTransition.js";
 import CreateBill from "./function/RecordBill/CreateBill.js";
 import CreateReportBill from "./function/Report/CreateReportBill.js";
+import CreateReportTs from "./function/Report/CreateReportTs.js";
 
 function App() {
 	const [selectedPrice, setSelectedPrice] = useState(null);
 	const [selectedRecord, setSelectedRecord] = useState(null);
 	const [selectedDate, setSelectedDate] = useState("");
+	const [selectedDateStart, setSelectedDateStart] = useState("");
+	const [selectedDateEnd, setSelectedDateEnd] = useState("");
 	const loadPrice = (price) => {
 		setSelectedPrice(price);
 	};
@@ -44,6 +47,12 @@ function App() {
 	};
 	const loadDate = (date) => {
 		setSelectedDate(date);
+	};
+	const loadDatest = (datest) => {
+		setSelectedDateStart(datest);
+	};
+	const loadDateed = (datest) => {
+		setSelectedDateEnd(datest);
 	};
 
 	return (
@@ -146,7 +155,11 @@ function App() {
 							</Route>
 							<Route exact path="/reporttransition">
 								<Header></Header>
-								<ReportTransition></ReportTransition>
+								<ReportTransition dateStartClicked={loadDatest} dateEndClicked={loadDateed}></ReportTransition>
+							</Route>
+							<Route exact path="/createreportts">
+								<Header></Header>
+								<CreateReportTs dates={selectedDateStart} datee={selectedDateEnd}></CreateReportTs>
 							</Route>
 						</Switch>
 					</div>
