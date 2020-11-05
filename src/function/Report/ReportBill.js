@@ -7,19 +7,22 @@ import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
 import PrintIcon from "@material-ui/icons/Print";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-
-function ReportBill() {
+import { Link } from "react-router-dom";
+function ReportBill(props) {
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const handleDateChange = (date) => {
 		setSelectedDate(date);
 	};
-	console.log(selectedDate)
+	console.log(selectedDate);
+	const dateClicked = (date) => {
+		props.dateClicked(selectedDate);
+	};
 	return (
 		<Fragment>
 			<Container maxWidth="md">
 				<h1 align="center"> รายงานสรุปยอดค่าเช่า(รายเดือน)</h1>
 				<Grid container spacing={3}>
-					<MuiPickersUtilsProvider utils={DateFnsUtils}locale={thLocale}>
+					<MuiPickersUtilsProvider utils={DateFnsUtils} locale={thLocale}>
 						<DatePicker
 							variant="inline"
 							openTo="year"
@@ -33,14 +36,17 @@ function ReportBill() {
 					<Grid item xs={12} sm={6}></Grid>
 					<Grid item xs={12} sm={6}></Grid>
 					<Grid item xs={12} sm={6}>
-						<Button
-							variant="contained"
-							color="primary"
-							size="large"
-							startIcon={<PrintIcon />}
-						>
-							สร้างรายงาน
-						</Button>
+						<Link to="createreportbill">
+							<Button
+								variant="contained"
+								color="primary"
+								size="large"
+								startIcon={<PrintIcon />}
+								onClick={dateClicked}
+							>
+								สร้างรายงาน
+							</Button>
+						</Link>
 					</Grid>
 				</Grid>
 			</Container>

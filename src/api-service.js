@@ -259,4 +259,13 @@ export class API {
 			},
 		});
 	}
+
+	static SearchDateBill(year,month,date) {
+		return fetch(`http://127.0.0.1:8000/api/payment/?start_date=${year}-${month}-1&end_date=${year}-${month}-${date}`, {
+			method: "GET",
+			headers: {
+				"content-Type": "application/json",
+			},
+		});
+	}
 }

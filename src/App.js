@@ -29,19 +29,23 @@ import ProblemView from "./function/Problem/ProblemView.js";
 import ReportMenu from "./function/Report/ReportMenu.js";
 import ReportBill from "./function/Report/ReportBill.js";
 import ReportTransition from "./function/Report/ReportTransition.js";
-import CreateBill from "./function/RecordBill/CreateBill.js"
+import CreateBill from "./function/RecordBill/CreateBill.js";
+import CreateReportBill from "./function/Report/CreateReportBill.js";
 
 function App() {
 	const [selectedPrice, setSelectedPrice] = useState(null);
 	const [selectedRecord, setSelectedRecord] = useState(null);
+	const [selectedDate, setSelectedDate] = useState("");
 	const loadPrice = (price) => {
 		setSelectedPrice(price);
 	};
 	const loadRecord = (record) => {
 		setSelectedRecord(record);
 	};
+	const loadDate = (date) => {
+		setSelectedDate(date);
+	};
 
-	
 	return (
 		<div className="App">
 			<header className="App-header">
@@ -87,7 +91,7 @@ function App() {
 								<Header></Header>
 								<ServiceRate price={selectedPrice}></ServiceRate>
 							</Route>
-							
+
 							<Route exact path="/movein">
 								<Header></Header>
 								<MoveIn></MoveIn>
@@ -98,7 +102,7 @@ function App() {
 							</Route>
 							<Route exact path="/servicerecord">
 								<Header></Header>
-								<ServiceRecord recordClicked={loadRecord} ></ServiceRecord>
+								<ServiceRecord recordClicked={loadRecord}></ServiceRecord>
 							</Route>
 							<Route exact path="/addbill/">
 								<Header></Header>
@@ -134,7 +138,11 @@ function App() {
 							</Route>
 							<Route exact path="/reportbill">
 								<Header></Header>
-								<ReportBill></ReportBill>
+								<ReportBill dateClicked={loadDate}></ReportBill>
+							</Route>
+							<Route exact path="/createreportbill">
+								<Header></Header>
+								<CreateReportBill date={selectedDate}></CreateReportBill>
 							</Route>
 							<Route exact path="/reporttransition">
 								<Header></Header>
