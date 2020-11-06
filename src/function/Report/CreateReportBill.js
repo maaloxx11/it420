@@ -7,7 +7,13 @@ import TableRow from "@material-ui/core/TableRow";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import { API } from "../../api-service";
+import Button from "@material-ui/core/Button";
+import PrintIcon from "@material-ui/icons/Print";
+import Box from "@material-ui/core/Box";
 function CreateReportBill(props) {
+	function print() {
+		window.print();
+	}
 	let date = props.date;
 	const date_now = new Date();
 	const [payments, SetPayment] = useState(null);
@@ -47,7 +53,6 @@ function CreateReportBill(props) {
 		(date_now.getMonth() + 1) +
 		"/" +
 		date_now.getDate();
-    const a = []
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -94,10 +99,53 @@ function CreateReportBill(props) {
 										</TableRow>
 									);
 								})}
+								<TableRow>
+									<TableCell></TableCell>
+									<TableCell align="center"></TableCell>
+									<TableCell align="right"></TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										จำนวนห้อง ({moth_th[date.getMonth()]} ค.ศ.{" "}
+										{date.getFullYear()})
+									</TableCell>
+									<TableCell align="center"></TableCell>
+									{payments.reduce((sum, payment) => {
+										return <TableCell align="right">{sum + 1}</TableCell>;
+									}, null)}
+								</TableRow>
+								<TableRow>
+									<TableCell>
+										ยอดรวมค่าเช่ารายเดือน ({moth_th[date.getMonth()]} ค.ศ.{" "}
+										{date.getFullYear()})
+									</TableCell>
+									<TableCell align="center"></TableCell>
+									{payments.reduce((sum, payment) => {
+										return (
+											<TableCell align="right">
+												{sum + payment.total_payment}
+											</TableCell>
+										);
+									}, null)}
+								</TableRow>
 							</TableBody>
 						) : null}
 					</Table>
 				</Grid>
+				<br></br>
+				<Box display="block" displayPrint="none" m={1}>
+					<Grid item xs={12} align="right">
+						<Button
+							variant="contained"
+							color="primary"
+							size="large"
+							startIcon={<PrintIcon />}
+							onClick={print}
+						>
+							พิมพ์ใบแจ้งหนี้
+						</Button>
+					</Grid>
+				</Box>
 			</Container>
 		</div>
 	);

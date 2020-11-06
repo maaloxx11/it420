@@ -12,7 +12,11 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { API } from "../../api-service.js";
-
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
@@ -33,38 +37,101 @@ function EditRoom() {
 	const [water_meter_new, setWMeterN] = useState("");
 	const [water_meter_old, setWMeterO] = useState("");
 	const [room_status, setRoomStatus] = useState("");
+	const [errorRoomID, setErrorRoomID] = useState(false);
+	const [errorRoomIDDetail, setErrorRoomIDDeatail] = useState("");
+	const [errorEM, setErrorEM] = useState(false);
+	const [errorEMDetail, setErrorEMDeatail] = useState("");
+	const [errorWM, setErrorWM] = useState(false);
+	const [errorWMDetail, setErrorWMDeatail] = useState("");
+	const [open, setOpen] = useState(false);
+	const [openDetail, setOpenDetail] = useState("");
 	const searchRoomID = () => {
-		API.searchRoom(room_id)
-			.then((resp) => resp.json())
-			.then((resp) => setRoom(resp))
-			.catch((error) => console.log(error));
+		setRoom(null);
+		setEMeterO("");
+		setWMeterO("");
+		setRoomStatus("");
+		if (!/^[0-9]/.test(room_id) && room_id !== "") {
+			setErrorRoomID(true);
+			setErrorRoomIDDeatail("รหัสห้องต้องเป็นตัวเลขเท่านั้น");
+		} else {
+			API.searchRoom(room_id)
+				.then((resp) => resp.json())
+				.then((resp) => setRoom(resp))
+				.catch((error) => console.log(error));
+			setErrorRoomID(false);
+			setErrorRoomIDDeatail("");
+		}
 	};
 	useEffect(() => {
-		if (room !== null) {
-			setEMeterO(room.electric_meter_new);
-			setWMeterO(room.water_meter_new);
-			setRoomStatus(room.room_status);
+		if (room !== null && room !== "") {
+			if (room.detail === "Not found." && room_id !== "") {
+				setErrorRoomID(true);
+				setErrorRoomIDDeatail("ไม่พบข้อมูลรหัสห้องพักในระบบ");
+				setEMeterO("");
+				setWMeterO("");
+				setRoomStatus("");
+			} else {
+				setEMeterO(room.electric_meter_new);
+				setWMeterO(room.water_meter_new);
+				setRoomStatus(room.room_status);
+				setRoomType(room.room_type);
+				setErrorRoomID(false);
+				setErrorRoomIDDeatail("");
+			}
 		}
-	}, [room]);
+		if (!/^[0-9]/.test(electric_meter_new) && electric_meter_new !== "") {
+			setErrorEM(true);
+			setErrorEMDeatail("เลขมิเตอร์ไฟฟ้าต้องเป็นตัวเลขเท่านั้น");
+		} else {
+			setErrorEM(false);
+			setErrorEMDeatail("");
+		}
+		if (!/^[0-9]/.test(water_meter_new) && water_meter_new !== "") {
+			setErrorWM(true);
+			setErrorWMDeatail("เลขมิเตอร์น้ำต้องเป็นตัวเลขเท่านั้น");
+		} else {
+			setErrorWM(false);
+			setErrorWMDeatail("");
+		}
+	}, [room, room_id, water_meter_new, electric_meter_new]);
+	const handleClose = () => {
+		setOpen(false);
+	};
+
 	const EditRoom = () => {
-		API.editRoom(room_id, {
-			room_id,
-			room_status,
-			room_type,
-			water_meter_new,
-			electric_meter_new,
-		})
-			.then((resp) => console.log(resp))
-			.then(
-				setRoomType(""),
-				setRoomID(""),
-				setWMeterO(""),
-				setWMeterN(""),
-				setEMeterN(""),
-				setRoom(null),
-				setEMeterO("")
-			)
-			.catch((error) => console.log(error));
+		if (
+			room_id !== "" &&
+			room_type !== "" &&
+			water_meter_new !== "" &&
+			electric_meter_new !== "" &&
+			errorRoomID !== true &&
+			errorEM !== true &&
+			errorWM !== true
+		) {
+			API.editRoom(room_id, {
+				room_id,
+				room_status,
+				room_type,
+				water_meter_new,
+				electric_meter_new,
+			})
+				.then((resp) => console.log(resp))
+				.then(
+					setRoomType(""),
+					setRoomID(""),
+					setWMeterO(""),
+					setWMeterN(""),
+					setEMeterN(""),
+					setRoom(null),
+					setEMeterO("")
+				)
+				.catch((error) => console.log(error));
+			setOpen(true);
+			setOpenDetail("แก้ไขข้อมูลห้องพักเสร็จสิ้น");
+		} else {
+			setOpen(true);
+			setOpenDetail("กรุณาตรวจสอบการกรอกข้อมูลอีกครั้ง");
+		}
 	};
 	return (
 		<div>
@@ -76,6 +143,8 @@ function EditRoom() {
 							required
 							id="standard-basic"
 							label="รหัสห้องพัก"
+							error={errorRoomID}
+							helperText={errorRoomIDDetail}
 							value={room_id}
 							onChange={(evt) => setRoomID(evt.target.value)}
 						/>
@@ -121,6 +190,8 @@ function EditRoom() {
 						<TextField
 							id="electric_meter_new"
 							label="มิเตอร์ไฟฟ้าปัจจุบัน"
+							error={errorEM}
+							helperText={errorEMDetail}
 							value={electric_meter_new}
 							onChange={(evt) => setEMeterN(evt.target.value)}
 						/>
@@ -138,6 +209,8 @@ function EditRoom() {
 						<TextField
 							id="water_meter_new"
 							label="มิเตอร์น้ำประปาปัจจุบัน"
+							error={errorWM}
+							helperText={errorWMDetail}
 							value={water_meter_new}
 							onChange={(evt) => setWMeterN(evt.target.value)}
 						/>
@@ -156,6 +229,25 @@ function EditRoom() {
 						</Button>
 					</Grid>
 				</Grid>
+
+				<Dialog
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">แสดงผลการดำเนินการ</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							{openDetail}
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose} color="primary">
+							ปิด
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</Container>
 		</div>
 	);

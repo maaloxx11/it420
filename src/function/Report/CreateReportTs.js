@@ -7,14 +7,19 @@ import TableRow from "@material-ui/core/TableRow";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import { API } from "../../api-service";
-
+import Button from "@material-ui/core/Button";
+import PrintIcon from "@material-ui/icons/Print";
+import Box from "@material-ui/core/Box";
 function CreateReportTs(props) {
-	console.log(props.datee);
-	console.log(props.dates);
+	function print() {
+		window.print();
+	}
 	let datestart = props.dates;
 	let dateeend = props.datee;
 	const date_now = new Date();
 	const [tsl, SetTS] = useState(null);
+	const [monthstartshow, SetStart] = useState("");
+	const [monthendshow, SetEnd] = useState("");
 	let year = datestart.getFullYear();
 	let month_st = datestart.getMonth() + 1;
 	let month_ed = dateeend.getMonth() + 1;
@@ -25,14 +30,35 @@ function CreateReportTs(props) {
 		(date_now.getMonth() + 1) +
 		"/" +
 		date_now.getDate();
+	let moth_th_full = {
+		0: "มกราคม",
+		1: "กุมภาพันธ์",
+		2: "มีนาคม",
+		3: "เมษายน",
+		4: "พฤษภาคม",
+		5: "มิถุนายน",
+		6: "กรกฎาคม",
+		7: "สิงหาคม",
+		8: "กันยายน ",
+		9: "ตุลาคม",
+		10: "พฤศจิกายน",
+		11: "ธันวาคม",
+	};
 
 	useEffect(() => {
 		API.SearchDateTS(year, month_st, month_ed, day)
 			.then((resp) => resp.json())
 			.then((resp) => SetTS(resp))
-            .catch((error) => console.log(error));
-        
-	}, [year, month_st, month_ed, day]);
+			.catch((error) => console.log(error));
+		if (month_st !== null && month_ed !== null) {
+			SetStart(moth_th_full[month_st - 1]);
+			if (month_st !== month_ed) {
+				SetEnd("    -    " + moth_th_full[month_ed - 1]);
+			}
+		}
+	}, [year, month_st, month_ed, day, props, moth_th_full]);
+	console.log(monthstartshow);
+	console.log(monthendshow);
 	let moth_th = {
 		0: "ม.ค.",
 		1: "ก.พ.",
@@ -47,6 +73,7 @@ function CreateReportTs(props) {
 		10: "พ.ย.",
 		11: "ธ.ค.",
 	};
+
 	var move_in = [];
 	if (tsl !== null) {
 		for (var i of tsl) {
@@ -57,7 +84,6 @@ function CreateReportTs(props) {
 				month: month,
 			};
 			move_in.push(list);
-			
 		}
 	}
 	var counts_move_in = move_in.reduce((p, c) => {
@@ -67,23 +93,23 @@ function CreateReportTs(props) {
 		}
 		p[name]++;
 		return p;
-    }, {});
-    
+	}, {});
+
 	var countsExtended_movein = Object.keys(counts_move_in).map((k) => {
 		return { month: k, count: counts_move_in[k] };
-    });
-    var move_out = [];
+	});
+	var move_out = [];
 	if (tsl !== null) {
-		for (var i of tsl) {
-            if(i.move_out_date !== null){
-			let date = new Date(i.move_out_date);
-			let month = moth_th[date.getMonth()];
-			let list = {
-				id: i.id,
-				month: month,
-			};
-			move_out.push(list);
-        }
+		for (var l of tsl) {
+			if (l.move_out_date !== null) {
+				let date = new Date(l.move_out_date);
+				let month = moth_th[date.getMonth()];
+				let list = {
+					id: l.id,
+					month: month,
+				};
+				move_out.push(list);
+			}
 		}
 	}
 	var counts_move_out = move_out.reduce((p, c) => {
@@ -93,14 +119,23 @@ function CreateReportTs(props) {
 		}
 		p[name]++;
 		return p;
-    }, {});
-    
+	}, {});
+
 	var countsExtended_moveout = Object.keys(counts_move_out).map((k) => {
 		return { month: k, count: counts_move_out[k] };
-    });
-    
-	console.log(countsExtended_movein);
-	console.log(countsExtended_moveout);
+	});
+	var m_in = 0;
+	var m_out = 0;
+	countsExtended_movein.map((movein) => {
+		m_in = movein.count + m_in;
+		return m_in;
+	});
+	countsExtended_moveout.map((moveout) => {
+		m_out = moveout.count + m_out;
+		return m_out;
+	});
+	console.log(m_in);
+	console.log(m_out);
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -111,33 +146,77 @@ function CreateReportTs(props) {
 						</span>
 					</Grid>
 					<Grid item xs={10}>
-						<h2 align="center"> รายงานแสดงช่วงเวลาที่มีการเข้าพัก-ย้ายออก</h2>
+						<h2 align="center"> รายงานแสดงจำนวนคนเข้าพัก-ย้ายออก</h2>
 					</Grid>
 					<Grid item xs={2}></Grid>
 					<Grid item xs={10}>
-						<p align="center">aaa</p>
+						<p align="center">
+							เดือน {monthstartshow} {monthendshow} ค.ศ. {year}
+						</p>
 					</Grid>
 
 					<Table aria-label="simple table">
 						<TableHead>
 							<TableRow>
-								<TableCell></TableCell>
-								<TableCell align="center">ห้อง</TableCell>
-								<TableCell align="right">ค่าเช่ารายเดือน</TableCell>
+								<TableCell>เดือน</TableCell>
+								<TableCell align="right">จำนวนคนเข้าพัก</TableCell>
+								<TableCell align="right">จำนวนคนย้ายออก</TableCell>
 							</TableRow>
 						</TableHead>
+						{countsExtended_movein && countsExtended_moveout ? (
+							<TableBody>
+								{countsExtended_movein.map((movein) => {
+									return (
+										<TableRow key={movein.month}>
+											<TableCell component="th" scope="row">
+												{movein.month}
+											</TableCell>
 
-						<TableBody>
-							<TableRow>
-								<TableCell component="th" scope="row"></TableCell>
+											<TableCell align="right">{movein.count}</TableCell>
 
-								<TableCell align="center"></TableCell>
-
-								<TableCell align="right">a</TableCell>
-							</TableRow>
-						</TableBody>
+											{countsExtended_moveout
+												.filter((moveout) => moveout.month === movein.month)
+												.map((filteredout) => (
+													<TableCell align="right" key={filteredout.month}>
+														{filteredout.count}
+													</TableCell>
+												))}
+										</TableRow>
+									);
+								})}
+								<TableRow>
+									<TableCell></TableCell>
+									<TableCell align="center"></TableCell>
+									<TableCell align="right"></TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>สรุปยอดจำนวนคนเข้าพัก</TableCell>
+									<TableCell align="center"></TableCell>
+									<TableCell align="right">{m_in}</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>สรุปยอดจำนวนคนย้ายออก</TableCell>
+									<TableCell align="center"></TableCell>
+									<TableCell align="right">{m_out}</TableCell>
+								</TableRow>
+							</TableBody>
+						) : null}
 					</Table>
 				</Grid>
+				<br></br>
+				<Box display="block" displayPrint="none" m={1}>
+					<Grid item xs={12} align="right">
+						<Button
+							variant="contained"
+							color="primary"
+							size="large"
+							startIcon={<PrintIcon />}
+							onClick={print}
+						>
+							พิมพ์ใบแจ้งหนี้
+						</Button>
+					</Grid>
+				</Box>
 			</Container>
 			;
 		</div>

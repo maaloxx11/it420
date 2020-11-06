@@ -102,10 +102,10 @@ function MovieIn() {
 						<Grid item xs={12}>
 							<TextField
 								required
-								error={errorSearch}
 								id="renter_id"
 								label="รหัสผู้เช่า"
 								value={renter_id}
+								error={errorSearch}
 								helperText={errorSearchDetail}
 								onChange={(evt) => setRenterID(evt.target.value)}
 							/>

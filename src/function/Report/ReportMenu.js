@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-import { API } from "../../api-service";
-import { add } from "date-fns";
 const useStyles = makeStyles((theme) => ({
 	marginButton: {
 		margin: theme.spacing(2),
@@ -13,16 +11,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ReportMenu() {
-	const [tsl, setTS] = useState(null);
-	useEffect(() => {
-		API.searchTSAll()
-			.then((resp) => resp.json())
-			.then((resp) => setTS(resp))
-			.catch((error) => console.log(error));
-	}, []);
-
-
-
 
 
 

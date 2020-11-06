@@ -6,9 +6,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
 import PrintIcon from "@material-ui/icons/Print";
 import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
 import NumberFormat from "react-number-format";
 import { API } from "../../api-service";
 

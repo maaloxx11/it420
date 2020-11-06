@@ -1,37 +1,92 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import SaveIcon from "@material-ui/icons/Save";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service.js";
 
 function CreateRoom() {
 	const [renter_id, setRenterID] = useState("");
+	const [renter, setRenter] = useState(null);
 	const [firstname, setFirstName] = useState("");
 	const [lastname, setLastName] = useState("");
 	const [address, setAddress] = useState("");
 	const [telephone, setTelephone] = useState("");
+	const [errorRenterID, setErrorRenterID] = useState(false);
+	const [errorRenterIDDetail, setErrorRenterIDDeatail] = useState("");
+	const [errorTel, setErrorTel] = useState(false);
+	const [errorTelDetail, setErrorTelDeatail] = useState("");
+	const [open, setOpen] = useState(false);
+	const [openDetail, setOpenDetail] = useState("");
 
-	const CreateClicked = () => {
-		API.createRenter({
-			renter_id,
-			firstname,
-			lastname,
-			address,
-			telephone,
-		})
-			.then((resp) => console.log(resp))
-			.then(
-				setRenterID(""),
-				setFirstName(""),
-				setLastName(""),
-				setAddress(""),
-				setTelephone("")
-			)
-			.catch((error) => console.log(error));
+	const handleClose = () => {
+		setOpen(false);
 	};
-	console.log({renter_id})
+	useEffect(() => {
+		if (!/^[0-9]/.test(renter_id) && renter_id !== "") {
+			setErrorRenterID(true);
+			setErrorRenterIDDeatail("รหัสห้องต้องเป็นตัวเลขเท่านั้น");
+		} else {
+			setErrorRenterID(false);
+			setErrorRenterIDDeatail("");
+			API.searchRenter(renter_id)
+				.then((resp) => resp.json())
+				.then((resp) => setRenter(resp))
+				.catch((error) => console.log(error));
+		}
+		if (!/^[0-9]/.test(telephone) && telephone !== "") {
+			setErrorTel(true);
+			setErrorTelDeatail("หมายเลขโทรศัพท์ต้องเป็นตัวเลขเท่านั้น");
+		} else {
+			setErrorTel(false);
+			setErrorTelDeatail("");
+		}
+	}, [renter_id, telephone]);
+
+	useEffect(() => {
+		if (renter !== null && renter !== "") {
+			if (renter.detail !== "Not found.") {
+				setErrorRenterID(true);
+				setErrorRenterIDDeatail("มีรหัสนี้อยู่ในระบบแล้วกรุณาใช้รหัสอื่น");
+			}
+		}
+	}, [renter]);
+	const CreateClicked = () => {
+		if (
+			renter_id !== "" &&
+			firstname !== "" &&
+			lastname !== "" &&
+			address !== "" &&
+			errorRenterID !== true &&
+			errorTel !== true
+		) {
+			API.createRenter({
+				renter_id,
+				firstname,
+				lastname,
+				address,
+				telephone,
+			})
+				.then((resp) => console.log(resp))
+				.catch((error) => console.log(error));
+			setRenterID("");
+			setFirstName("");
+			setLastName("");
+			setAddress("");
+			setTelephone("");
+			setOpen(true);
+			setOpenDetail("บันทึกข้อมูลผู้เช่าเสร็จสิ้น");
+		} else {
+			setOpen(true);
+			setOpenDetail("กรุณาตรวจสอบการกรอกข้อมูลอีกครั้ง");
+		}
+	};
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -43,6 +98,8 @@ function CreateRoom() {
 							id="renter_id"
 							label="รหัสผู้เช่า"
 							value={renter_id}
+							error={errorRenterID}
+							helperText={errorRenterIDDetail}
 							onChange={(evt) => setRenterID(evt.target.value)}
 						/>
 					</Grid>
@@ -87,6 +144,8 @@ function CreateRoom() {
 							id="telephone"
 							label="เบอร์โทร"
 							value={telephone}
+							error={errorTel}
+							helperText={errorTelDetail}
 							onChange={(evt) => setTelephone(evt.target.value)}
 						/>
 					</Grid>
@@ -103,6 +162,24 @@ function CreateRoom() {
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">แสดงผลการดำเนินการ</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							{openDetail}
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose} color="primary">
+							ปิด
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</Container>
 		</div>
 	);
