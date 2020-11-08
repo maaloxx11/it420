@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import SaveIcon from "@material-ui/icons/Save";
 import SearchIcon from "@material-ui/icons/Search";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
 
 function Problem() {
@@ -14,16 +19,49 @@ function Problem() {
 	const [room_id, SetRoomID] = useState("");
 	const [room, SetRoom] = useState(null);
 	const [promblem_description, SetDescription] = useState("");
+	const [errorRoomID, setErrorRoomID] = useState(false);
+	const [errorRoomIDDetail, setErrorRoomIDDeatail] = useState("");
+	const [open, setOpen] = useState(false);
+	const [openDetail, setOpenDetail] = useState("");
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 	const SearchRoom = () => {
-		API.searchRoom(room_id)
-			.then((resp) => resp.json())
-			.then((resp) => SetRoom([resp]))
-			.catch((error) => console.log(error));
+		if (!/^[0-9]/.test(room_id) && room_id !== "") {
+			setErrorRoomID(true);
+			setErrorRoomIDDeatail("รหัสห้องต้องเป็นตัวเลขเท่านั้น");
+		} else {
+			API.searchRoom(room_id)
+				.then((resp) => resp.json())
+				.then((resp) => SetRoom(resp))
+				.catch((error) => console.log(error));
+			setErrorRoomID(false);
+			setErrorRoomIDDeatail("");
+		}
 	};
+	useEffect(() => {
+		if (room !== null && room_id !== "") {
+			if (room.detail === "Not found.") {
+				setErrorRoomID(true);
+				setErrorRoomIDDeatail("ไม่พบข้อมูลรหัสห้องพักในระบบ");
+			} else {
+				setErrorRoomID(false);
+				setErrorRoomIDDeatail("");
+			}
+		}
+	}, [room, room_id]);
 	const Submit = () => {
-		API.ProblemCreate({ room_id, promblem_description, problem_date });
+		if (room_id !== "" && promblem_description !== "" && problem_date !== "") {
+			API.ProblemCreate({ room_id, promblem_description, problem_date });
+			setOpen(true);
+			setOpenDetail("บันทึกข้อมูลเรื่องร้องเรียน-ปัญหาเสร็จสิ้น");
+		} else {
+			setOpen(true);
+			setOpenDetail("กรุณาตรวจสอบการกรอกข้อมูลอีกครั้ง");
+		}
 	};
-	console.log(room)
+	console.log(room);
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -35,6 +73,8 @@ function Problem() {
 							id="standard-basic"
 							label="รหัสห้องพัก"
 							value={room_id}
+							error={errorRoomID}
+							helperText={errorRoomIDDetail}
 							onChange={(evt) => SetRoomID(evt.target.value)}
 						/>
 
@@ -85,6 +125,24 @@ function Problem() {
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">แสดงผลการดำเนินการ</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							{openDetail}
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose} color="primary">
+							ปิด
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</Container>
 		</div>
 	);

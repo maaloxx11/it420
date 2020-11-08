@@ -6,7 +6,11 @@ import TextField from "@material-ui/core/TextField";
 import SaveIcon from "@material-ui/icons/Save";
 import SearchIcon from "@material-ui/icons/Search";
 import { API } from "../../api-service";
-
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 function Payment() {
 	const date = new Date();
 	const [room_id, setRoomID] = useState("");
@@ -17,7 +21,14 @@ function Payment() {
 	const [total_payment, setPaymentTotal] = useState("");
 	const [pricelate, setPricelate] = useState(null);
 	const [sc_id, setID] = useState("");
+	const [errorRoomID, setErrorRoomID] = useState(false);
+	const [errorRoomIDDetail, setErrorRoomIDDeatail] = useState("");
+	const [open, setOpen] = useState(false);
+	const [openDetail, setOpenDetail] = useState("");
 
+	const handleClose = () => {
+		setOpen(false);
+	};
 	let payment_date =
 		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 
@@ -45,27 +56,42 @@ function Payment() {
 	};
 	const searchsv = () => {
 		Reset();
-		API.searchPayment(room_id)
-			.then((resp) => resp.json())
-			.then((resp) => setSV(resp))
-			.catch((error) => console.log(error));
+		if (!/^[0-9]/.test(room_id) && room_id !== "") {
+			setErrorRoomID(true);
+			setErrorRoomIDDeatail("รหัสห้องต้องเป็นตัวเลขเท่านั้น");
+		} else {
+			API.searchPayment(room_id)
+				.then((resp) => resp.json())
+				.then((resp) => setSV(resp))
+				.catch((error) => console.log(error));
+			setErrorRoomID(false);
+			setErrorRoomIDDeatail("");
+		}
 	};
 	const IDchange = (evt) => {
 		Reset();
 		setRoomID(evt.target.value);
 	};
+
 	useEffect(() => {
-		if (servicecharge !== null && servicecharge.length > 0) {
-			API.searchRoom(room_id)
-				.then((resp) => resp.json())
-				.then((resp) => setRoom(resp))
-				.catch((error) => console.log(error));
-			setDeadline(servicecharge[0].deadline_date);
-			API.searchPriceLate()
-				.then((resp) => resp.json())
-				.then((resp) => setPricelate(resp))
-				.catch((error) => console.log(error));
-			setID(servicecharge[0].id);
+		if (servicecharge !== null) {
+			if (servicecharge.length > 0) {
+				setErrorRoomID(false);
+				setErrorRoomIDDeatail("");
+				API.searchRoom(room_id)
+					.then((resp) => resp.json())
+					.then((resp) => setRoom(resp))
+					.catch((error) => console.log(error));
+				setDeadline(servicecharge[0].deadline_date);
+				API.searchPriceLate()
+					.then((resp) => resp.json())
+					.then((resp) => setPricelate(resp))
+					.catch((error) => console.log(error));
+				setID(servicecharge[0].id);
+			} else {
+				setErrorRoomID(true);
+				setErrorRoomIDDeatail("ไม่พบข้อมูลค่าบริการค้างชำระในระบบ");
+			}
 		}
 	}, [servicecharge, room_id]);
 
@@ -95,12 +121,19 @@ function Payment() {
 		late_date,
 	]);
 	const CreatePayment = () => {
-		API.PaymentCreate({
-			sc_id,
-			total_payment,
-			payment_date,
-		});
-		API.UpdatePaymentStatus(sc_id).then(Reset()).then(setRoomID(""));
+		if (sc_id !== "" && total_payment !== "" && payment_date !== "") {
+			API.PaymentCreate({
+				sc_id,
+				total_payment,
+				payment_date,
+			});
+			API.UpdatePaymentStatus(sc_id).then(Reset()).then(setRoomID(""));
+			setOpen(true);
+			setOpenDetail("บันทึกข้อมูลการชำระค่าบริการเสร็จสิ้น");
+		} else {
+			setOpen(true);
+			setOpenDetail("กรุณาตรวจสอบการกรอกข้อมูลอีกครั้ง");
+		}
 	};
 
 	return (
@@ -115,6 +148,8 @@ function Payment() {
 							id="room_id"
 							label="รหัสห้องพัก"
 							value={room_id}
+							error={errorRoomID}
+							helperText={errorRoomIDDetail}
 							onChange={IDchange}
 						/>
 
@@ -169,10 +204,28 @@ function Payment() {
 							startIcon={<SaveIcon />}
 							onClick={CreatePayment}
 						>
-							Save
+							บันทึก
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">แสดงผลการดำเนินการ</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							{openDetail}
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose} color="primary">
+							ปิด
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</Container>
 		</div>
 	);

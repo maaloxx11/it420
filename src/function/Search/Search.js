@@ -34,33 +34,54 @@ function Search() {
 	const [renters, setRenter] = useState(null);
 	const [id, setSetID] = useState("");
 	const [tsl, setTS] = useState(null);
-
+	const [errorID, setErrorID] = useState(false);
+	const [errorIDDetail, setErrorIDDeatail] = useState("");
+	const [errorType, setErrorType] = useState(false);
+	const [errorTypeDetail, setErrorTypeDeatail] = useState("");
 	const handleChange = (event) => {
 		setType(event.target.value);
 	};
 	const SearchClick = () => {
 		setRoom(null);
 		setRenter(null);
-		if (type === 1 && id === "") {
-			API.searchRoomAll()
-				.then((resp) => resp.json())
-				.then((resp) => setRoom(resp))
-				.catch((error) => console.log(error));
-		} else if (type === 2 && id === "") {
-			API.searchRenterAll()
-				.then((resp) => resp.json())
-				.then((resp) => setRenter(resp))
-				.catch((error) => console.log(error));
-		} else if (type === 1 && id !== "") {
-			API.searchRoom(id)
-				.then((resp) => resp.json())
-				.then((resp) => setRoom([resp]))
-				.catch((error) => console.log(error));
-		} else if (type === 2 && id !== "") {
-			API.searchRenter(id)
-				.then((resp) => resp.json())
-				.then((resp) => setRenter([resp]))
-				.catch((error) => console.log(error));
+		if (type !== "") {
+			setErrorType(false);
+			setErrorTypeDeatail("");
+			if (id !== "" && !/^[0-9]/.test(id)) {
+				setErrorID(true);
+				setErrorIDDeatail("รหัสต้องเป็นตัวเลขเท่านั้น");
+			} else {
+				if (id === "") {
+					if (type === 1) {
+						API.searchRoomAll()
+							.then((resp) => resp.json())
+							.then((resp) => setRoom(resp))
+							.catch((error) => console.log(error));
+					} else if (type === 2) {
+						API.searchRenterAll()
+							.then((resp) => resp.json())
+							.then((resp) => setRenter(resp))
+							.catch((error) => console.log(error));
+					}
+				} else {
+					if (type === 1) {
+						API.searchRoom(id)
+							.then((resp) => resp.json())
+							.then((resp) => setRoom([resp]))
+							.catch((error) => console.log(error));
+					} else if (type === 2) {
+						API.searchRenter(id)
+							.then((resp) => resp.json())
+							.then((resp) => setRenter([resp]))
+							.catch((error) => console.log(error));
+					}
+				}
+				setErrorID(false);
+				setErrorIDDeatail("");
+			}
+		} else {
+			setErrorType(true);
+			setErrorTypeDeatail("กรุณาระบุหัวข้อการสืบค้น");
 		}
 	};
 	useEffect(() => {
@@ -102,13 +123,17 @@ function Search() {
 								<MenuItem value={1}>ห้องพัก</MenuItem>
 								<MenuItem value={2}>ผู้เช่า</MenuItem>
 							</Select>
-							<FormHelperText></FormHelperText>
+							<FormHelperText error={errorType}>
+								{errorTypeDetail}
+							</FormHelperText>
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} sm={4}>
 						<TextField
 							id="standard-basic"
 							label="รหัส"
+							error={errorID}
+							helperText={errorIDDetail}
 							value={id}
 							onChange={(evt) => setSetID(evt.target.value)}
 						/>

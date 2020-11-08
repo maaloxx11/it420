@@ -12,6 +12,11 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import DateFnsUtils from "@date-io/date-fns";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
 import "date-fns";
 import {
@@ -37,10 +42,16 @@ function MovieIn() {
 	const [room_id, setRoomID] = useState("");
 	const [room_type, setRoomType] = useState("");
 	const [rooms, setRoom] = useState([]);
-	const [errorSearch, setErrorSearch] = useState(false);
-	const [errorSearchDetail, setErrorSearchDeatail] = useState("");
+	const [errorRenterID, setErrorRenterID] = useState(false);
+	const [errorRenterIDDetail, setErrorRenterIDDeatail] = useState("");
+	const [errorRoom, setErrorRoom] = useState(false);
+	const [errorRoomDetail, setErrorRoomDeatail] = useState("");
+	const [open, setOpen] = useState(false);
+	const [openDetail, setOpenDetail] = useState("");
 
-
+	const handleClose = () => {
+		setOpen(false);
+	};
 	useEffect(() => {
 		if (room_type !== "") {
 			API.roomCheck({ room_type })
@@ -48,16 +59,28 @@ function MovieIn() {
 				.then((resp) => setRoom(resp))
 				.catch((error) => console.log(error));
 		}
+
 		if (renter.detail === "Not found.") {
-			setErrorSearch(true)
-			setErrorSearchDeatail("ไม่พบข้อมูลในระบบ")
+			setErrorRenterID(true);
+			setErrorRenterIDDeatail("ไม่พบข้อมูลในระบบ");
+		} else {
+			setErrorRenterID(false);
+			setErrorRenterIDDeatail("");
 		}
 	}, [room_type, renter]);
+	useEffect(() => {
+		if (room_type !== "" && rooms.length === 0) {
+			setErrorRoom(true);
+			setErrorRoomDeatail("ไม่พบห้องว่างในระบบกรุณาเลือกประเภทห้องใหม่");
+		} else {
+			setErrorRoom(false);
+			setErrorRoomDeatail("");
+		}
+	}, [room_type, rooms]);
 
 	const handleChange = (evt) => {
 		setRoomID(evt.target.value);
 	};
-
 	const handleDateChange = (date) => {
 		setSelectedDate(date);
 	};
@@ -66,28 +89,44 @@ function MovieIn() {
 		setRoomType(evt.target.value);
 		setRoomID("");
 	};
-
+	console.log(errorRoomDetail);
 	const room_status = 1;
 
 	const searchRenter = () => {
-		setErrorSearch(false)
-		setErrorSearchDeatail("")
-		API.searchRenter( renter_id)
-			.then((resp) => resp.json())
-			.then((resp) => setRenter(resp))
-			.catch((error) => console.log(error));
+		setErrorRenterID(false);
+		setErrorRenterIDDeatail("");
+
+		if (!/^[0-9]/.test(renter_id) && renter_id !== "") {
+			setErrorRenterID(true);
+			setErrorRenterIDDeatail("รหัสผู้เช่าต้องเป็นตัวเลขเท่านั้น");
+		} else {
+			API.searchRenter(renter_id)
+				.then((resp) => resp.json())
+				.then((resp) => setRenter(resp))
+				.catch((error) => console.log(error));
+			setErrorRenterID(false);
+			setErrorRenterIDDeatail("");
+		}
 	};
 	const CreateMoveIn = () => {
-		API.MoveinCreate({
-			room_id,
-			renter_id,
-			move_in_date,
-		})
-			.then((resp) => console.log(resp))
-			.then(API.updateRoomStatus(room_id, { room_id, room_status, room_type }))
-			.then(API.CreateServiceCharge({ room_id }))
-			.then(setRenterID(""), setRoomID(""), setRoomType(""))
-			.catch((error) => console.log(error));
+		if (room_id !== "" && errorRenterID !== true && renter_id !== "") {
+			API.MoveinCreate({
+				room_id,
+				renter_id,
+				move_in_date,
+			})
+				.then(
+					API.updateRoomStatus(room_id, { room_id, room_status, room_type })
+				)
+				.then(API.CreateServiceCharge({ room_id }))
+				.then(setRenterID(""), setRoomID(""), setRoomType(""))
+				.catch((error) => console.log(error));
+			setOpen(true);
+			setOpenDetail("แก้ไขอัตรค่าบริการเสร็จสิ้น");
+		} else {
+			setOpen(true);
+			setOpenDetail("กรุณาตรวจสอบการกรอกข้อมูลอีกครั้ง");
+		}
 	};
 
 	let move_in_date =
@@ -105,11 +144,11 @@ function MovieIn() {
 								id="renter_id"
 								label="รหัสผู้เช่า"
 								value={renter_id}
-								error={errorSearch}
-								helperText={errorSearchDetail}
+								error={errorRenterID}
+								helperText={errorRenterIDDetail}
 								onChange={(evt) => setRenterID(evt.target.value)}
 							/>
-						
+
 							<Button
 								variant="contained"
 								color="primary"
@@ -146,7 +185,10 @@ function MovieIn() {
 								<MenuItem value={4}>ห้องเฟอร์นิเจอร์+แอร์</MenuItem>
 							</Select>
 
-							<FormHelperText></FormHelperText>
+							<FormHelperText error={errorRenterID}>
+								{" "}
+								{errorRenterIDDetail}
+							</FormHelperText>
 						</FormControl>
 					</Grid>
 
@@ -171,7 +213,9 @@ function MovieIn() {
 								})}
 							</Select>
 
-							<FormHelperText></FormHelperText>
+							<FormHelperText error={errorRoom}>
+								{errorRoomDetail}
+							</FormHelperText>
 						</FormControl>
 					</Grid>
 
@@ -208,6 +252,24 @@ function MovieIn() {
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">แสดงผลการดำเนินการ</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							{openDetail}
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose} color="primary">
+							ปิด
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</Container>
 		</div>
 	);

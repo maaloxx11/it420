@@ -28,7 +28,6 @@ function ReportBill(props) {
 							openTo="year"
 							views={["year", "month"]}
 							label="เดือน/ปี"
-							helperText="Start from year selection"
 							value={selectedDate}
 							onChange={handleDateChange}
 						/>

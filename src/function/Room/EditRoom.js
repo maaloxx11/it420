@@ -45,6 +45,7 @@ function EditRoom() {
 	const [errorWMDetail, setErrorWMDeatail] = useState("");
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
+	
 	const searchRoomID = () => {
 		setRoom(null);
 		setEMeterO("");
@@ -63,8 +64,8 @@ function EditRoom() {
 		}
 	};
 	useEffect(() => {
-		if (room !== null && room !== "") {
-			if (room.detail === "Not found." && room_id !== "") {
+		if (room !== null && room_id !== "") {
+			if (room.detail === "Not found." ) {
 				setErrorRoomID(true);
 				setErrorRoomIDDeatail("ไม่พบข้อมูลรหัสห้องพักในระบบ");
 				setEMeterO("");

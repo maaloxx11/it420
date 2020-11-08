@@ -12,6 +12,11 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import DateFnsUtils from "@date-io/date-fns";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
 import "date-fns";
 import {
@@ -42,14 +47,22 @@ function MovieOut() {
 	const [move_in, setMovein] = useState("");
 	const [debt, setDebt] = useState("");
 	const [date, setSelectedDate] = useState(new Date());
-	const [rooms, setRoom] = useState([]);
+	const [rooms, setRoom] = useState(null);
+	const [errorRenterID, setErrorRenterID] = useState(false);
+	const [errorRenterIDDetail, setErrorRenterIDDeatail] = useState("");
 	const [Selroom, setSelRoom] = useState(null);
+	const [open, setOpen] = useState(false);
+	const [openDetail, setOpenDetail] = useState("");
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 	const Reset = () => {
 		setRoomID("");
 		setRenter(null);
 		setServicecharge(null);
 		setFirstname("");
-		setRoom([]);
+		setRoom(null);
 		setDebt("");
 		setMovein("");
 	};
@@ -58,15 +71,27 @@ function MovieOut() {
 		setRoomID(event.target.value);
 	};
 	const UpdateMoveOut = () => {
-		API.updateMoveOut(id, {
-			room_id,
-			renter_id,
-			move_in_date,
-			move_out_date,
-		})
-			.then(Reset())
-			.then(setRenterID(""))
-			.catch((error) => console.log(error));
+		if (
+			room_id !== "" &&
+			renter_id !== "" &&
+			move_out_date !== "" &&
+			debt !== "คุณมียอดค้าชำระ"
+		) {
+			API.updateMoveOut(id, {
+				room_id,
+				renter_id,
+				move_in_date,
+				move_out_date,
+			}).catch((error) => console.log(error));
+			Reset();
+			setRenterID("");
+			API.UpdateSVStatus(room_id).catch((error) => console.log(error));
+			setOpen(true);
+			setOpenDetail("บันทึกวันย้ายออกเสร็จสิ้น");
+		} else {
+			setOpen(true);
+			setOpenDetail("กรุณาตรวจสอบการกรอกข้อมูลอีกครั้ง");
+		}
 	};
 	let move_out_date =
 		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
@@ -86,17 +111,18 @@ function MovieOut() {
 		setSelectedDate(date);
 	};
 	const searchRenterTs = () => {
+		setErrorRenterID(false);
+		setErrorRenterIDDeatail("");
 		Reset();
-		API.searchRenterTs({ renter_id })
-			.then((resp) => resp.json())
-			.then((resp) => setRoom(resp))
-			.then(
-				API.searchRenter(renter_id)
-					.then((resp) => resp.json())
-					.then((resp) => setRenter(resp))
-					.catch((error) => console.log(error))
-			)
-			.catch((error) => console.log(error));
+		if (!/^[0-9]/.test(renter_id) && renter_id !== "") {
+			setErrorRenterID(true);
+			setErrorRenterIDDeatail("รหัสผู้เช่าต้องเป็นตัวเลขเท่านั้น");
+		} else {
+			API.searchRenterTs({ renter_id })
+				.then((resp) => resp.json())
+				.then((resp) => setRoom(resp))
+				.catch((error) => console.log(error));
+		}
 	};
 
 	useEffect(() => {
@@ -119,7 +145,21 @@ function MovieOut() {
 		} else if (service !== null) {
 			setDebt("คุณไม่มียอดค้าชำระ");
 		}
-	}, [service, debt_status]);
+
+		if (rooms !== null && renter === null) {
+			if (rooms.length !== 0) {
+				API.searchRenter(renter_id)
+					.then((resp) => resp.json())
+					.then((resp) => setRenter(resp))
+					.catch((error) => console.log(error));
+				setErrorRenterID(false);
+				setErrorRenterIDDeatail("");
+			} else {
+				setErrorRenterID(true);
+				setErrorRenterIDDeatail("ไม่พบข้อมูลในระบบ");
+			}
+		}
+	}, [service, debt_status, rooms, renter_id, renter]);
 	const handleRoomChange = (evt) => {
 		setRoomID(evt.target.value);
 	};
@@ -137,6 +177,8 @@ function MovieOut() {
 							required
 							id="standard-basic"
 							label="รหัสผู้เช่า"
+							error={errorRenterID}
+							helperText={errorRenterIDDetail}
 							value={renter_id}
 							onChange={(evt) => setRenterID(evt.target.value)}
 						/>
@@ -242,6 +284,24 @@ function MovieOut() {
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">แสดงผลการดำเนินการ</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							{openDetail}
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose} color="primary">
+							ปิด
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</Container>
 		</div>
 	);

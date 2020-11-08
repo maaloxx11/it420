@@ -30,6 +30,7 @@ import ReportMenu from "./function/Report/ReportMenu.js";
 import ReportBill from "./function/Report/ReportBill.js";
 import ReportTransition from "./function/Report/ReportTransition.js";
 import CreateBill from "./function/RecordBill/CreateBill.js";
+import CreateBillAll from "./function/RecordBill/CreateBillAll.js";
 import CreateReportBill from "./function/Report/CreateReportBill.js";
 import CreateReportTs from "./function/Report/CreateReportTs.js";
 
@@ -120,6 +121,10 @@ function App() {
 							<Route exact path="/createbill/:billId">
 								<Header></Header>
 								<CreateBill servicecharge={selectedRecord}></CreateBill>
+							</Route>
+							<Route exact path="/createbillall/">
+								<Header></Header>
+								<CreateBillAll ></CreateBillAll>
 							</Route>
 							<Route exact path="/payment">
 								<Header></Header>

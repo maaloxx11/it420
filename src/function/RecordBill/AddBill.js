@@ -10,6 +10,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
 const useStyles = makeStyles((theme) => ({
 	formControl: {
@@ -37,53 +42,25 @@ function AddBill(props) {
 	const [water_meter_new, setWMeterN] = useState("");
 	const [water_meter_old, setWMeterO] = useState("");
 	const [adddatelast, setAddDateLast] = useState("");
+	const [status, setStatus] = useState("");
 	const [room_type, setRoomType] = useState("");
 	const [room_typedef, setRoomTypeDef] = useState("");
 	const [servicecharges, setServiceCharge] = useState([]);
 	const [Selservicecharges, setSelServiceCharge] = useState(null);
 	const [sendTotal, setsendTotal] = useState(false);
 	const [room, setRoom] = useState(null);
+	const [errorEM, setErrorEM] = useState(false);
+	const [errorEMDetail, setErrorEMDeatail] = useState("");
+	const [errorWM, setErrorWM] = useState(false);
+	const [errorWMDetail, setErrorWMDeatail] = useState("");
+	const [open, setOpen] = useState(false);
+	const [openDetail, setOpenDetail] = useState("");
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 	let room_status = 1;
-	useEffect(() => {
-		API.searchServiceCharge()
-			.then((resp) => resp.json())
-			.then((resp) => setServiceCharge(resp))
-			.catch((error) => console.log(error));
-		if (props.servicecharge !== null && room_id === "") {
-			setRoomId(parseInt(props.servicecharge.room_id));
-			setAddDateLast(props.servicecharge.add_date);
-			setSelServiceCharge(props.servicecharge);
-		}
-		if (room_id !== "") {
-			API.searchRoom(room_id)
-				.then((resp) => resp.json())
-				.then((resp) => setRoom(resp))
-				.catch((error) => console.log(error));
-		}
-	}, [props, room_id]);
-
-	useEffect(() => {
-		if (room !== null) {
-			setRoomTypeDef(room_def[room.room_type]);
-			setRoomType(room.room_type);
-			setEMeterO(room.electric_meter_new);
-			setWMeterO(room.water_meter_new);
-			setAddDateLast(Selservicecharges.add_date);
-			setId(Selservicecharges.id);
-		}
-		if (sendTotal === true) {
-			API.Total(room_id);
-			Reset();
-		}
-	}, [room, room_def, Selservicecharges, sendTotal, room_id]);
-
-	const handleChange = (evt) => {
-		setRoomId("");
-		setRoomId(evt.target.value);
-	};
-	const handleClicked = (servicecharge) => (evt) => {
-		setSelServiceCharge(servicecharge);
-	};
+	let debt_status = { 1: "มียอดค้างชำระ", 0: "ไม่มียอดค้างชำระ" };
 	let add_date =
 		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 
@@ -93,9 +70,50 @@ function AddBill(props) {
 	} else {
 		deadline_date = date.getFullYear() + "-" + (date.getMonth() + 2) + "-" + 5;
 	}
+	useEffect(() => {
+		if (servicecharges.length === 0) {
+			API.searchServiceCharge()
+				.then((resp) => resp.json())
+				.then((resp) => setServiceCharge(resp))
+				.catch((error) => console.log(error));
+		}
+		if (props.servicecharge !== null && room_id === "") {
+			setRoomId(parseInt(props.servicecharge.room_id));
+			setAddDateLast(props.servicecharge.add_date);
+			setSelServiceCharge(props.servicecharge);
+			setStatus(debt_status[props.servicecharge.payment_status]);
+		}
+		if (room_id !== "" && room === null) {
+			API.searchRoom(room_id)
+				.then((resp) => resp.json())
+				.then((resp) => setRoom(resp))
+				.catch((error) => console.log(error));
+		}
+		if (!/^[0-9]/.test(electric_meter_new) && electric_meter_new !== "") {
+			setErrorEM(true);
+			setErrorEMDeatail("เลขมิเตอร์ไฟฟ้าต้องเป็นตัวเลขเท่านั้น");
+		} else {
+			setErrorEM(false);
+			setErrorEMDeatail("");
+		}
+		if (!/^[0-9]/.test(water_meter_new) && water_meter_new !== "") {
+			setErrorWM(true);
+			setErrorWMDeatail("เลขมิเตอร์น้ำต้องเป็นตัวเลขเท่านั้น");
+		} else {
+			setErrorWM(false);
+			setErrorWMDeatail("");
+		}
+	}, [
+		props,
+		room_id,
+		debt_status,
+		servicecharges,
+		room,
+		electric_meter_new,
+		water_meter_new,
+	]);
 	const Reset = () => {
 		setRoomType("");
-		setRoomId("");
 		setWMeterO("");
 		setWMeterN("");
 		setEMeterN("");
@@ -106,26 +124,67 @@ function AddBill(props) {
 		setServiceCharge([]);
 		setSelServiceCharge(null);
 		setsendTotal(false);
+		setStatus("");
 	};
+
+	useEffect(() => {
+		if (room !== null) {
+			setRoomTypeDef(room_def[room.room_type]);
+			setRoomType(room.room_type);
+			setEMeterO(room.electric_meter_new);
+			setWMeterO(room.water_meter_new);
+			setAddDateLast(Selservicecharges.add_date);
+			setId(Selservicecharges.id);
+			setStatus(debt_status[Selservicecharges.payment_status]);
+		}
+		if (sendTotal === true) {
+			API.Total(room_id);
+		}
+	}, [room, debt_status, room_def, Selservicecharges, sendTotal, room_id]);
+
+	const handleChange = (evt) => {
+		setRoomId("");
+		setRoomId(evt.target.value);
+	};
+	const handleClicked = (servicecharge) => (evt) => {
+		Reset();
+		setSelServiceCharge(servicecharge);
+	};
+
 	let payment_status = 1;
 	const CreateBill = () => {
-		API.editRoom(room_id, {
-			room_id,
-			room_status,
-			room_type,
-			water_meter_new,
-			water_meter_old,
-			electric_meter_new,
-			electric_meter_old,
-		});
-		API.updateRecord(id, {
-			id,
-			room_id,
-			add_date,
-			deadline_date,
-			payment_status,
-		});
-		setsendTotal(true);
+		if (
+			room_id !== "" &&
+			electric_meter_new !== "" &&
+			electric_meter_old !== "" &&
+			errorEM !== true &&
+			errorWM !== true &&
+			status !== "มียอดค้างชำระ"
+		) {
+			API.editRoom(room_id, {
+				room_id,
+				room_status,
+				room_type,
+				water_meter_new,
+				water_meter_old,
+				electric_meter_new,
+				electric_meter_old,
+			});
+			API.updateRecord(id, {
+				id,
+				room_id,
+				add_date,
+				deadline_date,
+				payment_status,
+			});
+			Reset();
+			setsendTotal(true);
+			setOpen(true);
+			setOpenDetail("บันทึกค่าบริการเสร็จสิ้น");
+		} else {
+			setOpen(true);
+			setOpenDetail("กรุณาตรวจสอบการกรอกข้อมูลอีกครั้ง");
+		}
 	};
 
 	return (
@@ -175,7 +234,14 @@ function AddBill(props) {
 							value={adddatelast}
 						/>
 					</Grid>
-
+					<Grid item xs={12}>
+						<TextField
+							disabled
+							id="status"
+							label="สถานะการชำระเงิน"
+							value={status}
+						/>
+					</Grid>
 					<Grid item xs={12} sm={6}>
 						<TextField
 							disabled
@@ -189,6 +255,8 @@ function AddBill(props) {
 							required
 							id="new_ele"
 							label="มิเตอร์ไฟฟ้าใหม่"
+							error={errorEM}
+							helperText={errorEMDetail}
 							value={electric_meter_new}
 							onChange={(evt) => setEMeterN(evt.target.value)}
 						/>
@@ -207,6 +275,8 @@ function AddBill(props) {
 							id="new_water"
 							label="มิเตอร์น้ำประปาใหม่"
 							value={water_meter_new}
+							error={errorWM}
+							helperText={errorWMDetail}
 							onChange={(evt) => setWMeterN(evt.target.value)}
 						/>
 					</Grid>
@@ -241,6 +311,25 @@ function AddBill(props) {
 						</Button>
 					</Grid>
 				</Grid>
+
+				<Dialog
+					open={open}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">แสดงผลการดำเนินการ</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							{openDetail}
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose} color="primary">
+							ปิด
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</Container>
 		</div>
 	);

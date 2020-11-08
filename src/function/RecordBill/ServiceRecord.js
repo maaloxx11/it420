@@ -69,6 +69,18 @@ function ServiceRecord(props) {
 				</Table>
 				<br></br>
 				<Grid item xs={12} align="right">
+				<Link to="/addbill/">
+					<Button
+						variant="contained"
+						color="primary"
+						size="large"
+						startIcon={<PrintIcon />}
+					>
+						บันทึกข้อมูลค่าบริการ
+					</Button>
+					</Link>
+					<p></p>
+					<Link to="/createbillall/">
 					<Button
 						variant="contained"
 						color="primary"
@@ -77,6 +89,7 @@ function ServiceRecord(props) {
 					>
 						สร้างใบแจ้งหนี้ทั้งหมด
 					</Button>
+					</Link>
 				</Grid>
 			</Container>
 		</div>

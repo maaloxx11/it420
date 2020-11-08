@@ -132,7 +132,7 @@ export class API {
 		}).then((resp) => resp.json());
 	}
 	static searchServiceCharge() {
-		return fetch(`http://127.0.0.1:8000/api/servicecharge/`, {
+		return fetch(`http://127.0.0.1:8000/api/servicecharge/?status=1`, {
 			method: "GET",
 			headers: {
 				"content-Type": "application/json",
@@ -260,20 +260,37 @@ export class API {
 		});
 	}
 
-	static SearchDateBill(year,month,date) {
-		return fetch(`http://127.0.0.1:8000/api/payment/?start_date=${year}-${month}-1&end_date=${year}-${month}-${date}`, {
-			method: "GET",
-			headers: {
-				"content-Type": "application/json",
-			},
-		});
+	static SearchDateBill(year, month, date) {
+		return fetch(
+			`http://127.0.0.1:8000/api/payment/?start_date=${year}-${month}-1&end_date=${year}-${month}-${date}`,
+			{
+				method: "GET",
+				headers: {
+					"content-Type": "application/json",
+				},
+			}
+		);
 	}
-	static SearchDateTS(year,month_st,month_ed,date) {
-		return fetch(`http://127.0.0.1:8000/api/transition/?start_date=${year}-${month_st}-1&end_date=${year}-${month_ed}-${date}`, {
-			method: "GET",
-			headers: {
-				"content-Type": "application/json",
-			},
-		});
+	static SearchDateTS(year, month_st, month_ed, date) {
+		return fetch(
+			`http://127.0.0.1:8000/api/transition/?start_date=${year}-${month_st}-1&end_date=${year}-${month_ed}-${date}`,
+			{
+				method: "GET",
+				headers: {
+					"content-Type": "application/json",
+				},
+			}
+		);
+	}
+	static UpdateSVStatus(room_id) {
+		return fetch(
+			`http://127.0.0.1:8000/api/room/${room_id}/updateservicestatus/`,
+			{
+				method: "POST",
+				headers: {
+					"content-Type": "application/json",
+				},
+			}
+		).then((resp) => resp.json());
 	}
 }

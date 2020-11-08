@@ -36,13 +36,13 @@ function CreateBill(props) {
 			SetRoomType(room_def[room.room_type]);
 			SetRoomTypeInt(Number(room.room_type));
 		}
-		if (room === null) {
+		if (prices === null) {
 			API.searchPrice()
 				.then((resp) => resp.json())
 				.then((resp) => SetPrice(resp))
 				.catch((error) => console.log(error));
 		}
-	}, [sv, room, room_def]);
+	}, [sv, room, room_def,prices]);
 	useEffect(() => {
 		if (room_id !== "") {
 			API.searchRoom(room_id)
@@ -136,7 +136,7 @@ function CreateBill(props) {
 									<p align="left" key={filteredPrice.price_id}>
 										หมายเหตุ <br></br>กรุณาชำระเงินภายในวันที่ 5 ของทุกเดือน
 										<br></br>
-										ถ้าหากเกินปรับ {filteredPrice.price_num} ต่อวัน
+										ถ้าหากเกินปรับ {filteredPrice.price_num} บาทต่อวัน
 									</p>
 								))}
 						</div>
