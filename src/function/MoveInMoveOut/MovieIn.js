@@ -48,7 +48,7 @@ function MovieIn() {
 	const [errorRoomDetail, setErrorRoomDeatail] = useState("");
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
-
+	const [sendTotal, setsendTotal] = useState(false);
 	const handleClose = () => {
 		setOpen(false);
 	};
@@ -76,7 +76,12 @@ function MovieIn() {
 			setErrorRoom(false);
 			setErrorRoomDeatail("");
 		}
-	}, [room_type, rooms]);
+		if (sendTotal === true) {
+			API.UpdateTotalFirst(room_id);
+			console.log(room_id)
+			
+		}
+	}, [room_type, rooms, sendTotal, room_id]);
 
 	const handleChange = (evt) => {
 		setRoomID(evt.target.value);
@@ -85,6 +90,9 @@ function MovieIn() {
 		setSelectedDate(date);
 	};
 
+	let deadline_date =
+		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+	console.log(deadline_date);
 	const handleRoomType = (evt) => {
 		setRoomType(evt.target.value);
 		setRoomID("");
@@ -118,11 +126,12 @@ function MovieIn() {
 				.then(
 					API.updateRoomStatus(room_id, { room_id, room_status, room_type })
 				)
-				.then(API.CreateServiceCharge({ room_id }))
-				.then(setRenterID(""), setRoomID(""), setRoomType(""))
+				.then(API.CreateServiceCharge({ room_id, deadline_date }))
+				.then(setRenterID(""), setRoomType(""))
 				.catch((error) => console.log(error));
+			setsendTotal(true);
 			setOpen(true);
-			setOpenDetail("แก้ไขอัตรค่าบริการเสร็จสิ้น");
+			setOpenDetail("บันทึกข้อมูลการเข้าพักเสร็จสิ้น");
 		} else {
 			setOpen(true);
 			setOpenDetail("กรุณาตรวจสอบการกรอกข้อมูลอีกครั้ง");
@@ -184,11 +193,6 @@ function MovieIn() {
 								<MenuItem value={3}>ห้องแอร์</MenuItem>
 								<MenuItem value={4}>ห้องเฟอร์นิเจอร์+แอร์</MenuItem>
 							</Select>
-
-							<FormHelperText error={errorRenterID}>
-								{" "}
-								{errorRenterIDDetail}
-							</FormHelperText>
 						</FormControl>
 					</Grid>
 

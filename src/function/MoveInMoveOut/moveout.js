@@ -86,6 +86,7 @@ function MovieOut() {
 			Reset();
 			setRenterID("");
 			API.UpdateSVStatus(room_id).catch((error) => console.log(error));
+			API.UpdateRoomStatusMoveout(room_id).catch((error) => console.log(error));
 			setOpen(true);
 			setOpenDetail("บันทึกวันย้ายออกเสร็จสิ้น");
 		} else {
@@ -215,7 +216,7 @@ function MovieOut() {
 									{rooms.map((room) => {
 										return (
 											<MenuItem
-												key={room.room_id}
+												key={room.id}
 												value={room.room_id}
 												onClick={handleClicked(room)}
 											>

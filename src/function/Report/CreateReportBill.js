@@ -18,6 +18,7 @@ function CreateReportBill(props) {
 	const date_now = new Date();
 	const [payments, SetPayment] = useState(null);
 	const [svl, SetSV] = useState(null);
+	const [total, SetTotal] = useState(0);
 	let year = date.getFullYear();
 	let month = date.getMonth() + 1;
 	let day = new Date(year, month, 0).getDate();
@@ -27,7 +28,7 @@ function CreateReportBill(props) {
 			.then((resp) => resp.json())
 			.then((resp) => SetPayment(resp))
 			.catch((error) => console.log(error));
-		API.searchServiceCharge()
+		API.searchServiceChargeBill()
 			.then((resp) => resp.json())
 			.then((resp) => SetSV(resp))
 			.catch((error) => console.log(error));
@@ -53,6 +54,13 @@ function CreateReportBill(props) {
 		(date_now.getMonth() + 1) +
 		"/" +
 		date_now.getDate();
+	if (payments !== null && total === 0) {
+		const result = payments.reduce((sum, number) => {
+			return sum + number.total_payment;
+		}, 0);
+		SetTotal(result);
+	}
+
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -110,9 +118,9 @@ function CreateReportBill(props) {
 										{date.getFullYear()})
 									</TableCell>
 									<TableCell align="center"></TableCell>
-									{payments.reduce((sum, payment) => {
-										return <TableCell align="right">{sum + 1}</TableCell>;
-									}, null)}
+									<TableCell align="right">
+										<p>{payments.length}</p>
+									</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>
@@ -120,13 +128,8 @@ function CreateReportBill(props) {
 										{date.getFullYear()})
 									</TableCell>
 									<TableCell align="center"></TableCell>
-									{payments.reduce((sum, payment) => {
-										return (
-											<TableCell align="right">
-												{sum + payment.total_payment}
-											</TableCell>
-										);
-									}, null)}
+
+									<TableCell align="right">{total}</TableCell>
 								</TableRow>
 							</TableBody>
 						) : null}

@@ -30,7 +30,11 @@ function Payment() {
 		setOpen(false);
 	};
 	let payment_date =
-		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+		date.getFullYear() +
+		"-" +
+		("0" + (date.getMonth() + 1)).slice(-2) +
+		"-" +
+		("0" + date.getDate()).slice(-2);
 
 	let dateline_day = new Date(dead_line);
 	let payment_day = new Date(payment_date);
@@ -100,7 +104,8 @@ function Payment() {
 			setRoomType(room_def[room.room_type]);
 		}
 		if (dead_line !== "" && pricelate !== null) {
-			if (payment_date < dead_line) {
+			if (payment_date <= dead_line) {
+				console.log("a");
 				setPaymentTotal(servicecharge[0].total);
 			} else if (payment_date > max_late_date) {
 				setPaymentTotal(servicecharge[0].total + 1000);
@@ -109,6 +114,9 @@ function Payment() {
 					servicecharge[0].total + late_date * pricelate.price_num
 				);
 			}
+			console.log(payment_date);
+			console.log(dead_line);
+		} else {
 		}
 	}, [
 		room,
@@ -120,6 +128,7 @@ function Payment() {
 		pricelate,
 		late_date,
 	]);
+
 	const CreatePayment = () => {
 		if (sc_id !== "" && total_payment !== "" && payment_date !== "") {
 			API.PaymentCreate({

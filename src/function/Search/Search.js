@@ -199,7 +199,11 @@ function Search() {
 											<TableCell align="left">{renter.address}</TableCell>
 											<TableCell align="left">{renter.telephone}</TableCell>
 											{tsl
-												.filter((ts) => ts.renter_id === renter.renter_id)
+												.filter(
+													(ts) =>
+														ts.renter_id === renter.renter_id &&
+														ts.move_out_date === null
+												)
 												.map((filteredTS) => (
 													<TableCell align="center" key={filteredTS.id}>
 														{filteredTS.room_id}

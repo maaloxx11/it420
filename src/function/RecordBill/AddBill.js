@@ -122,7 +122,6 @@ function AddBill(props) {
 		setAddDateLast("");
 		setRoomTypeDef("");
 		setServiceCharge([]);
-		setSelServiceCharge(null);
 		setsendTotal(false);
 		setStatus("");
 	};

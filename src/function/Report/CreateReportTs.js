@@ -46,17 +46,19 @@ function CreateReportTs(props) {
 	};
 
 	useEffect(() => {
-		API.SearchDateTS(year, month_st, month_ed, day)
-			.then((resp) => resp.json())
-			.then((resp) => SetTS(resp))
-			.catch((error) => console.log(error));
+		if (tsl === null) {
+			API.SearchDateTS(year, month_st, month_ed, day)
+				.then((resp) => resp.json())
+				.then((resp) => SetTS(resp))
+				.catch((error) => console.log(error));
+		}
 		if (month_st !== null && month_ed !== null) {
 			SetStart(moth_th_full[month_st - 1]);
 			if (month_st !== month_ed) {
 				SetEnd("    -    " + moth_th_full[month_ed - 1]);
 			}
 		}
-	}, [year, month_st, month_ed, day, props, moth_th_full]);
+	}, [year, month_st, month_ed, day, props, moth_th_full,tsl]);
 	console.log(monthstartshow);
 	console.log(monthendshow);
 	let moth_th = {
