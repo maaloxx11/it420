@@ -10,19 +10,20 @@ import { API } from "../../api-service";
 import Button from "@material-ui/core/Button";
 import PrintIcon from "@material-ui/icons/Print";
 import Box from "@material-ui/core/Box";
+import { Redirect } from "react-router-dom";
 function CreateReportTs(props) {
 	function print() {
 		window.print();
 	}
-	let datestart = props.dates;
-	let dateeend = props.datee;
+
 	const date_now = new Date();
 	const [tsl, SetTS] = useState(null);
 	const [monthstartshow, SetStart] = useState("");
 	const [monthendshow, SetEnd] = useState("");
-	let year = datestart.getFullYear();
-	let month_st = datestart.getMonth() + 1;
-	let month_ed = dateeend.getMonth() + 1;
+	const [year, Setyear] = useState("");
+	const [month_st, Setmonth_st] = useState("");
+	const [month_ed, Setmonth_ed] = useState("");
+
 	let day = new Date(year, month_ed, 0).getDate();
 	let add_date =
 		date_now.getFullYear() +
@@ -46,21 +47,29 @@ function CreateReportTs(props) {
 	};
 
 	useEffect(() => {
-		if (tsl === null) {
-			API.SearchDateTS(year, month_st, month_ed, day)
-				.then((resp) => resp.json())
-				.then((resp) => SetTS(resp))
-				.catch((error) => console.log(error));
-		}
-		if (month_st !== null && month_ed !== null) {
-			SetStart(moth_th_full[month_st - 1]);
-			if (month_st !== month_ed) {
-				SetEnd("    -    " + moth_th_full[month_ed - 1]);
+		if (props.dates !== "" && props.datee !== "") {
+			if (year === "") {
+				Setyear(props.dates.getFullYear());
+				Setmonth_st(props.dates.getMonth() + 1);
+				Setmonth_ed(props.datee.getMonth() + 1);
+			}
+			if ((year !== "", month_st !== "", month_ed !== "")) {
+				if (tsl === null) {
+					API.SearchDateTS(year, month_st, month_ed, day)
+						.then((resp) => resp.json())
+						.then((resp) => SetTS(resp))
+						.catch((error) => console.log(error));
+				}
+				if (month_st !== null && month_ed !== null) {
+					SetStart(moth_th_full[month_st - 1]);
+					if (month_st !== month_ed) {
+						SetEnd("    -    " + moth_th_full[month_ed - 1]);
+					}
+				}
 			}
 		}
-	}, [year, month_st, month_ed, day, props, moth_th_full,tsl]);
-	console.log(monthstartshow);
-	console.log(monthendshow);
+	}, [year, month_st, month_ed, day, props, moth_th_full, tsl]);
+
 	let moth_th = {
 		0: "ม.ค.",
 		1: "ก.พ.",
@@ -136,91 +145,92 @@ function CreateReportTs(props) {
 		m_out = moveout.count + m_out;
 		return m_out;
 	});
-	console.log(m_in);
-	console.log(m_out);
 	return (
 		<div>
-			<Container maxWidth="md">
-				<Grid container spacing={3}>
-					<Grid item xs={2}>
-						<span>
-							พิมพ์วันที่ : <br></br> {add_date}
-						</span>
-					</Grid>
-					<Grid item xs={10}>
-						<h2 align="center"> รายงานแสดงจำนวนคนเข้าพัก-ย้ายออก</h2>
-					</Grid>
-					<Grid item xs={2}></Grid>
-					<Grid item xs={10}>
-						<p align="center">
-							เดือน {monthstartshow} {monthendshow} ค.ศ. {year}
-						</p>
-					</Grid>
+			{props.dates ? (
+				<Container maxWidth="md">
+					<Grid container spacing={3}>
+						<Grid item xs={2}>
+							<span>
+								พิมพ์วันที่ : <br></br> {add_date}
+							</span>
+						</Grid>
+						<Grid item xs={10}>
+							<h2 align="center"> รายงานแสดงจำนวนคนเข้าพัก-ย้ายออก</h2>
+						</Grid>
+						<Grid item xs={2}></Grid>
+						<Grid item xs={10}>
+							<p align="center">
+								เดือน {monthstartshow} {monthendshow} ค.ศ. {year}
+							</p>
+						</Grid>
 
-					<Table aria-label="simple table">
-						<TableHead>
-							<TableRow>
-								<TableCell>เดือน</TableCell>
-								<TableCell align="right">จำนวนคนเข้าพัก</TableCell>
-								<TableCell align="right">จำนวนคนย้ายออก</TableCell>
-							</TableRow>
-						</TableHead>
-						{countsExtended_movein && countsExtended_moveout ? (
-							<TableBody>
-								{countsExtended_movein.map((movein) => {
-									return (
-										<TableRow key={movein.month}>
-											<TableCell component="th" scope="row">
-												{movein.month}
-											</TableCell>
+						<Table aria-label="simple table">
+							<TableHead>
+								<TableRow>
+									<TableCell>เดือน</TableCell>
+									<TableCell align="right">จำนวนคนเข้าพัก</TableCell>
+									<TableCell align="right">จำนวนคนย้ายออก</TableCell>
+								</TableRow>
+							</TableHead>
+							{countsExtended_movein && countsExtended_moveout ? (
+								<TableBody>
+									{countsExtended_movein.map((movein) => {
+										return (
+											<TableRow key={movein.month}>
+												<TableCell component="th" scope="row">
+													{movein.month}
+												</TableCell>
 
-											<TableCell align="right">{movein.count}</TableCell>
+												<TableCell align="right">{movein.count}</TableCell>
 
-											{countsExtended_moveout
-												.filter((moveout) => moveout.month === movein.month)
-												.map((filteredout) => (
-													<TableCell align="right" key={filteredout.month}>
-														{filteredout.count}
-													</TableCell>
-												))}
-										</TableRow>
-									);
-								})}
-								<TableRow>
-									<TableCell></TableCell>
-									<TableCell align="center"></TableCell>
-									<TableCell align="right"></TableCell>
-								</TableRow>
-								<TableRow>
-									<TableCell>สรุปยอดจำนวนคนเข้าพัก</TableCell>
-									<TableCell align="center"></TableCell>
-									<TableCell align="right">{m_in}</TableCell>
-								</TableRow>
-								<TableRow>
-									<TableCell>สรุปยอดจำนวนคนย้ายออก</TableCell>
-									<TableCell align="center"></TableCell>
-									<TableCell align="right">{m_out}</TableCell>
-								</TableRow>
-							</TableBody>
-						) : null}
-					</Table>
-				</Grid>
-				<br></br>
-				<Box display="block" displayPrint="none" m={1}>
-					<Grid item xs={12} align="right">
-						<Button
-							variant="contained"
-							color="primary"
-							size="large"
-							startIcon={<PrintIcon />}
-							onClick={print}
-						>
-							พิมพ์ใบแจ้งหนี้
-						</Button>
+												{countsExtended_moveout
+													.filter((moveout) => moveout.month === movein.month)
+													.map((filteredout) => (
+														<TableCell align="right" key={filteredout.month}>
+															{filteredout.count}
+														</TableCell>
+													))}
+											</TableRow>
+										);
+									})}
+									<TableRow>
+										<TableCell></TableCell>
+										<TableCell align="center"></TableCell>
+										<TableCell align="right"></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell>สรุปยอดจำนวนคนเข้าพัก</TableCell>
+										<TableCell align="center"></TableCell>
+										<TableCell align="right">{m_in}</TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell>สรุปยอดจำนวนคนย้ายออก</TableCell>
+										<TableCell align="center"></TableCell>
+										<TableCell align="right">{m_out}</TableCell>
+									</TableRow>
+								</TableBody>
+							) : null}
+						</Table>
 					</Grid>
-				</Box>
-			</Container>
-			;
+					<br></br>
+					<Box display="block" displayPrint="none" m={1}>
+						<Grid item xs={12} align="right">
+							<Button
+								variant="contained"
+								color="primary"
+								size="large"
+								startIcon={<PrintIcon />}
+								onClick={print}
+							>
+								พิมพ์ใบแจ้งหนี้
+							</Button>
+						</Grid>
+					</Box>
+				</Container>
+			) : (
+				<Redirect to="/reporttransition"></Redirect>
+			)}
 		</div>
 	);
 }

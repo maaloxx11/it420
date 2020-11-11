@@ -10,13 +10,14 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
-
+import { Redirect } from "react-router-dom";
 function ServiceRate(props) {
 	const [price_num, setNewPrice] = useState("");
 	const [errorPrice, setErrorPrice] = useState(false);
 	const [errorPriceDetail, setErrorPriceDeatail] = useState("");
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
+	const [price_description, setPrice_description] = useState("");
 
 	const handleClose = () => {
 		setOpen(false);
@@ -29,8 +30,11 @@ function ServiceRate(props) {
 			setErrorPrice(false);
 			setErrorPriceDeatail("");
 		}
-	}, [price_num]);
-	let price_description = props.price.price_description;
+		if (price_description === "" && props.price !== null) {
+			setPrice_description(props.price.price_description);
+		}
+	}, [price_num, price_description, props]);
+
 	const UpdateClicked = () => {
 		if (price_num !== "" && errorPrice !== true) {
 			API.updatePrice(props.price.price_id, { price_num, price_description })
@@ -47,61 +51,67 @@ function ServiceRate(props) {
 
 	return (
 		<div>
-			<Container maxWidth="md">
-				<h1 align="center">กำหนดอัตรค่าบริการ</h1>
-				<Grid container spacing={3} align="center">
-					<Grid item xs={12} sm={6}>
-						<TextField
-							disabled
-							required
-							id="electric_meter"
-							label={"ค่า" + props.price.price_description + "เก่า"}
-							value={props.price.price_num}
-						/>
+			{props.price ? (
+				<Container maxWidth="md">
+					<h1 align="center">กำหนดอัตรค่าบริการ</h1>
+					<Grid container spacing={3} align="center">
+						<Grid item xs={12} sm={6}>
+							<TextField
+								disabled
+								required
+								id="electric_meter"
+								label={"ค่า" + props.price.price_description + "เก่า"}
+								value={props.price.price_num}
+							/>
+						</Grid>
+						<Grid item xs={12} sm={6}>
+							<TextField
+								required
+								id="water_meter"
+								label={"ค่า" + props.price.price_description + "ใหม่"}
+								value={price_num}
+								error={errorPrice}
+								helperText={errorPriceDetail}
+								onChange={(evt) => setNewPrice(evt.target.value)}
+							/>
+						</Grid>
+						<Grid item xs={6}></Grid>
+						<Grid item xs={6}>
+							<Button
+								variant="contained"
+								color="primary"
+								size="large"
+								startIcon={<SaveIcon />}
+								onClick={UpdateClicked}
+							>
+								บันทึก
+							</Button>
+						</Grid>
 					</Grid>
-					<Grid item xs={12} sm={6}>
-						<TextField
-							required
-							id="water_meter"
-							label={"ค่า" + props.price.price_description + "ใหม่"}
-							value={price_num}
-							error={errorPrice}
-							helperText={errorPriceDetail}
-							onChange={(evt) => setNewPrice(evt.target.value)}
-						/>
-					</Grid>
-					<Grid item xs={6}></Grid>
-					<Grid item xs={6}>
-						<Button
-							variant="contained"
-							color="primary"
-							size="large"
-							startIcon={<SaveIcon />}
-							onClick={UpdateClicked}
-						>
-							บันทึก
-						</Button>
-					</Grid>
-				</Grid>
-				<Dialog
-					open={open}
-					onClose={handleClose}
-					aria-labelledby="alert-dialog-title"
-					aria-describedby="alert-dialog-description"
-				>
-					<DialogTitle id="alert-dialog-title">แสดงผลการดำเนินการ</DialogTitle>
-					<DialogContent>
-						<DialogContentText id="alert-dialog-description">
-							{openDetail}
-						</DialogContentText>
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={handleClose} color="primary">
-							ปิด
-						</Button>
-					</DialogActions>
-				</Dialog>
-			</Container>
+					<Dialog
+						open={open}
+						onClose={handleClose}
+						aria-labelledby="alert-dialog-title"
+						aria-describedby="alert-dialog-description"
+					>
+						<DialogTitle id="alert-dialog-title">
+							แสดงผลการดำเนินการ
+						</DialogTitle>
+						<DialogContent>
+							<DialogContentText id="alert-dialog-description">
+								{openDetail}
+							</DialogContentText>
+						</DialogContent>
+						<DialogActions>
+							<Button onClick={handleClose} color="primary">
+								ปิด
+							</Button>
+						</DialogActions>
+					</Dialog>
+				</Container>
+			) : (
+				<Redirect to="/serviceratemenu" />
+			)}
 		</div>
 	);
 }

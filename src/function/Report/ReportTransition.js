@@ -41,8 +41,7 @@ function ReportTransition(props) {
 			setError(false);
 			setErrorDetail("");
 		}
-		console.log(selectedDateStart.getFullYear());
-		console.log(selectedDateEnd.getFullYear());
+
 	}, [selectedDateStart, selectedDateEnd]);
 
 	const dateClicked = (date) => {
