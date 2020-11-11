@@ -148,7 +148,6 @@ export class API {
 		});
 	}
 
-
 	static Total(room_id) {
 		return fetch(
 			`http://127.0.0.1:8000/api/room/${room_id}/addservicecharge/`,
@@ -271,7 +270,9 @@ export class API {
 
 	static SearchDateBill(year, month, date) {
 		return fetch(
-			`http://127.0.0.1:8000/api/payment/?start_date=${year}-${month-1}-26&end_date=${year}-${month}-25`,
+			`http://127.0.0.1:8000/api/payment/?start_date=${year}-${
+				month - 1
+			}-26&end_date=${year}-${month}-25`,
 			{
 				method: "GET",
 				headers: {
@@ -303,15 +304,12 @@ export class API {
 		).then((resp) => resp.json());
 	}
 	static UpdateTotalFirst(room_id) {
-		return fetch(
-			`http://127.0.0.1:8000/api/room/${room_id}/updatetoatal/`,
-			{
-				method: "POST",
-				headers: {
-					"content-Type": "application/json",
-				},
-			}
-		).then((resp) => resp.json());
+		return fetch(`http://127.0.0.1:8000/api/room/${room_id}/updatetoatal/`, {
+			method: "POST",
+			headers: {
+				"content-Type": "application/json",
+			},
+		}).then((resp) => resp.json());
 	}
 	static UpdateRoomStatusMoveout(room_id) {
 		return fetch(
@@ -323,5 +321,13 @@ export class API {
 				},
 			}
 		).then((resp) => resp.json());
+	}
+	static searchPriceRoom(price_id) {
+		return fetch(`http://127.0.0.1:8000/api/price/?price_id=${price_id}`, {
+			method: "GET",
+			headers: {
+				"content-Type": "application/json",
+			},
+		});
 	}
 }

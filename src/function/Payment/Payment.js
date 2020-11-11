@@ -11,7 +11,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-function Payment() {
+import { Link } from "react-router-dom";
+function Payment(props) {
 	const date = new Date();
 	const [room_id, setRoomID] = useState("");
 	const [servicecharge, setSV] = useState(null);
@@ -25,6 +26,7 @@ function Payment() {
 	const [errorRoomIDDetail, setErrorRoomIDDeatail] = useState("");
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
+	const [receipts, setReceipts] = useState(0);
 
 	const handleClose = () => {
 		setOpen(false);
@@ -46,7 +48,11 @@ function Payment() {
 		4: "ห้องเฟอร์นิเจอร์+แอร์",
 	};
 	let max_late_date =
-		date.getFullYear() + "-" + (date.getMonth() + 2) + "-" + 16;
+		date.getFullYear() +
+		"-" +
+		("0" + (date.getMonth() + 2)).slice(-2) +
+		"-" +
+		16;
 
 	let late_date = payment_day.getDate() - dateline_day.getDate();
 	const Reset = () => {
@@ -105,7 +111,6 @@ function Payment() {
 		}
 		if (dead_line !== "" && pricelate !== null) {
 			if (payment_date <= dead_line) {
-				console.log("a");
 				setPaymentTotal(servicecharge[0].total);
 			} else if (payment_date > max_late_date) {
 				setPaymentTotal(servicecharge[0].total + 1000);
@@ -114,8 +119,6 @@ function Payment() {
 					servicecharge[0].total + late_date * pricelate.price_num
 				);
 			}
-			console.log(payment_date);
-			console.log(dead_line);
 		} else {
 		}
 	}, [
@@ -131,6 +134,7 @@ function Payment() {
 
 	const CreatePayment = () => {
 		if (sc_id !== "" && total_payment !== "" && payment_date !== "") {
+			setReceipts(1);
 			API.PaymentCreate({
 				sc_id,
 				total_payment,
@@ -145,6 +149,11 @@ function Payment() {
 		}
 	};
 
+	const createReceipts = () => {
+		props.RoomClicked(room_id);
+		props.TotalClicked(total_payment);
+		props.TypeClicked(room.room_type);
+	};
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -230,6 +239,13 @@ function Payment() {
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
+						{receipts ? (
+							<Link to="receipt">
+								<Button onClick={createReceipts} color="primary">
+									พิมพ์ใบเสร็จ
+								</Button>
+							</Link>
+						) : null}
 						<Button onClick={handleClose} color="primary">
 							ปิด
 						</Button>

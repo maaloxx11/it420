@@ -298,6 +298,7 @@ function MovieOut() {
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
+					
 						<Button onClick={handleClose} color="primary">
 							ปิด
 						</Button>

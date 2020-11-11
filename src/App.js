@@ -33,13 +33,16 @@ import CreateBill from "./function/RecordBill/CreateBill.js";
 import CreateBillAll from "./function/RecordBill/CreateBillAll.js";
 import CreateReportBill from "./function/Report/CreateReportBill.js";
 import CreateReportTs from "./function/Report/CreateReportTs.js";
-
+import Receipt from "./function/Payment/Receipt.js";
 function App() {
 	const [selectedPrice, setSelectedPrice] = useState(null);
 	const [selectedRecord, setSelectedRecord] = useState(null);
 	const [selectedDate, setSelectedDate] = useState("");
 	const [selectedDateStart, setSelectedDateStart] = useState("");
 	const [selectedDateEnd, setSelectedDateEnd] = useState("");
+	const [selectedRoom, setSelectedRoom] = useState("");
+	const [selectedTotal, setSelectedTotal] = useState("");
+	const [selectedType, setSelectedType] = useState("");
 	const loadPrice = (price) => {
 		setSelectedPrice(price);
 	};
@@ -55,7 +58,15 @@ function App() {
 	const loadDateed = (datest) => {
 		setSelectedDateEnd(datest);
 	};
-
+	const loadRoom = (room) => {
+		setSelectedRoom(room);
+	};
+	const loadTotal = (total) => {
+		setSelectedTotal(total);
+	};
+	const loadType = (type) => {
+		setSelectedType(type);
+	};
 	return (
 		<div className="App">
 			<header className="App-header">
@@ -124,12 +135,43 @@ function App() {
 							</Route>
 							<Route exact path="/createbillall/">
 								<Header></Header>
-								<CreateBillAll ></CreateBillAll>
+								<CreateBillAll></CreateBillAll>
 							</Route>
+
+
+
+
+
+
+
+
+
+
+
 							<Route exact path="/payment">
 								<Header></Header>
-								<Payment></Payment>
+								<Payment RoomClicked={loadRoom} TotalClicked={loadTotal} TypeClicked={loadType}></Payment>
 							</Route>
+							<Route exact path="/receipt">
+								<Header></Header>
+								<Receipt room={selectedRoom} total={selectedTotal} type={selectedType}></Receipt>
+							</Route>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 							<Route exact path="/search">
 								<Header></Header>
 								<Search></Search>
@@ -160,11 +202,17 @@ function App() {
 							</Route>
 							<Route exact path="/reporttransition">
 								<Header></Header>
-								<ReportTransition dateStartClicked={loadDatest} dateEndClicked={loadDateed}></ReportTransition>
+								<ReportTransition
+									dateStartClicked={loadDatest}
+									dateEndClicked={loadDateed}
+								></ReportTransition>
 							</Route>
 							<Route exact path="/createreportts">
 								<Header></Header>
-								<CreateReportTs dates={selectedDateStart} datee={selectedDateEnd}></CreateReportTs>
+								<CreateReportTs
+									dates={selectedDateStart}
+									datee={selectedDateEnd}
+								></CreateReportTs>
 							</Route>
 						</Switch>
 					</div>
