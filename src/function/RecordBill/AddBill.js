@@ -16,6 +16,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
+import ReturnHome from "../../ReturnHome.js";
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
@@ -55,7 +56,10 @@ function AddBill(props) {
 	const [errorWMDetail, setErrorWMDeatail] = useState("");
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
-
+	const [openConfirm, setOpenConfirm] = useState(false);
+	const handleOpen = () => {
+		setOpenConfirm(true);
+	};
 	const handleClose = () => {
 		setOpen(false);
 	};
@@ -194,14 +198,14 @@ function AddBill(props) {
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
 						<FormControl className={classes.formControl}>
-							<InputLabel id="room_id">รหัสห้องพัก</InputLabel>
+							<InputLabel id="room_id">หมายเลขห้องพัก</InputLabel>
 							<Select
 								labelId="room_id_sel"
 								id="room_id"
 								value={room_id}
 								onChange={handleChange}
 							>
-								<MenuItem value={room_id}>รหัสห้องพัก</MenuItem>
+								<MenuItem value={room_id}>หมายเลขห้องพัก</MenuItem>
 								{servicecharges.map((servicecharge) => {
 									return (
 										<MenuItem
@@ -296,7 +300,7 @@ function AddBill(props) {
 							defaultValue={add_date}
 						/>
 					</Grid>
-					<Grid item xs={12} sm={6}></Grid>
+					<Grid item xs={12} sm={6}><ReturnHome></ReturnHome></Grid>
 
 					<Grid item xs={12} sm={6}>
 						<Button
@@ -304,13 +308,40 @@ function AddBill(props) {
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
-							onClick={CreateBill}
+							onClick={handleOpen}
+							style={{ backgroundColor: "green" }}
 						>
 							บันทึก
 						</Button>
 					</Grid>
 				</Grid>
-
+				<Dialog
+					open={openConfirm}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">
+						ยืนยันการบันทึกค่าบริการ
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							ยืนยันการบันทึกค่าบริการ
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							onClick={handleClose}
+							color="primary"
+							style={{ color: "red" }}
+						>
+							ยกเลิก
+						</Button>
+						<Button onClick={CreateBill} color="primary">
+							ยืนยัน
+						</Button>
+					</DialogActions>
+				</Dialog>
 				<Dialog
 					open={open}
 					onClose={handleClose}

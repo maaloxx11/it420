@@ -3,7 +3,6 @@ import "date-fns";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import PrintIcon from "@material-ui/icons/Print";
 import DateFnsUtils from "@date-io/date-fns";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -14,6 +13,7 @@ import thLocale from "date-fns/locale/th";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { Link } from "react-router-dom";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import PostAddIcon from "@material-ui/icons/PostAdd";
 function ReportTransition(props) {
 	const [selectedDateStart, setSelectedDateStart] = useState(new Date());
 	const [selectedDateEnd, setSelectedDateEnd] = useState(new Date());
@@ -41,7 +41,6 @@ function ReportTransition(props) {
 			setError(false);
 			setErrorDetail("");
 		}
-
 	}, [selectedDateStart, selectedDateEnd]);
 
 	const dateClicked = (date) => {
@@ -58,7 +57,7 @@ function ReportTransition(props) {
 			<Container maxWidth="md">
 				<h1 align="center">
 					{" "}
-					รายงานแสดงการเข้าพักและย้ายออก(ตามช่วงเวลาที่กำหนด)
+					รายงานแสดงจำนวนคนเข้าพักและย้ายออก(ตามช่วงเวลาที่กำหนด)
 				</h1>
 				<Grid container spacing={3}>
 					<Grid item xs={12} sm={6}>
@@ -95,7 +94,7 @@ function ReportTransition(props) {
 								color="primary"
 								size="large"
 								display="none"
-								startIcon={<PrintIcon />}
+								startIcon={<PostAddIcon />}
 								onClick={dateClicked}
 							>
 								สร้างรายงาน

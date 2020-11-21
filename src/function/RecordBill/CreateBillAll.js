@@ -11,6 +11,7 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import NumberFormat from "react-number-format";
 import { API } from "../../api-service";
+import ReturnHome from "../../ReturnHome.js";
 function CreateBillAll() {
 	const date = new Date();
 	let add_date =
@@ -56,16 +57,21 @@ function CreateBillAll() {
 			{rooms && prices && svs ? (
 				<Container maxWidth="md" align="center">
 					<Box display="block" displayPrint="none" m={1}>
-						<Grid item xs={12} align="right">
-							<Button
-								variant="contained"
-								color="primary"
-								size="large"
-								startIcon={<PrintIcon />}
-								onClick={print}
-							>
-								พิมพ์ใบแจ้งหนี้
-							</Button>
+						<Grid container spacing={3}>
+							<Grid item xs={12} sm={6}>
+								<ReturnHome></ReturnHome>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<Button
+									variant="contained"
+									color="primary"
+									size="large"
+									startIcon={<PrintIcon />}
+									onClick={print}
+								>
+									พิมพ์ใบแจ้งหนี้
+								</Button>
+							</Grid>
 						</Grid>
 					</Box>
 					{svs.map((sv) => {
@@ -156,7 +162,7 @@ function CreateBillAll() {
 										<p align="left" key={filteredPrice.price_id}>
 											หมายเหตุ <br></br>กรุณาชำระเงินภายในวันที่ 5 ของทุกเดือน
 											<br></br>
-											ถ้าหากเกินปรับ {filteredPrice.price_num} บาทต่อวัน 
+											ถ้าหากเกินปรับ {filteredPrice.price_num} บาทต่อวัน
 										</p>
 									))}
 								<br></br>

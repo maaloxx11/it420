@@ -14,9 +14,19 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import DraftsIcon from "@material-ui/icons/Drafts";
 import Box from "@material-ui/core/Box";
+import ApartmentIcon from "@material-ui/icons/Apartment";
 import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+import AssignmentReturnedIcon from "@material-ui/icons/AssignmentReturned";
+import AssignmentReturnIcon from "@material-ui/icons/AssignmentReturn";
+import ReceiptIcon from "@material-ui/icons/Receipt";
+import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
+import FindInPageIcon from "@material-ui/icons/FindInPage";
+import ReportProblemIcon from "@material-ui/icons/ReportProblem";
+import LocalPrintshopIcon from "@material-ui/icons/LocalPrintshop";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -117,9 +127,10 @@ export default function PersistentDrawerLeft() {
 								underline="none"
 								activeStyle={{ color: "white", textDecoration: "none" }}
 							>
-								Niran Apartment
+								นิรันดร์อะพาร์ทเมนต์
 							</NavLink>
 						</Typography>
+						
 					</Toolbar>
 				</AppBar>
 				<Drawer
@@ -142,68 +153,135 @@ export default function PersistentDrawerLeft() {
 					</div>
 
 					<Divider />
-					<ListItem button>
-						<ListItemIcon>
-							<DraftsIcon />
-						</ListItemIcon>
-						<ListItemText primary="1" />
-					</ListItem>
+					<Link
+						to="/roommenu"
+						underline="none"
+						style={{ color: "black", textDecoration: "none" }}
+					>
+						<ListItem button>
+							<ListItemIcon>
+								<ApartmentIcon />
+							</ListItemIcon>
+							<ListItemText primary="จัดการทะเบียนห้องพัก" />
+						</ListItem>
+					</Link>
 					<Divider />
-					<ListItem button>
-						<ListItemIcon>
-							<DraftsIcon />
-						</ListItemIcon>
-						<ListItemText primary="2" />
-					</ListItem>
+					<Link
+						to="/rentermenu"
+						underline="none"
+						style={{ color: "black", textDecoration: "none" }}
+					>
+						<ListItem button>
+							<ListItemIcon>
+								<AssignmentIndIcon />
+							</ListItemIcon>
+							<ListItemText primary="จัดการทะเบียนผู้เช่า" />
+						</ListItem>
+					</Link>
 					<Divider />
-					<ListItem button>
-						<ListItemIcon>
-							<DraftsIcon />
-						</ListItemIcon>
-						<ListItemText primary="3" />
-					</ListItem>
+					<Link
+						to="/serviceratemenu"
+						underline="none"
+						style={{ color: "black", textDecoration: "none" }}
+					>
+						<ListItem button>
+							<ListItemIcon>
+								<MonetizationOnIcon />
+							</ListItemIcon>
+							<ListItemText primary="กำหนดอัตราค่าบริการ" />
+						</ListItem>
+					</Link>
 					<Divider />
-					<ListItem button>
-						<ListItemIcon>
-							<DraftsIcon />
-						</ListItemIcon>
-						<ListItemText primary="4" />
-					</ListItem>
+					<Link
+						to="/movein"
+						underline="none"
+						style={{ color: "black", textDecoration: "none" }}
+					>
+						<ListItem button>
+							<ListItemIcon>
+								<AssignmentReturnedIcon />
+							</ListItemIcon>
+							<ListItemText primary="บันทึกการเข้าพัก" />
+						</ListItem>
+					</Link>
 					<Divider />
-					<ListItem button>
-						<ListItemIcon>
-							<DraftsIcon />
-						</ListItemIcon>
-						<ListItemText primary="5" />
-					</ListItem>
+					<Link
+						to="/moveout"
+						underline="none"
+						style={{ color: "black", textDecoration: "none" }}
+					>
+						<ListItem button>
+							<ListItemIcon>
+								<AssignmentReturnIcon />
+							</ListItemIcon>
+							<ListItemText primary="บันทึกการย้ายออก" />
+						</ListItem>
+					</Link>
 					<Divider />
-					<ListItem button>
-						<ListItemIcon>
-							<DraftsIcon />
-						</ListItemIcon>
-						<ListItemText primary="6" />
-					</ListItem>
+					<Link
+						to="/servicerecord"
+						underline="none"
+						style={{ color: "black", textDecoration: "none" }}
+					>
+						<ListItem button>
+							<ListItemIcon>
+								<ReceiptIcon />
+							</ListItemIcon>
+							<ListItemText primary="บันทึกการใช้บริการ และจัดพิมพ์ใบแจ้งหนี้" />
+						</ListItem>
+					</Link>
 					<Divider />
-					<ListItem button>
-						<ListItemIcon>
-							<DraftsIcon />
-						</ListItemIcon>
-						<ListItemText primary="7" />
-					</ListItem>
+					<Link
+						to="/payment"
+						underline="none"
+						style={{ color: "black", textDecoration: "none" }}
+					>
+						<ListItem button>
+							<ListItemIcon>
+								<AccountBalanceWalletIcon />
+							</ListItemIcon>
+							<ListItemText primary="รับชำระค่าบริการ" />
+						</ListItem>
+					</Link>
 					<Divider />
-					<ListItem button>
-						<ListItemIcon>
-							<DraftsIcon />
-						</ListItemIcon>
-						<ListItemText primary="8" />
-					</ListItem>
+					<Link
+						to="/search"
+						underline="none"
+						style={{ color: "black", textDecoration: "none" }}
+					>
+						<ListItem button>
+							<ListItemIcon>
+								<FindInPageIcon />
+							</ListItemIcon>
+							<ListItemText primary="สืบค้นข้อมูล" />
+						</ListItem>
+					</Link>
 					<Divider />
-					<ListItem button>
-						<ListItemIcon>
-							<DraftsIcon />
-						</ListItemIcon>
-						<ListItemText primary="9" />
-					</ListItem>
+					<Link
+						to="/problemmenu"
+						underline="none"
+						style={{ color: "black", textDecoration: "none" }}
+					>
+						<ListItem button>
+							<ListItemIcon>
+								<ReportProblemIcon />
+							</ListItemIcon>
+							<ListItemText primary="จัดการเรื่องร้องเรียน-ปัญหา" />
+						</ListItem>
+					</Link>
+					<Divider />
+					<Link
+						to="/reportmenu"
+						underline="none"
+						style={{ color: "black", textDecoration: "none" }}
+					>
+						<ListItem button>
+							<ListItemIcon>
+								<LocalPrintshopIcon />
+							</ListItemIcon>
+							<ListItemText primary="จัดพิมพ์รายงานแสดงผลการดำเนินงาน" />
+						</ListItem>
+					</Link>
 				</Drawer>
 				<main
 					className={clsx(classes.content, {

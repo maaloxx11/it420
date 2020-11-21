@@ -22,7 +22,7 @@ function ProblemView() {
 					<Table aria-label="simple table">
 						<TableHead>
 							<TableRow>
-								<TableCell align="center">รหัสห้อง</TableCell>
+								<TableCell align="center">หมายเลขห้อง</TableCell>
 								<TableCell align="left">วันที่เพิ่มข้อมูล</TableCell>
 								<TableCell align="left">รายละเอียด</TableCell>
 							</TableRow>

@@ -18,6 +18,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
+import ReturnHome from "../../ReturnHome.js";
 import "date-fns";
 import {
 	MuiPickersUtilsProvider,
@@ -53,9 +54,13 @@ function MovieOut() {
 	const [Selroom, setSelRoom] = useState(null);
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
-
+	const [openConfirm, setOpenConfirm] = useState(false);
+	const handleOpen = () => {
+		setOpenConfirm(true);
+	};
 	const handleClose = () => {
 		setOpen(false);
+		setOpenConfirm(false);
 	};
 	const Reset = () => {
 		setRoomID("");
@@ -117,7 +122,7 @@ function MovieOut() {
 		Reset();
 		if (!/^[0-9]/.test(renter_id) && renter_id !== "") {
 			setErrorRenterID(true);
-			setErrorRenterIDDeatail("รหัสผู้เช่าต้องเป็นตัวเลขเท่านั้น");
+			setErrorRenterIDDeatail("หมายเลขผู้เช่าต้องเป็นตัวเลขเท่านั้น");
 		} else {
 			API.searchRenterTs({ renter_id })
 				.then((resp) => resp.json())
@@ -177,7 +182,7 @@ function MovieOut() {
 						<TextField
 							required
 							id="standard-basic"
-							label="รหัสผู้เช่า"
+							label="หมายเลขผู้เช่า"
 							error={errorRenterID}
 							helperText={errorRenterIDDetail}
 							value={renter_id}
@@ -272,19 +277,47 @@ function MovieOut() {
 							/>
 						</MuiPickersUtilsProvider>
 					</Grid>
-					<Grid item xs={12} sm={6}></Grid>
+					<Grid item xs={12} sm={6}><ReturnHome></ReturnHome></Grid>
 					<Grid item xs={12} sm={6}>
 						<Button
 							variant="contained"
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
-							onClick={UpdateMoveOut}
+							onClick={handleOpen}
+							style={{ backgroundColor: "green" }}
 						>
 							บันทึก
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={openConfirm}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">
+						ยืนยันการบันทึกการย้ายออด
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							ยืนยันการบันทึกการย้ายออก
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							onClick={handleClose}
+							color="primary"
+							style={{ color: "red" }}
+						>
+							ยกเลิก
+						</Button>
+						<Button onClick={UpdateMoveOut} color="primary">
+							ยืนยัน
+						</Button>
+					</DialogActions>
+				</Dialog>
 				<Dialog
 					open={open}
 					onClose={handleClose}

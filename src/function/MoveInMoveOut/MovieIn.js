@@ -18,6 +18,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
+import ReturnHome from "../../ReturnHome.js";
 import "date-fns";
 import {
 	MuiPickersUtilsProvider,
@@ -49,8 +50,13 @@ function MovieIn() {
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
 	const [sendTotal, setsendTotal] = useState(false);
+	const [openConfirm, setOpenConfirm] = useState(false);
+	const handleOpen = () => {
+		setOpenConfirm(true);
+	};
 	const handleClose = () => {
 		setOpen(false);
+		setOpenConfirm(false);
 	};
 	useEffect(() => {
 		if (room_type !== "") {
@@ -78,8 +84,7 @@ function MovieIn() {
 		}
 		if (sendTotal === true) {
 			API.UpdateTotalFirst(room_id);
-			console.log(room_id)
-			
+			console.log(room_id);
 		}
 	}, [room_type, rooms, sendTotal, room_id]);
 
@@ -106,7 +111,7 @@ function MovieIn() {
 
 		if (!/^[0-9]/.test(renter_id) && renter_id !== "") {
 			setErrorRenterID(true);
-			setErrorRenterIDDeatail("รหัสผู้เช่าต้องเป็นตัวเลขเท่านั้น");
+			setErrorRenterIDDeatail("หมายเลขผู้เช่าต้องเป็นตัวเลขเท่านั้น");
 		} else {
 			API.searchRenter(renter_id)
 				.then((resp) => resp.json())
@@ -151,7 +156,7 @@ function MovieIn() {
 							<TextField
 								required
 								id="renter_id"
-								label="รหัสผู้เช่า"
+								label="หมายเลขผู้เช่า"
 								value={renter_id}
 								error={errorRenterID}
 								helperText={errorRenterIDDetail}
@@ -242,7 +247,9 @@ function MovieIn() {
 					</Grid>
 
 					<Grid item xs={12} sm={6}></Grid>
-					<Grid item xs={12} sm={6}></Grid>
+					<Grid item xs={12} sm={6}>
+						<ReturnHome></ReturnHome>
+					</Grid>
 
 					<Grid item xs={12} sm={6}>
 						<Button
@@ -250,12 +257,40 @@ function MovieIn() {
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
-							onClick={CreateMoveIn}
+							onClick={handleOpen}
+							style={{ backgroundColor: "green" }}
 						>
 							บันทึก
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={openConfirm}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">
+						ยืนยันการบันทึกการเข้าพัก
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							ยืนยันการบันทึกการเข้าพัก
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							onClick={handleClose}
+							color="primary"
+							style={{ color: "red" }}
+						>
+							ยกเลิก
+						</Button>
+						<Button onClick={CreateMoveIn} color="primary">
+							ยืนยัน
+						</Button>
+					</DialogActions>
+				</Dialog>
 				<Dialog
 					open={open}
 					onClose={handleClose}

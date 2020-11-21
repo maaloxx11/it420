@@ -11,6 +11,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
 import { Redirect } from "react-router-dom";
+import ReturnHome from "../../ReturnHome.js";
 function ServiceRate(props) {
 	const [price_num, setNewPrice] = useState("");
 	const [errorPrice, setErrorPrice] = useState(false);
@@ -18,9 +19,13 @@ function ServiceRate(props) {
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
 	const [price_description, setPrice_description] = useState("");
-
+	const [openConfirm, setOpenConfirm] = useState(false);
+	const handleOpen = () => {
+		setOpenConfirm(true);
+	};
 	const handleClose = () => {
 		setOpen(false);
+		setOpenConfirm(false);
 	};
 	useEffect(() => {
 		if (!/^[0-9]/.test(price_num) && price_num !== "") {
@@ -75,19 +80,49 @@ function ServiceRate(props) {
 								onChange={(evt) => setNewPrice(evt.target.value)}
 							/>
 						</Grid>
-						<Grid item xs={6}></Grid>
+						<Grid item xs={6}>
+							<ReturnHome></ReturnHome>
+						</Grid>
 						<Grid item xs={6}>
 							<Button
 								variant="contained"
 								color="primary"
 								size="large"
 								startIcon={<SaveIcon />}
-								onClick={UpdateClicked}
+								onClick={handleOpen}
+								style={{ backgroundColor: "green" }}
 							>
 								บันทึก
 							</Button>
 						</Grid>
 					</Grid>
+					<Dialog
+						open={openConfirm}
+						onClose={handleClose}
+						aria-labelledby="alert-dialog-title"
+						aria-describedby="alert-dialog-description"
+					>
+						<DialogTitle id="alert-dialog-title">
+							ยืนยันการแก้ไขอัตราค่าบริการ
+						</DialogTitle>
+						<DialogContent>
+							<DialogContentText id="alert-dialog-description">
+								ยืนยันการแก้ไขอัตราค่าบริการ
+							</DialogContentText>
+						</DialogContent>
+						<DialogActions>
+							<Button
+								onClick={handleClose}
+								color="primary"
+								style={{ color: "red" }}
+							>
+								ยกเลิก
+							</Button>
+							<Button onClick={UpdateClicked} color="primary">
+								ยืนยัน
+							</Button>
+						</DialogActions>
+					</Dialog>
 					<Dialog
 						open={open}
 						onClose={handleClose}

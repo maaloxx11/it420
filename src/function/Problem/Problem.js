@@ -11,7 +11,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
-
+import ReturnHome from "../../ReturnHome.js";
 function Problem() {
 	const date = new Date();
 	let problem_date =
@@ -23,14 +23,18 @@ function Problem() {
 	const [errorRoomIDDetail, setErrorRoomIDDeatail] = useState("");
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
-
+	const [openConfirm, setOpenConfirm] = useState(false);
+	const handleOpen = () => {
+		setOpenConfirm(true);
+	};
 	const handleClose = () => {
 		setOpen(false);
+		setOpenConfirm(false);
 	};
 	const SearchRoom = () => {
 		if (!/^[0-9]/.test(room_id) && room_id !== "") {
 			setErrorRoomID(true);
-			setErrorRoomIDDeatail("รหัสห้องต้องเป็นตัวเลขเท่านั้น");
+			setErrorRoomIDDeatail("หมายเลขห้องต้องเป็นตัวเลขเท่านั้น");
 		} else {
 			API.searchRoom(room_id)
 				.then((resp) => resp.json())
@@ -44,7 +48,7 @@ function Problem() {
 		if (room !== null && room_id !== "") {
 			if (room.detail === "Not found.") {
 				setErrorRoomID(true);
-				setErrorRoomIDDeatail("ไม่พบข้อมูลรหัสห้องพักในระบบ");
+				setErrorRoomIDDeatail("ไม่พบข้อมูลหมายเลขห้องพักในระบบ");
 			} else {
 				setErrorRoomID(false);
 				setErrorRoomIDDeatail("");
@@ -71,7 +75,7 @@ function Problem() {
 						<TextField
 							required
 							id="standard-basic"
-							label="รหัสห้องพัก"
+							label="หมายเลขห้องพัก"
 							value={room_id}
 							error={errorRoomID}
 							helperText={errorRoomIDDetail}
@@ -112,19 +116,47 @@ function Problem() {
 						/>
 					</Grid>
 					<Grid item xs={12} sm={6}></Grid>
-					<Grid item xs={12} sm={6}></Grid>
+					<Grid item xs={12} sm={6}><ReturnHome></ReturnHome></Grid>
 					<Grid item xs={12} sm={6} align="right">
 						<Button
 							variant="contained"
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
-							onClick={Submit}
+							onClick={handleOpen}
+							style={{ backgroundColor: "green" }}
 						>
 							บันทึก
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={openConfirm}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">
+						ยืนยันการบันทึกเรื่องร้องเรียน-ปัญหา
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							ยืนยันการบันทึกเรื่องร้องเรียน-ปัญหา
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							onClick={handleClose}
+							color="primary"
+							style={{ color: "red" }}
+						>
+							ยกเลิก
+						</Button>
+						<Button onClick={Submit} color="primary">
+							ยืนยัน
+						</Button>
+					</DialogActions>
+				</Dialog>
 				<Dialog
 					open={open}
 					onClose={handleClose}

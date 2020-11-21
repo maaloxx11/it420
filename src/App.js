@@ -34,6 +34,7 @@ import CreateBillAll from "./function/RecordBill/CreateBillAll.js";
 import CreateReportBill from "./function/Report/CreateReportBill.js";
 import CreateReportTs from "./function/Report/CreateReportTs.js";
 import Receipt from "./function/Payment/Receipt.js";
+import Auth from "./auth.js";
 function App() {
 	const [selectedPrice, setSelectedPrice] = useState(null);
 	const [selectedRecord, setSelectedRecord] = useState(null);
@@ -43,6 +44,7 @@ function App() {
 	const [selectedRoom, setSelectedRoom] = useState("");
 	const [selectedTotal, setSelectedTotal] = useState("");
 	const [selectedType, setSelectedType] = useState("");
+
 	const loadPrice = (price) => {
 		setSelectedPrice(price);
 	};
@@ -58,8 +60,8 @@ function App() {
 	const loadDateed = (datest) => {
 		setSelectedDateEnd(datest);
 	};
-	const loadRoom = (room) => {
-		setSelectedRoom(room);
+	const loadRoom = (room_id) => {
+		setSelectedRoom(room_id);
 	};
 	const loadTotal = (total) => {
 		setSelectedTotal(total);
@@ -67,6 +69,7 @@ function App() {
 	const loadType = (type) => {
 		setSelectedType(type);
 	};
+	console.log(selectedTotal);
 	return (
 		<div className="App">
 			<header className="App-header">
@@ -76,6 +79,9 @@ function App() {
 							{/* <Route path="/login">
 								<LoginPage />
 							</Route> */}
+							<Route exact path="/">
+								<Auth></Auth>
+							</Route>
 							<Route exact path="/">
 								<Header></Header>
 								<Home></Home>
@@ -138,39 +144,22 @@ function App() {
 								<CreateBillAll></CreateBillAll>
 							</Route>
 
-
-
-
-
-
-
-
-
-
-
 							<Route exact path="/payment">
 								<Header></Header>
-								<Payment RoomClicked={loadRoom} TotalClicked={loadTotal} TypeClicked={loadType}></Payment>
+								<Payment
+									RoomClicked={loadRoom}
+									TotalClicked={loadTotal}
+									TypeClicked={loadType}
+								></Payment>
 							</Route>
 							<Route exact path="/receipt">
 								<Header></Header>
-								<Receipt room={selectedRoom} total={selectedTotal} type={selectedType}></Receipt>
+								<Receipt
+									room={selectedRoom}
+									total={selectedTotal}
+									type={selectedType}
+								></Receipt>
 							</Route>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 							<Route exact path="/search">
 								<Header></Header>

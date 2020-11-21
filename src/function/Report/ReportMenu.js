@@ -11,9 +11,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ReportMenu() {
-
-
-
 	const classes = useStyles();
 	return (
 		<div>
@@ -36,7 +33,7 @@ function ReportMenu() {
 						size="large"
 						className={classes.marginButton}
 					>
-						รายงานแสดงการเข้าพักและย้ายออก(ตามช่วงเวลาที่กำหนด)
+						รายงานแสดงจำนวนคนเข้าพักและย้ายออก(ตามช่วงเวลาที่กำหนด)
 					</Button>
 				</Link>
 			</Container>

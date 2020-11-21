@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import PrintIcon from "@material-ui/icons/Print";
 import Box from "@material-ui/core/Box";
 import { Redirect } from "react-router-dom";
+import ReturnHome from "../../ReturnHome.js";
 function CreateReportTs(props) {
 	function print() {
 		window.print();
@@ -215,16 +216,21 @@ function CreateReportTs(props) {
 					</Grid>
 					<br></br>
 					<Box display="block" displayPrint="none" m={1}>
-						<Grid item xs={12} align="right">
-							<Button
-								variant="contained"
-								color="primary"
-								size="large"
-								startIcon={<PrintIcon />}
-								onClick={print}
-							>
-								พิมพ์ใบแจ้งหนี้
-							</Button>
+						<Grid container spacing={3}>
+							<Grid item xs={12} sm={6}>
+								<ReturnHome></ReturnHome>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<Button
+									variant="contained"
+									color="primary"
+									size="large"
+									startIcon={<PrintIcon />}
+									onClick={print}
+								>
+									พิมพ์รายงาน
+								</Button>
+							</Grid>
 						</Grid>
 					</Box>
 				</Container>

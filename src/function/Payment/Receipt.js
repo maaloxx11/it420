@@ -12,6 +12,7 @@ import Grid from "@material-ui/core/Grid";
 import NumberFormat from "react-number-format";
 import { API } from "../../api-service";
 import { Redirect } from "react-router-dom";
+import ReturnHome from "../../ReturnHome.js";
 function Receipt(props) {
 	const [room_id, setRoom] = useState("");
 	const [total, setTotal] = useState(0);
@@ -24,7 +25,7 @@ function Receipt(props) {
 		if (props.room !== "" && room_id === "") {
 			setRoom(props.room);
 			setTotal(Number(props.total));
-			API.searchPayment(room_id)
+			API.searchPaymentRecipt(room_id)
 				.then((resp) => resp.json())
 				.then((resp) => setSV(resp))
 				.catch((error) => console.log(error));
@@ -43,7 +44,7 @@ function Receipt(props) {
 					Number(sv[0].price_water_meter) -
 					Number(typeprice[0].price_num)
 			);
-			console.log(typeprice[0].price_num);
+		
 		}
 	}, [props, room_id, total, sv, type, typeprice]);
 	function print() {
@@ -138,16 +139,21 @@ function Receipt(props) {
 					) : null}
 					<br></br>
 					<Box display="block" displayPrint="none" m={1}>
-						<Grid item xs={12} align="right">
-							<Button
-								variant="contained"
-								color="primary"
-								size="large"
-								startIcon={<PrintIcon />}
-								onClick={print}
-							>
-								พิมพ์ใบแจ้งหนี้
-							</Button>
+						<Grid container spacing={3}>
+							<Grid item xs={12} sm={6}>
+								<ReturnHome></ReturnHome>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<Button
+									variant="contained"
+									color="primary"
+									size="large"
+									startIcon={<PrintIcon />}
+									onClick={print}
+								>
+									พิมพ์ใบเสร็จ
+								</Button>
+							</Grid>
 						</Grid>
 					</Box>
 				</Container>

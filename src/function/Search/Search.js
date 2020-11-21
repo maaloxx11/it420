@@ -49,7 +49,7 @@ function Search() {
 			setErrorTypeDeatail("");
 			if (id !== "" && !/^[0-9]/.test(id)) {
 				setErrorID(true);
-				setErrorIDDeatail("รหัสต้องเป็นตัวเลขเท่านั้น");
+				setErrorIDDeatail("หมายเลขต้องเป็นตัวเลขเท่านั้น");
 			} else {
 				if (id === "") {
 					if (type === 1) {
@@ -131,7 +131,7 @@ function Search() {
 					<Grid item xs={12} sm={4}>
 						<TextField
 							id="standard-basic"
-							label="รหัส"
+							label="หมายเลข"
 							error={errorID}
 							helperText={errorIDDetail}
 							value={id}
@@ -151,7 +151,7 @@ function Search() {
 						<Table aria-label="simple table">
 							<TableHead>
 								<TableRow>
-									<TableCell align="center">รหัสห้อง</TableCell>
+									<TableCell align="center">หมายเลขห้อง</TableCell>
 									<TableCell align="left">ประเภทห้อง</TableCell>
 									<TableCell align="left">สถานะ</TableCell>
 								</TableRow>
@@ -179,7 +179,7 @@ function Search() {
 						<Table aria-label="simple table">
 							<TableHead>
 								<TableRow>
-									<TableCell align="center">รหัสผู้เช่า</TableCell>
+									<TableCell align="center">หมายเลขผู้เช่า</TableCell>
 									<TableCell align="left">ชื่อผู้เช่า</TableCell>
 									<TableCell align="left">นามสกุลผู้เช่า</TableCell>
 									<TableCell align="left">ที่อยู่ผู้เช่า</TableCell>

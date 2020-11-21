@@ -11,6 +11,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service.js";
+import ReturnHome from "../../ReturnHome.js";
 function EditRenter() {
 	const [renter, setRenter] = useState(null);
 	const [renter_id, setRenterID] = useState("");
@@ -24,9 +25,16 @@ function EditRenter() {
 	const [errorTelDetail, setErrorTelDeatail] = useState("");
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
-
+	const [openConfirm, setOpenConfirm] = useState(false);
+	const handleOpen = () => {
+		setOpenConfirm(true);
+	};
+	const date1 = new Date();
+	let date =
+		date1.getFullYear() + "-" + (date1.getMonth() + 1) + "-" + date1.getDate();
 	const handleClose = () => {
 		setOpen(false);
+		setOpenConfirm(false);
 	};
 	const Reset = () => {
 		setFirstName("");
@@ -39,7 +47,7 @@ function EditRenter() {
 		Reset();
 		if (!/^[0-9]/.test(renter_id) && renter_id !== "") {
 			setErrorRenterID(true);
-			setErrorRenterIDDeatail("รหัสผู้เช่าต้องเป็นตัวเลขเท่านั้น");
+			setErrorRenterIDDeatail("หมายเลขผู้เช่าต้องเป็นตัวเลขเท่านั้น");
 		} else {
 			API.searchRenter(renter_id)
 				.then((resp) => resp.json())
@@ -87,6 +95,7 @@ function EditRenter() {
 				lastname,
 				address,
 				telephone,
+				date,
 			}).catch((error) => console.log(error));
 			Reset();
 			setRenterID("");
@@ -98,6 +107,7 @@ function EditRenter() {
 			setOpenDetail("กรุณาตรวจสอบการกรอกข้อมูลอีกครั้ง");
 		}
 	};
+
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -107,7 +117,7 @@ function EditRenter() {
 						<TextField
 							required
 							id="renter_id"
-							label="รหัสผู้เช่า"
+							label="หมายเลขผู้เช่า"
 							error={errorRenterID}
 							helperText={errorRenterIDDetail}
 							value={renter_id}
@@ -164,21 +174,59 @@ function EditRenter() {
 							onChange={(evt) => setTelephone(evt.target.value)}
 						/>
 					</Grid>
+					<Grid item xs={12} sm={6}>
+						<TextField
+							disabled
+							id="present_date"
+							format="yyyy-MM-dd"
+							label="วันที่บันทึกข้อมูลปัจจุบัน"
+							defaultValue={date}
+						/>
+					</Grid>
 
-					<Grid item xs={12} sm={6}></Grid>
-					<Grid item xs={12} sm={6}></Grid>
+					<Grid item xs={12} sm={6}>
+						<ReturnHome></ReturnHome>
+					</Grid>
 					<Grid item xs={12} sm={6}>
 						<Button
 							variant="contained"
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
-							onClick={EditRenter}
+							style={{ backgroundColor: "green" }}
+							onClick={handleOpen}
 						>
 							บันทึก
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={openConfirm}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">
+						ยืนยันการแก้ไขข้อมูลผู้เช่า
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							ยืนยันการแก้ไขข้อมูลผู้เช่า
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							onClick={handleClose}
+							color="primary"
+							style={{ color: "red" }}
+						>
+							ยกเลิก
+						</Button>
+						<Button onClick={EditRenter} color="primary">
+							ยืนยัน
+						</Button>
+					</DialogActions>
+				</Dialog>
 				<Dialog
 					open={open}
 					onClose={handleClose}

@@ -10,7 +10,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service.js";
-
+import ReturnHome from "../../ReturnHome.js";
 function CreateRoom() {
 	const [renter_id, setRenterID] = useState("");
 	const [renter, setRenter] = useState(null);
@@ -24,14 +24,18 @@ function CreateRoom() {
 	const [errorTelDetail, setErrorTelDeatail] = useState("");
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
-
+	const [openConfirm, setOpenConfirm] = useState(false);
+	const handleOpen = () => {
+		setOpenConfirm(true);
+	};
 	const handleClose = () => {
 		setOpen(false);
+		setOpenConfirm(false);
 	};
 	useEffect(() => {
 		if (!/^[0-9]/.test(renter_id) && renter_id !== "") {
 			setErrorRenterID(true);
-			setErrorRenterIDDeatail("รหัสห้องต้องเป็นตัวเลขเท่านั้น");
+			setErrorRenterIDDeatail("หมายเลขผู้เช่าต้องเป็นตัวเลขเท่านั้น");
 		} else {
 			setErrorRenterID(false);
 			setErrorRenterIDDeatail("");
@@ -53,7 +57,9 @@ function CreateRoom() {
 		if (renter !== null && renter !== "") {
 			if (renter.detail !== "Not found.") {
 				setErrorRenterID(true);
-				setErrorRenterIDDeatail("มีรหัสนี้อยู่ในระบบแล้วกรุณาใช้รหัสอื่น");
+				setErrorRenterIDDeatail(
+					"มีหมายเลขนี้อยู่ในระบบแล้วกรุณาใช้หมายเลขอื่น"
+				);
 			}
 		}
 	}, [renter]);
@@ -87,6 +93,9 @@ function CreateRoom() {
 			setOpenDetail("กรุณาตรวจสอบการกรอกข้อมูลอีกครั้ง");
 		}
 	};
+	const date = new Date();
+	let add_date =
+		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -96,7 +105,7 @@ function CreateRoom() {
 						<TextField
 							required
 							id="renter_id"
-							label="รหัสผู้เช่า"
+							label="หมายเลขผู้เช่า"
 							value={renter_id}
 							error={errorRenterID}
 							helperText={errorRenterIDDetail}
@@ -149,19 +158,58 @@ function CreateRoom() {
 							onChange={(evt) => setTelephone(evt.target.value)}
 						/>
 					</Grid>
-
+					<Grid item xs={12} sm={6}>
+						<TextField
+							disabled
+							id="present_date"
+							format="yyyy-MM-dd"
+							label="วันที่บันทึกข้อมูลปัจจุบัน"
+							defaultValue={add_date}
+						/>
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<ReturnHome></ReturnHome>
+					</Grid>
 					<Grid item xs={12} sm={6}>
 						<Button
 							variant="contained"
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
-							onClick={CreateClicked}
+							style={{ backgroundColor: "green" }}
+							onClick={handleOpen}
 						>
 							บันทึก
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={openConfirm}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">
+						ยืนยันการเพิ่มข้อมูลผู้เช่า
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							ยืนยันการเพิ่มข้อมูลผู้เช่า
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							onClick={handleClose}
+							color="primary"
+							style={{ color: "red" }}
+						>
+							ยกเลิก
+						</Button>
+						<Button onClick={CreateClicked} color="primary">
+							ยืนยัน
+						</Button>
+					</DialogActions>
+				</Dialog>
 				<Dialog
 					open={open}
 					onClose={handleClose}

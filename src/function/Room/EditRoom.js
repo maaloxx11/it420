@@ -17,6 +17,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import ReturnHome from "../../ReturnHome.js";
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
@@ -45,7 +46,10 @@ function EditRoom() {
 	const [errorWMDetail, setErrorWMDeatail] = useState("");
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
-	
+	const [openConfirm, setOpenConfirm] = useState(false);
+	const handleOpen = () => {
+		setOpenConfirm(true);
+	};
 	const searchRoomID = () => {
 		setRoom(null);
 		setEMeterO("");
@@ -53,7 +57,7 @@ function EditRoom() {
 		setRoomStatus("");
 		if (!/^[0-9]/.test(room_id) && room_id !== "") {
 			setErrorRoomID(true);
-			setErrorRoomIDDeatail("รหัสห้องต้องเป็นตัวเลขเท่านั้น");
+			setErrorRoomIDDeatail("หมายเลขห้องต้องเป็นตัวเลขเท่านั้น");
 		} else {
 			API.searchRoom(room_id)
 				.then((resp) => resp.json())
@@ -65,9 +69,9 @@ function EditRoom() {
 	};
 	useEffect(() => {
 		if (room !== null && room_id !== "") {
-			if (room.detail === "Not found." ) {
+			if (room.detail === "Not found.") {
 				setErrorRoomID(true);
-				setErrorRoomIDDeatail("ไม่พบข้อมูลรหัสห้องพักในระบบ");
+				setErrorRoomIDDeatail("ไม่พบข้อมูลหมายเลขห้องพักในระบบ");
 				setEMeterO("");
 				setWMeterO("");
 				setRoomStatus("");
@@ -97,6 +101,7 @@ function EditRoom() {
 	}, [room, room_id, water_meter_new, electric_meter_new]);
 	const handleClose = () => {
 		setOpen(false);
+		setOpenConfirm(false);
 	};
 
 	const EditRoom = () => {
@@ -143,7 +148,7 @@ function EditRoom() {
 						<TextField
 							required
 							id="standard-basic"
-							label="รหัสห้องพัก"
+							label="หมายเลขห้องพัก"
 							error={errorRoomID}
 							helperText={errorRoomIDDetail}
 							value={room_id}
@@ -217,20 +222,47 @@ function EditRoom() {
 						/>
 					</Grid>
 
-					<Grid item xs={12} sm={6}></Grid>
+					<Grid item xs={12} sm={6}><ReturnHome></ReturnHome></Grid>
 					<Grid item xs={12} sm={6}>
 						<Button
 							variant="contained"
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
-							onClick={EditRoom}
+							style={{ backgroundColor : "green" }}
+							onClick={handleOpen}
 						>
 							บันทึก
 						</Button>
 					</Grid>
 				</Grid>
-
+				<Dialog
+					open={openConfirm}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">
+						ยืนยันการแก้ไขข้อมูลห้องพัก
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							ยืนยันการแก้ไขข้อมูลห้องพัก
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							onClick={handleClose}
+							color="primary"
+							style={{ color: "red" }}
+						>
+							ยกเลิก
+						</Button>
+						<Button onClick={EditRoom} color="primary">
+							ยืนยัน
+						</Button>
+					</DialogActions>
+				</Dialog>
 				<Dialog
 					open={open}
 					onClose={handleClose}

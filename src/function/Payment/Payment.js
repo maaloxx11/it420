@@ -12,12 +12,14 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Link } from "react-router-dom";
+import ReturnHome from "../../ReturnHome.js";
 function Payment(props) {
 	const date = new Date();
 	const [room_id, setRoomID] = useState("");
 	const [servicecharge, setSV] = useState(null);
 	const [room, setRoom] = useState(null);
 	const [room_type, setRoomType] = useState("");
+	const [room_typeid, setRoomTypeid] = useState("");
 	const [dead_line, setDeadline] = useState("");
 	const [total_payment, setPaymentTotal] = useState("");
 	const [pricelate, setPricelate] = useState(null);
@@ -27,9 +29,17 @@ function Payment(props) {
 	const [open, setOpen] = useState(false);
 	const [openDetail, setOpenDetail] = useState("");
 	const [receipts, setReceipts] = useState(0);
-
+	const [openConfirm, setOpenConfirm] = useState(false);
+	const handleOpen = () => {
+		setOpenConfirm(true);
+	};
 	const handleClose = () => {
 		setOpen(false);
+		if (openDetail === "บันทึกข้อมูลการชำระค่าบริการเสร็จสิ้น") {
+			setRoomID("");
+			Reset();
+		}
+		setOpenConfirm(false);
 	};
 	let payment_date =
 		date.getFullYear() +
@@ -68,7 +78,7 @@ function Payment(props) {
 		Reset();
 		if (!/^[0-9]/.test(room_id) && room_id !== "") {
 			setErrorRoomID(true);
-			setErrorRoomIDDeatail("รหัสห้องต้องเป็นตัวเลขเท่านั้น");
+			setErrorRoomIDDeatail("หมายเลขห้องต้องเป็นตัวเลขเท่านั้น");
 		} else {
 			API.searchPayment(room_id)
 				.then((resp) => resp.json())
@@ -108,6 +118,7 @@ function Payment(props) {
 	useEffect(() => {
 		if (room !== null) {
 			setRoomType(room_def[room.room_type]);
+			setRoomTypeid(room.room_type);
 		}
 		if (dead_line !== "" && pricelate !== null) {
 			if (payment_date <= dead_line) {
@@ -140,7 +151,7 @@ function Payment(props) {
 				total_payment,
 				payment_date,
 			});
-			API.UpdatePaymentStatus(sc_id).then(Reset()).then(setRoomID(""));
+			API.UpdatePaymentStatus(sc_id);
 			setOpen(true);
 			setOpenDetail("บันทึกข้อมูลการชำระค่าบริการเสร็จสิ้น");
 		} else {
@@ -152,8 +163,10 @@ function Payment(props) {
 	const createReceipts = () => {
 		props.RoomClicked(room_id);
 		props.TotalClicked(total_payment);
-		props.TypeClicked(room.room_type);
+		props.TypeClicked(room_typeid);
 	};
+
+
 	return (
 		<div>
 			<Container maxWidth="md">
@@ -164,7 +177,7 @@ function Payment(props) {
 						<TextField
 							required
 							id="room_id"
-							label="รหัสห้องพัก"
+							label="หมายเลขห้องพัก"
 							value={room_id}
 							error={errorRoomID}
 							helperText={errorRoomIDDetail}
@@ -213,19 +226,49 @@ function Payment(props) {
 						/>
 					</Grid>
 					<Grid item xs={12} sm={6}></Grid>
-					<Grid item xs={12} sm={6}></Grid>
+					<Grid item xs={12} sm={6}>
+						<ReturnHome></ReturnHome>
+					</Grid>
 					<Grid item xs={12} sm={6}>
 						<Button
 							variant="contained"
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
-							onClick={CreatePayment}
+							onClick={handleOpen}
+							style={{ backgroundColor: "green" }}
 						>
 							บันทึก
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={openConfirm}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">
+						ยืนยันการบันทึกการชำระค่าบริการ
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+						ยืนยันการบันทึกการชำระค่าบริการ
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							onClick={handleClose}
+							color="primary"
+							style={{ color: "red" }}
+						>
+							ยกเลิก
+						</Button>
+						<Button onClick={CreatePayment} color="primary">
+							ยืนยัน
+						</Button>
+					</DialogActions>
+				</Dialog>
 				<Dialog
 					open={open}
 					onClose={handleClose}
@@ -240,7 +283,7 @@ function Payment(props) {
 					</DialogContent>
 					<DialogActions>
 						{receipts ? (
-							<Link to="receipt">
+							<Link to="/receipt">
 								<Button onClick={createReceipts} color="primary">
 									พิมพ์ใบเสร็จ
 								</Button>

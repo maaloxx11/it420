@@ -330,4 +330,15 @@ export class API {
 			},
 		});
 	}
+	static searchPaymentRecipt(room_id) {
+		return fetch(
+			`http://127.0.0.1:8000/api/servicecharge/?room_id=${room_id}&status=1`,
+			{
+				method: "GET",
+				headers: {
+					"content-Type": "application/json",
+				},
+			}
+		);
+	}
 }

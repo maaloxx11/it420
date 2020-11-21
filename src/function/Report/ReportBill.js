@@ -5,9 +5,9 @@ import Container from "@material-ui/core/Container";
 import thLocale from "date-fns/locale/th";
 import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
-import PrintIcon from "@material-ui/icons/Print";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { Link } from "react-router-dom";
+import PostAddIcon from '@material-ui/icons/PostAdd';
 function ReportBill(props) {
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const handleDateChange = (date) => {
@@ -40,7 +40,7 @@ function ReportBill(props) {
 								variant="contained"
 								color="primary"
 								size="large"
-								startIcon={<PrintIcon />}
+								startIcon={<PostAddIcon />}
 								onClick={dateClicked}
 							>
 								สร้างรายงาน

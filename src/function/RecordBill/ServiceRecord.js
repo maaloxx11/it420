@@ -10,6 +10,8 @@ import Grid from "@material-ui/core/Grid";
 import PrintIcon from "@material-ui/icons/Print";
 import { API } from "../../api-service";
 import { Link } from "react-router-dom";
+import PostAddIcon from "@material-ui/icons/PostAdd";
+
 function ServiceRecord(props) {
 	const [records, SetRecord] = useState([]);
 
@@ -30,7 +32,7 @@ function ServiceRecord(props) {
 				<Table aria-label="simple table">
 					<TableHead>
 						<TableRow>
-							<TableCell align="center">รหัสห้อง</TableCell>
+							<TableCell align="center">หมายเลขห้อง</TableCell>
 							<TableCell align="center">
 								วันที่บันทึกข้อมูลค่าบริการล่าสุด
 							</TableCell>
@@ -47,7 +49,9 @@ function ServiceRecord(props) {
 										{servicecharge.room_id}
 									</TableCell>
 									<TableCell align="center">{servicecharge.add_date}</TableCell>
-									<TableCell align="left">{debt_status[servicecharge.payment_status]}</TableCell>
+									<TableCell align="left">
+										{debt_status[servicecharge.payment_status]}
+									</TableCell>
 									<TableCell align="center">
 										<Link to={`/addbill/`}>
 											<span onClick={recordClicked(servicecharge)}>
@@ -69,26 +73,26 @@ function ServiceRecord(props) {
 				</Table>
 				<br></br>
 				<Grid item xs={12} align="right">
-				<Link to="/addbill/">
-					<Button
-						variant="contained"
-						color="primary"
-						size="large"
-						startIcon={<PrintIcon />}
-					>
-						บันทึกข้อมูลค่าบริการ
-					</Button>
+					<Link to="/addbill/">
+						<Button
+							variant="contained"
+							color="primary"
+							size="large"
+							startIcon={<PrintIcon />}
+						>
+							บันทึกข้อมูลค่าบริการ
+						</Button>
 					</Link>
 					<p></p>
 					<Link to="/createbillall/">
-					<Button
-						variant="contained"
-						color="primary"
-						size="large"
-						startIcon={<PrintIcon />}
-					>
-						สร้างใบแจ้งหนี้ทั้งหมด
-					</Button>
+						<Button
+							variant="contained"
+							color="primary"
+							size="large"
+							startIcon={<PostAddIcon />}
+						>
+							สร้างใบแจ้งหนี้ทั้งหมด
+						</Button>
 					</Link>
 				</Grid>
 			</Container>

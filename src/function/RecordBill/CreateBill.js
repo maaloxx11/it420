@@ -12,6 +12,7 @@ import Grid from "@material-ui/core/Grid";
 import NumberFormat from "react-number-format";
 import { API } from "../../api-service";
 import { Redirect } from "react-router-dom";
+import ReturnHome from "../../ReturnHome.js";
 function CreateBill(props) {
 	let sv = props.servicecharge;
 	const date = new Date();
@@ -148,16 +149,21 @@ function CreateBill(props) {
 							) : null}{" "}
 							<br></br>
 							<Box display="block" displayPrint="none" m={1}>
-								<Grid item xs={12} align="right">
-									<Button
-										variant="contained"
-										color="primary"
-										size="large"
-										startIcon={<PrintIcon />}
-										onClick={print}
-									>
-										พิมพ์ใบแจ้งหนี้
-									</Button>
+								<Grid container spacing={3}>
+									<Grid item xs={12} sm={6}>
+										<ReturnHome></ReturnHome>
+									</Grid>
+									<Grid item xs={12} sm={6}>
+										<Button
+											variant="contained"
+											color="primary"
+											size="large"
+											startIcon={<PrintIcon />}
+											onClick={print}
+										>
+											พิมพ์ใบแจ้งหนี้
+										</Button>
+									</Grid>
 								</Grid>
 							</Box>
 						</Container>

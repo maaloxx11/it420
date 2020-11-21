@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
+import SaveIcon from "@material-ui/icons/Save";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import SaveIcon from "@material-ui/icons/Save";
+import ReturnHome from "../../ReturnHome.js"
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -42,15 +43,21 @@ function CreateRoom(props) {
 	const [errorWMDetail, setErrorWMDeatail] = useState("");
 	const [room, setRoom] = useState(null);
 	const [open, setOpen] = useState(false);
+	
 	const [openDetail, setOpenDetail] = useState("");
-
+	const [openConfirm, setOpenConfirm] = useState(false);
+	const handleOpen = () => {
+		setOpenConfirm(true);
+	};
 	const handleClose = () => {
 		setOpen(false);
+		setOpenConfirm(false)
 	};
+	
 	useEffect(() => {
 		if (!/^[0-9]/.test(room_id) && room_id !== "") {
 			setErrorRoomID(true);
-			setErrorRoomIDDeatail("รหัสห้องต้องเป็นตัวเลขเท่านั้น");
+			setErrorRoomIDDeatail("หมายเลขห้องพักห้องต้องเป็นตัวเลขเท่านั้น");
 		} else {
 			setErrorRoomID(false);
 			setErrorRoomIDDeatail("");
@@ -78,7 +85,9 @@ function CreateRoom(props) {
 		if (room !== null && room !== "") {
 			if (room.detail !== "Not found.") {
 				setErrorRoomID(true);
-				setErrorRoomIDDeatail("มีรหัสนี้อยู่ในระบบแล้วกรุณาใช้รหัสอื่น");
+				setErrorRoomIDDeatail(
+					"มีหมายเลขห้องพักนี้อยู่ในระบบแล้วกรุณาใช้หมายเลขห้องพักอื่น"
+				);
 			}
 		}
 	}, [room]);
@@ -120,7 +129,7 @@ function CreateRoom(props) {
 						<TextField
 							required
 							id="room_id"
-							label="รหัสห้องพัก"
+							label="หมายเลขห้องพัก"
 							value={room_id}
 							error={errorRoomID}
 							helperText={errorRoomIDDetail}
@@ -167,19 +176,44 @@ function CreateRoom(props) {
 						/>
 					</Grid>
 
-					<Grid item xs={12} sm={6}></Grid>
+					<Grid item xs={12} sm={6}><ReturnHome></ReturnHome></Grid>
 					<Grid item xs={12} sm={6}>
+						
 						<Button
 							variant="contained"
 							color="primary"
 							size="large"
-							onClick={CreateClicked}
+							onClick={handleOpen}
+							style={{ backgroundColor : "green" }}
 							startIcon={<SaveIcon />}
 						>
 							บันทึก
 						</Button>
 					</Grid>
 				</Grid>
+				<Dialog
+					open={openConfirm}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">
+						ยืนยันการเพิ่มข้อมูลห้องพัก
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							ยืนยันการเพิ่มข้อมูลห้องพัก
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose} color="primary" style={{ color : "red" }}>
+							ยกเลิก
+						</Button>
+						<Button onClick={CreateClicked} color="primary">
+							ยืนยัน
+						</Button>
+					</DialogActions>
+				</Dialog>
 
 				<Dialog
 					open={open}
