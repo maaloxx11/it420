@@ -13,8 +13,11 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Link } from "react-router-dom";
 import ReturnHome from "../../ReturnHome.js";
+import { useCookies } from "react-cookie";
+import ReturnLogin from "../../ReturnLogin.js";
 function Payment(props) {
 	const date = new Date();
+	const [token] = useCookies(["mr-token"]);
 	const [room_id, setRoomID] = useState("");
 	const [servicecharge, setSV] = useState(null);
 	const [room, setRoom] = useState(null);
@@ -80,7 +83,7 @@ function Payment(props) {
 			setErrorRoomID(true);
 			setErrorRoomIDDeatail("หมายเลขห้องต้องเป็นตัวเลขเท่านั้น");
 		} else {
-			API.searchPayment(room_id)
+			API.searchPayment(room_id, token["mr-token"])
 				.then((resp) => resp.json())
 				.then((resp) => setSV(resp))
 				.catch((error) => console.log(error));
@@ -94,26 +97,28 @@ function Payment(props) {
 	};
 
 	useEffect(() => {
-		if (servicecharge !== null) {
-			if (servicecharge.length > 0) {
-				setErrorRoomID(false);
-				setErrorRoomIDDeatail("");
-				API.searchRoom(room_id)
-					.then((resp) => resp.json())
-					.then((resp) => setRoom(resp))
-					.catch((error) => console.log(error));
-				setDeadline(servicecharge[0].deadline_date);
-				API.searchPriceLate()
-					.then((resp) => resp.json())
-					.then((resp) => setPricelate(resp))
-					.catch((error) => console.log(error));
-				setID(servicecharge[0].id);
-			} else {
-				setErrorRoomID(true);
-				setErrorRoomIDDeatail("ไม่พบข้อมูลค่าบริการค้างชำระในระบบ");
+		if (token["mr-token"]) {
+			if (servicecharge !== null) {
+				if (servicecharge.length > 0) {
+					setErrorRoomID(false);
+					setErrorRoomIDDeatail("");
+					API.searchRoom(room_id, token["mr-token"])
+						.then((resp) => resp.json())
+						.then((resp) => setRoom(resp))
+						.catch((error) => console.log(error));
+					setDeadline(servicecharge[0].deadline_date);
+					API.searchPriceLate(token["mr-token"])
+						.then((resp) => resp.json())
+						.then((resp) => setPricelate(resp))
+						.catch((error) => console.log(error));
+					setID(servicecharge[0].id);
+				} else {
+					setErrorRoomID(true);
+					setErrorRoomIDDeatail("ไม่พบข้อมูลค่าบริการค้างชำระในระบบ");
+				}
 			}
 		}
-	}, [servicecharge, room_id]);
+	}, [servicecharge, room_id, token]);
 
 	useEffect(() => {
 		if (room !== null) {
@@ -146,12 +151,15 @@ function Payment(props) {
 	const CreatePayment = () => {
 		if (sc_id !== "" && total_payment !== "" && payment_date !== "") {
 			setReceipts(1);
-			API.PaymentCreate({
-				sc_id,
-				total_payment,
-				payment_date,
-			});
-			API.UpdatePaymentStatus(sc_id);
+			API.PaymentCreate(
+				{
+					sc_id,
+					total_payment,
+					payment_date,
+				},
+				token["mr-token"]
+			);
+			API.UpdatePaymentStatus(sc_id, token["mr-token"]);
 			setOpen(true);
 			setOpenDetail("บันทึกข้อมูลการชำระค่าบริการเสร็จสิ้น");
 		} else {
@@ -166,9 +174,9 @@ function Payment(props) {
 		props.TypeClicked(room_typeid);
 	};
 
-
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center">รับชำระค่าบริการ</h1>
 
@@ -253,7 +261,7 @@ function Payment(props) {
 					</DialogTitle>
 					<DialogContent>
 						<DialogContentText id="alert-dialog-description">
-						ยืนยันการบันทึกการชำระค่าบริการ
+							ยืนยันการบันทึกการชำระค่าบริการ
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>

@@ -12,7 +12,10 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
 import { Redirect } from "react-router-dom";
 import ReturnHome from "../../ReturnHome.js";
+import { useCookies } from "react-cookie";
+
 function ServiceRate(props) {
+	const [token] = useCookies(["mr-token"]);
 	const [price_num, setNewPrice] = useState("");
 	const [errorPrice, setErrorPrice] = useState(false);
 	const [errorPriceDetail, setErrorPriceDeatail] = useState("");
@@ -42,7 +45,7 @@ function ServiceRate(props) {
 
 	const UpdateClicked = () => {
 		if (price_num !== "" && errorPrice !== true) {
-			API.updatePrice(props.price.price_id, { price_num, price_description })
+			API.updatePrice(props.price.price_id, { price_num, price_description },token["mr-token"])
 				.then((resp) => console.log(resp))
 				.catch((error) => console.log(error));
 			setNewPrice("");

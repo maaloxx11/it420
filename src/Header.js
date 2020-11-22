@@ -27,6 +27,8 @@ import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import FindInPageIcon from "@material-ui/icons/FindInPage";
 import ReportProblemIcon from "@material-ui/icons/ReportProblem";
 import LocalPrintshopIcon from "@material-ui/icons/LocalPrintshop";
+import { useCookies } from "react-cookie";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -90,13 +92,16 @@ export default function PersistentDrawerLeft() {
 	const classes = useStyles();
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
-
+	const [token, setToken, deleteToken] = useCookies(["mr-token"]);
 	const handleDrawerOpen = () => {
 		setOpen(true);
 	};
 
 	const handleDrawerClose = () => {
 		setOpen(false);
+	};
+	const LogOut = () => {
+		deleteToken(["mr-token"]);
 	};
 
 	return (
@@ -130,7 +135,6 @@ export default function PersistentDrawerLeft() {
 								นิรันดร์อะพาร์ทเมนต์
 							</NavLink>
 						</Typography>
-						
 					</Toolbar>
 				</AppBar>
 				<Drawer
@@ -282,6 +286,13 @@ export default function PersistentDrawerLeft() {
 							<ListItemText primary="จัดพิมพ์รายงานแสดงผลการดำเนินงาน" />
 						</ListItem>
 					</Link>
+
+					<ListItem button onClick={LogOut}>
+						<ListItemIcon style={{ color: "red" }}>
+							<ExitToAppIcon />
+						</ListItemIcon>
+						<ListItemText primary="ออดจากระบบ" style={{ color: "red" }} />
+					</ListItem>
 				</Drawer>
 				<main
 					className={clsx(classes.content, {

@@ -18,6 +18,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import ReturnHome from "../../ReturnHome.js";
+import { useCookies } from "react-cookie";
+import ReturnLogin from "../../ReturnLogin.js";
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
@@ -29,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditRoom() {
+	const [token] = useCookies(["mr-token"]);
 	const classes = useStyles();
 	const [room_id, setRoomID] = useState("");
 	const [room, setRoom] = useState(null);
@@ -59,7 +62,7 @@ function EditRoom() {
 			setErrorRoomID(true);
 			setErrorRoomIDDeatail("หมายเลขห้องต้องเป็นตัวเลขเท่านั้น");
 		} else {
-			API.searchRoom(room_id)
+			API.searchRoom(room_id, token["mr-token"])
 				.then((resp) => resp.json())
 				.then((resp) => setRoom(resp))
 				.catch((error) => console.log(error));
@@ -87,6 +90,12 @@ function EditRoom() {
 		if (!/^[0-9]/.test(electric_meter_new) && electric_meter_new !== "") {
 			setErrorEM(true);
 			setErrorEMDeatail("เลขมิเตอร์ไฟฟ้าต้องเป็นตัวเลขเท่านั้น");
+		} else if (
+			Number(electric_meter_new) < 0 ||
+			(Number(electric_meter_new) > 9999 && electric_meter_new !== "")
+		) {
+			setErrorEM(true);
+			setErrorEMDeatail("เลขมิเตอร์ไฟฟ้าต้องอยู่ระหว่าง0-9999");
 		} else {
 			setErrorEM(false);
 			setErrorEMDeatail("");
@@ -94,6 +103,12 @@ function EditRoom() {
 		if (!/^[0-9]/.test(water_meter_new) && water_meter_new !== "") {
 			setErrorWM(true);
 			setErrorWMDeatail("เลขมิเตอร์น้ำต้องเป็นตัวเลขเท่านั้น");
+		} else if (
+			Number(water_meter_new) < 0 ||
+			(Number(water_meter_new) > 9999 && water_meter_new !== "")
+		) {
+			setErrorWM(true);
+			setErrorWMDeatail("เลขมิเตอร์น้ำต้องอยู่ระหว่าง0-9999");
 		} else {
 			setErrorWM(false);
 			setErrorWMDeatail("");
@@ -114,13 +129,17 @@ function EditRoom() {
 			errorEM !== true &&
 			errorWM !== true
 		) {
-			API.editRoom(room_id, {
+			API.editRoom(
 				room_id,
-				room_status,
-				room_type,
-				water_meter_new,
-				electric_meter_new,
-			})
+				{
+					room_id,
+					room_status,
+					room_type,
+					water_meter_new,
+					electric_meter_new,
+				},
+				token["mr-token"]
+			)
 				.then((resp) => console.log(resp))
 				.then(
 					setRoomType(""),
@@ -141,6 +160,7 @@ function EditRoom() {
 	};
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center">แก้ไขข้อมูลห้องพัก</h1>
 				<Grid container spacing={3}>
@@ -222,14 +242,16 @@ function EditRoom() {
 						/>
 					</Grid>
 
-					<Grid item xs={12} sm={6}><ReturnHome></ReturnHome></Grid>
+					<Grid item xs={12} sm={6}>
+						<ReturnHome></ReturnHome>
+					</Grid>
 					<Grid item xs={12} sm={6}>
 						<Button
 							variant="contained"
 							color="primary"
 							size="large"
 							startIcon={<SaveIcon />}
-							style={{ backgroundColor : "green" }}
+							style={{ backgroundColor: "green" }}
 							onClick={handleOpen}
 						>
 							บันทึก

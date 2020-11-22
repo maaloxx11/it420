@@ -3,9 +3,6 @@ import {
 	BrowserRouter as Router,
 	Switch,
 	Route,
-	// Redirect,
-	// useHistory,
-	// useLocation,
 } from "react-router-dom";
 import Header from "./Header.js";
 import Home from "./Home.js";
@@ -35,7 +32,9 @@ import CreateReportBill from "./function/Report/CreateReportBill.js";
 import CreateReportTs from "./function/Report/CreateReportTs.js";
 import Receipt from "./function/Payment/Receipt.js";
 import Auth from "./auth.js";
+import { CookiesProvider } from "react-cookie";
 function App() {
+
 	const [selectedPrice, setSelectedPrice] = useState(null);
 	const [selectedRecord, setSelectedRecord] = useState(null);
 	const [selectedDate, setSelectedDate] = useState("");
@@ -69,214 +68,146 @@ function App() {
 	const loadType = (type) => {
 		setSelectedType(type);
 	};
-	console.log(selectedTotal);
+
 	return (
 		<div className="App">
 			<header className="App-header">
-				<Router>
-					<div className="app">
-						<Switch>
-							{/* <Route path="/login">
-								<LoginPage />
-							</Route> */}
-							<Route exact path="/">
-								<Auth></Auth>
-							</Route>
-							<Route exact path="/">
-								<Header></Header>
-								<Home></Home>
-							</Route>
-							<Route exact path="/roommenu">
-								<Header></Header>
-								<MenuRoom></MenuRoom>
-							</Route>
-							<Route exact path="/createroom">
-								<Header></Header>
-								<CreateRoom></CreateRoom>
-							</Route>
-							<Route exact path="/editroom">
-								<Header></Header>
-								<EditRoom></EditRoom>
-							</Route>
-							<Route exact path="/rentermenu">
-								<Header></Header>
-								<RenterMenu></RenterMenu>
-							</Route>
-							<Route exact path="/createrenter">
-								<Header></Header>
-								<CreateRenter></CreateRenter>
-							</Route>
-							<Route exact path="/editrenter">
-								<Header></Header>
-								<EditRenter></EditRenter>
-							</Route>
-							<Route exact path="/serviceratemenu">
-								<Header></Header>
-								<ServiceRateMenu priceClicked={loadPrice}></ServiceRateMenu>
-							</Route>
-							<Route exact path="/servicerate/:servicerateId">
-								<Header></Header>
-								<ServiceRate price={selectedPrice}></ServiceRate>
-							</Route>
+				<CookiesProvider>
+					<Router>
+						<div className="app">
+							<Switch>
+								<Route exact path="/">
+									<Header></Header>
+									<Home></Home>
+								</Route>
+								<Route exact path="/login">
+									<Auth></Auth>
+								</Route>
+								<Route exact path="/roommenu">
+									<Header></Header>
+									<MenuRoom></MenuRoom>
+								</Route>
+								<Route exact path="/createroom">
+									<Header></Header>
+									<CreateRoom></CreateRoom>
+								</Route>
+								<Route exact path="/editroom">
+									<Header></Header>
+									<EditRoom></EditRoom>
+								</Route>
+								<Route exact path="/rentermenu">
+									<Header></Header>
+									<RenterMenu></RenterMenu>
+								</Route>
+								<Route exact path="/createrenter">
+									<Header></Header>
+									<CreateRenter></CreateRenter>
+								</Route>
+								<Route exact path="/editrenter">
+									<Header></Header>
+									<EditRenter></EditRenter>
+								</Route>
+								<Route exact path="/serviceratemenu">
+									<Header></Header>
+									<ServiceRateMenu priceClicked={loadPrice}></ServiceRateMenu>
+								</Route>
+								<Route exact path="/servicerate/:servicerateId">
+									<Header></Header>
+									<ServiceRate price={selectedPrice}></ServiceRate>
+								</Route>
 
-							<Route exact path="/movein">
-								<Header></Header>
-								<MoveIn></MoveIn>
-							</Route>
-							<Route exact path="/moveout">
-								<Header></Header>
-								<MoveOut></MoveOut>
-							</Route>
-							<Route exact path="/servicerecord">
-								<Header></Header>
-								<ServiceRecord recordClicked={loadRecord}></ServiceRecord>
-							</Route>
-							<Route exact path="/addbill/">
-								<Header></Header>
-								<AddBill servicecharge={selectedRecord}></AddBill>
-							</Route>
-							<Route exact path="/createbill/:billId">
-								<Header></Header>
-								<CreateBill servicecharge={selectedRecord}></CreateBill>
-							</Route>
-							<Route exact path="/createbillall/">
-								<Header></Header>
-								<CreateBillAll></CreateBillAll>
-							</Route>
+								<Route exact path="/movein">
+									<Header></Header>
+									<MoveIn></MoveIn>
+								</Route>
+								<Route exact path="/moveout">
+									<Header></Header>
+									<MoveOut></MoveOut>
+								</Route>
+								<Route exact path="/servicerecord">
+									<Header></Header>
+									<ServiceRecord recordClicked={loadRecord}></ServiceRecord>
+								</Route>
+								<Route exact path="/addbill/">
+									<Header></Header>
+									<AddBill servicecharge={selectedRecord}></AddBill>
+								</Route>
+								<Route exact path="/createbill/:billId">
+									<Header></Header>
+									<CreateBill servicecharge={selectedRecord}></CreateBill>
+								</Route>
+								<Route exact path="/createbillall/">
+									<Header></Header>
+									<CreateBillAll></CreateBillAll>
+								</Route>
 
-							<Route exact path="/payment">
-								<Header></Header>
-								<Payment
-									RoomClicked={loadRoom}
-									TotalClicked={loadTotal}
-									TypeClicked={loadType}
-								></Payment>
-							</Route>
-							<Route exact path="/receipt">
-								<Header></Header>
-								<Receipt
-									room={selectedRoom}
-									total={selectedTotal}
-									type={selectedType}
-								></Receipt>
-							</Route>
+								<Route exact path="/payment">
+									<Header></Header>
+									<Payment
+										RoomClicked={loadRoom}
+										TotalClicked={loadTotal}
+										TypeClicked={loadType}
+									></Payment>
+								</Route>
+								<Route exact path="/receipt">
+									<Header></Header>
+									<Receipt
+										room={selectedRoom}
+										total={selectedTotal}
+										type={selectedType}
+									></Receipt>
+								</Route>
 
-							<Route exact path="/search">
-								<Header></Header>
-								<Search></Search>
-							</Route>
-							<Route exact path="/problem">
-								<Header></Header>
-								<Problem></Problem>
-							</Route>
-							<Route exact path="/problemmenu">
-								<Header></Header>
-								<ProblemMenu></ProblemMenu>
-							</Route>
-							<Route exact path="/problemview">
-								<Header></Header>
-								<ProblemView></ProblemView>
-							</Route>
-							<Route exact path="/reportmenu">
-								<Header></Header>
-								<ReportMenu></ReportMenu>
-							</Route>
-							<Route exact path="/reportbill">
-								<Header></Header>
-								<ReportBill dateClicked={loadDate}></ReportBill>
-							</Route>
-							<Route exact path="/createreportbill">
-								<Header></Header>
-								<CreateReportBill date={selectedDate}></CreateReportBill>
-							</Route>
-							<Route exact path="/reporttransition">
-								<Header></Header>
-								<ReportTransition
-									dateStartClicked={loadDatest}
-									dateEndClicked={loadDateed}
-								></ReportTransition>
-							</Route>
-							<Route exact path="/createreportts">
-								<Header></Header>
-								<CreateReportTs
-									dates={selectedDateStart}
-									datee={selectedDateEnd}
-								></CreateReportTs>
-							</Route>
-						</Switch>
-					</div>
-				</Router>
+								<Route exact path="/search">
+									<Header></Header>
+									<Search></Search>
+								</Route>
+								<Route exact path="/problem">
+									<Header></Header>
+									<Problem></Problem>
+								</Route>
+								<Route exact path="/problemmenu">
+									<Header></Header>
+									<ProblemMenu></ProblemMenu>
+								</Route>
+								<Route exact path="/problemview">
+									<Header></Header>
+									<ProblemView></ProblemView>
+								</Route>
+								<Route exact path="/reportmenu">
+									<Header></Header>
+									<ReportMenu></ReportMenu>
+								</Route>
+								<Route exact path="/reportbill">
+									<Header></Header>
+									<ReportBill dateClicked={loadDate}></ReportBill>
+								</Route>
+								<Route exact path="/createreportbill">
+									<Header></Header>
+									<CreateReportBill date={selectedDate}></CreateReportBill>
+								</Route>
+								<Route exact path="/reporttransition">
+									<Header></Header>
+									<ReportTransition
+										dateStartClicked={loadDatest}
+										dateEndClicked={loadDateed}
+									></ReportTransition>
+								</Route>
+								<Route exact path="/createreportts">
+									<Header></Header>
+									<CreateReportTs
+										dates={selectedDateStart}
+										datee={selectedDateEnd}
+									></CreateReportTs>
+								</Route>
+							</Switch>
+						</div>
+					</Router>
+				</CookiesProvider>
 			</header>
 		</div>
 	);
 }
-// const fakeAuth = {
-// 	isAuthenticated: false,
-// 	authenticate(cb) {
-// 		fakeAuth.isAuthenticated = true;
-// 		setTimeout(cb, 100); // fake async
-// 	},
-// 	signout(cb) {
-// 		fakeAuth.isAuthenticated = false;
-// 		setTimeout(cb, 100);
-// 	},
-// };
 
-// function AuthButton() {
-// 	let history = useHistory();
-
-// 	return fakeAuth.isAuthenticated ? (
-// 		<p>
-// 			Welcome!{" "}
-// 			<button
-// 				onClick={() => {
-// 					fakeAuth.signout(() => history.push("/"));
-// 				}}
-// 			>
-// 				Sign out
-// 			</button>
-// 		</p>
-// 	) : (
-// 		<p>You are not logged in.</p>
-// 	);
-// }
-// function PrivateRoute({ children, ...rest }) {
-// 	return (
-// 		<Route
-// 			{...rest}
-// 			render={({ location }) =>
-// 				fakeAuth.isAuthenticated ? (
-// 					children
-// 				) : (
-// 					<Redirect
-// 						to={{
-// 							pathname: "/login",
-// 							state: { from: location },
-// 						}}
-// 					/>
-// 				)
-// 			}
-// 		/>
-// 	);
-// }
-
-// function LoginPage() {
-// 	let history = useHistory();
-// 	let location = useLocation();
-
-// 	let { from } = location.state || { from: { pathname: "/" } };
-// 	let login = () => {
-// 		fakeAuth.authenticate(() => {
-// 			history.replace(from);
-// 		});
-// 	};
-
-// 	return (
-// 		<div>
-// 			<p>You must log in to view the page at {from.pathname}</p>
-// 			<button onClick={login}>Log in</button>
-// 		</div>
-// 	);
-// }
 
 export default App;

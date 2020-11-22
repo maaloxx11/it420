@@ -11,7 +11,9 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import NumberFormat from "react-number-format";
 import { API } from "../../api-service";
+import { useCookies } from "react-cookie";
 import ReturnHome from "../../ReturnHome.js";
+import ReturnLogin from "../../ReturnLogin.js";
 function CreateBillAll() {
 	const date = new Date();
 	let add_date =
@@ -22,38 +24,41 @@ function CreateBillAll() {
 		3: "ห้องแอร์",
 		4: "ห้องเฟอร์นิเจอร์+แอร์",
 	};
-
+	const [token] = useCookies(["mr-token"]);
 	const [rooms, SetRoom] = useState(null);
 	const [prices, SetPrice] = useState(null);
 	const [svs, SetSV] = useState(null);
 
 	useEffect(() => {
-		if (rooms === null) {
-			API.searchRoomAll()
-				.then((resp) => resp.json())
-				.then((resp) => SetRoom(resp))
-				.catch((error) => console.log(error));
-		}
-		if (svs === null) {
-			API.searchServiceCharge()
-				.then((resp) => resp.json())
-				.then((resp) => SetSV(resp))
-				.catch((error) => console.log(error));
-		}
+		if (token["mr-token"]) {
+			if (rooms === null) {
+				API.searchRoomAll(token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => SetRoom(resp))
+					.catch((error) => console.log(error));
+			}
+			if (svs === null) {
+				API.searchServiceCharge(token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => SetSV(resp))
+					.catch((error) => console.log(error));
+			}
 
-		if (prices === null) {
-			API.searchPrice()
-				.then((resp) => resp.json())
-				.then((resp) => SetPrice(resp))
-				.catch((error) => console.log(error));
+			if (prices === null) {
+				API.searchPrice(token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => SetPrice(resp))
+					.catch((error) => console.log(error));
+			}
 		}
-	}, [svs, rooms, room_def, prices]);
+	}, [svs, rooms, room_def, prices, token]);
 
 	function print() {
 		window.print();
 	}
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			{rooms && prices && svs ? (
 				<Container maxWidth="md" align="center">
 					<Box display="block" displayPrint="none" m={1}>

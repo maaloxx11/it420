@@ -13,40 +13,43 @@ import NumberFormat from "react-number-format";
 import { API } from "../../api-service";
 import { Redirect } from "react-router-dom";
 import ReturnHome from "../../ReturnHome.js";
+import { useCookies } from "react-cookie";
 function Receipt(props) {
 	const [room_id, setRoom] = useState("");
 	const [total, setTotal] = useState(0);
 	const [late, setLate] = useState(0);
 	const [type, setType] = useState("");
+	const [token] = useCookies(["mr-token"]);
 	const [typeprice, setTypePrice] = useState(null);
 	const [sv, setSV] = useState(null);
 	const date = new Date();
 	useEffect(() => {
-		if (props.room !== "" && room_id === "") {
-			setRoom(props.room);
-			setTotal(Number(props.total));
-			API.searchPaymentRecipt(room_id)
-				.then((resp) => resp.json())
-				.then((resp) => setSV(resp))
-				.catch((error) => console.log(error));
-			setType(props.type);
+		if (token["mr-token"]) {
+			if (props.room !== "" && room_id === "") {
+				setRoom(props.room);
+				setTotal(Number(props.total));
+				API.searchPaymentRecipt(room_id, token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => setSV(resp))
+					.catch((error) => console.log(error));
+				setType(props.type);
+			}
+			if (type !== "" && typeprice === null) {
+				API.searchPriceRoom(type, token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => setTypePrice(resp))
+					.catch((error) => console.log(error));
+			}
+			if (total !== 0 && typeprice !== null && sv !== null) {
+				setLate(
+					total -
+						Number(sv[0].price_electric_meter) -
+						Number(sv[0].price_water_meter) -
+						Number(typeprice[0].price_num)
+				);
+			}
 		}
-		if (type !== "" && typeprice === null) {
-			API.searchPriceRoom(type)
-				.then((resp) => resp.json())
-				.then((resp) => setTypePrice(resp))
-				.catch((error) => console.log(error));
-		}
-		if (total !== 0 && typeprice !== null && sv !== null) {
-			setLate(
-				total -
-					Number(sv[0].price_electric_meter) -
-					Number(sv[0].price_water_meter) -
-					Number(typeprice[0].price_num)
-			);
-		
-		}
-	}, [props, room_id, total, sv, type, typeprice]);
+	}, [props, room_id, total, sv, type, typeprice, token]);
 	function print() {
 		window.print();
 	}

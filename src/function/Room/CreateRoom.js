@@ -4,7 +4,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import ReturnHome from "../../ReturnHome.js"
+import ReturnHome from "../../ReturnHome.js";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -17,7 +17,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service.js";
-
+import ReturnLogin from "../../ReturnLogin.js";
+import { useCookies } from "react-cookie";
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
@@ -29,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function CreateRoom(props) {
+	const [token] = useCookies(["mr-token"]);
 	const classes = useStyles();
-
 	const [room_id, setRoomID] = useState("");
 	const [room_type, setRoomType] = useState("");
 	const [electric_meter_new, setEMeterN] = useState("");
@@ -43,7 +44,7 @@ function CreateRoom(props) {
 	const [errorWMDetail, setErrorWMDeatail] = useState("");
 	const [room, setRoom] = useState(null);
 	const [open, setOpen] = useState(false);
-	
+
 	const [openDetail, setOpenDetail] = useState("");
 	const [openConfirm, setOpenConfirm] = useState(false);
 	const handleOpen = () => {
@@ -51,36 +52,50 @@ function CreateRoom(props) {
 	};
 	const handleClose = () => {
 		setOpen(false);
-		setOpenConfirm(false)
+		setOpenConfirm(false);
 	};
-	
+
 	useEffect(() => {
-		if (!/^[0-9]/.test(room_id) && room_id !== "") {
-			setErrorRoomID(true);
-			setErrorRoomIDDeatail("หมายเลขห้องพักห้องต้องเป็นตัวเลขเท่านั้น");
-		} else {
-			setErrorRoomID(false);
-			setErrorRoomIDDeatail("");
-			API.searchRoom(room_id)
-				.then((resp) => resp.json())
-				.then((resp) => setRoom(resp))
-				.catch((error) => console.log(error));
+		if (token["mr-token"]) {
+			if (!/^[0-9]/.test(room_id) && room_id !== "") {
+				setErrorRoomID(true);
+				setErrorRoomIDDeatail("หมายเลขห้องพักห้องต้องเป็นตัวเลขเท่านั้น");
+			} else {
+				setErrorRoomID(false);
+				setErrorRoomIDDeatail("");
+				API.searchRoom(room_id, token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => setRoom(resp))
+					.catch((error) => console.log(error));
+			}
+			if (!/^[0-9]/.test(electric_meter_new) && electric_meter_new !== "") {
+				setErrorEM(true);
+				setErrorEMDeatail("เลขมิเตอร์ไฟฟ้าต้องเป็นตัวเลขเท่านั้น");
+			} else if (
+				Number(electric_meter_new) < 0 ||
+				(Number(electric_meter_new) > 9999 && electric_meter_new !== "")
+			) {
+				setErrorEM(true);
+				setErrorEMDeatail("เลขมิเตอร์ไฟฟ้าต้องอยู่ระหว่าง0-9999");
+			} else {
+				setErrorEM(false);
+				setErrorEMDeatail("");
+			}
+			if (!/^[0-9]/.test(water_meter_new) && water_meter_new !== "") {
+				setErrorWM(true);
+				setErrorWMDeatail("เลขมิเตอร์น้ำต้องเป็นตัวเลขเท่านั้น");
+			} else if (
+				Number(water_meter_new) < 0 ||
+				(Number(water_meter_new) > 9999 && water_meter_new !== "")
+			) {
+				setErrorWM(true);
+				setErrorWMDeatail("เลขมิเตอร์น้ำต้องอยู่ระหว่าง0-9999");
+			} else {
+				setErrorWM(false);
+				setErrorWMDeatail("");
+			}
 		}
-		if (!/^[0-9]/.test(electric_meter_new) && electric_meter_new !== "") {
-			setErrorEM(true);
-			setErrorEMDeatail("เลขมิเตอร์ไฟฟ้าต้องเป็นตัวเลขเท่านั้น");
-		} else {
-			setErrorEM(false);
-			setErrorEMDeatail("");
-		}
-		if (!/^[0-9]/.test(water_meter_new) && water_meter_new !== "") {
-			setErrorWM(true);
-			setErrorWMDeatail("เลขมิเตอร์น้ำต้องเป็นตัวเลขเท่านั้น");
-		} else {
-			setErrorWM(false);
-			setErrorWMDeatail("");
-		}
-	}, [room_id, electric_meter_new, water_meter_new]);
+	}, [room_id, electric_meter_new, water_meter_new, token]);
 	useEffect(() => {
 		if (room !== null && room !== "") {
 			if (room.detail !== "Not found.") {
@@ -102,13 +117,16 @@ function CreateRoom(props) {
 			errorEM !== true &&
 			errorWM !== true
 		) {
-			API.createRoom({
-				room_id,
-				room_type,
-				electric_meter_new,
-				water_meter_new,
-				room_status,
-			})
+			API.createRoom(
+				{
+					room_id,
+					room_type,
+					electric_meter_new,
+					water_meter_new,
+					room_status,
+				},
+				token["mr-token"]
+			)
 				.then((resp) => console.log(resp))
 				.then(setRoomID(""), setRoomType(""), setEMeterN(""), setWMeterN(""))
 				.catch((error) => console.log(error));
@@ -122,6 +140,7 @@ function CreateRoom(props) {
 
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center">เพิ่มห้องพัก</h1>
 				<Grid container spacing={3}>
@@ -176,15 +195,16 @@ function CreateRoom(props) {
 						/>
 					</Grid>
 
-					<Grid item xs={12} sm={6}><ReturnHome></ReturnHome></Grid>
 					<Grid item xs={12} sm={6}>
-						
+						<ReturnHome></ReturnHome>
+					</Grid>
+					<Grid item xs={12} sm={6}>
 						<Button
 							variant="contained"
 							color="primary"
 							size="large"
 							onClick={handleOpen}
-							style={{ backgroundColor : "green" }}
+							style={{ backgroundColor: "green" }}
 							startIcon={<SaveIcon />}
 						>
 							บันทึก
@@ -206,7 +226,11 @@ function CreateRoom(props) {
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
-						<Button onClick={handleClose} color="primary" style={{ color : "red" }}>
+						<Button
+							onClick={handleClose}
+							color="primary"
+							style={{ color: "red" }}
+						>
 							ยกเลิก
 						</Button>
 						<Button onClick={CreateClicked} color="primary">

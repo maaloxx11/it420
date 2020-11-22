@@ -13,6 +13,7 @@ import NumberFormat from "react-number-format";
 import { API } from "../../api-service";
 import { Redirect } from "react-router-dom";
 import ReturnHome from "../../ReturnHome.js";
+import { useCookies } from "react-cookie";
 function CreateBill(props) {
 	let sv = props.servicecharge;
 	const date = new Date();
@@ -24,6 +25,7 @@ function CreateBill(props) {
 		3: "ห้องแอร์",
 		4: "ห้องเฟอร์นิเจอร์+แอร์",
 	};
+	const [token] = useCookies(["mr-token"]);
 	const [room_id, SetRoomID] = useState("");
 	const [room, SetRoom] = useState(null);
 	const [room_type, SetRoomType] = useState("");
@@ -31,28 +33,32 @@ function CreateBill(props) {
 	const [prices, SetPrice] = useState(null);
 
 	useEffect(() => {
-		if (props.servicecharge !== null) {
-			SetRoomID(sv.room_id);
-			if (room !== null) {
-				SetRoomType(room_def[room.room_type]);
-				SetRoomTypeInt(Number(room.room_type));
+		if (token["mr-token"]) {
+			if (props.servicecharge !== null) {
+				SetRoomID(sv.room_id);
+				if (room !== null) {
+					SetRoomType(room_def[room.room_type]);
+					SetRoomTypeInt(Number(room.room_type));
+				}
+				if (prices === null) {
+					API.searchPrice(token["mr-token"])
+						.then((resp) => resp.json())
+						.then((resp) => SetPrice(resp))
+						.catch((error) => console.log(error));
+				}
 			}
-			if (prices === null) {
-				API.searchPrice()
+		}
+	}, [sv, room, room_def, prices, props, token]);
+	useEffect(() => {
+		if (token["mr-token"]) {
+			if (room_id !== "") {
+				API.searchRoom(room_id, token["mr-token"])
 					.then((resp) => resp.json())
-					.then((resp) => SetPrice(resp))
+					.then((resp) => SetRoom(resp))
 					.catch((error) => console.log(error));
 			}
 		}
-	}, [sv, room, room_def, prices, props]);
-	useEffect(() => {
-		if (room_id !== "") {
-			API.searchRoom(room_id)
-				.then((resp) => resp.json())
-				.then((resp) => SetRoom(resp))
-				.catch((error) => console.log(error));
-		}
-	}, [room_id]);
+	}, [room_id, token]);
 	function print() {
 		window.print();
 	}

@@ -7,7 +7,8 @@ import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { Link } from "react-router-dom";
-import PostAddIcon from '@material-ui/icons/PostAdd';
+import PostAddIcon from "@material-ui/icons/PostAdd";
+import ReturnLogin from "../../ReturnLogin.js";
 function ReportBill(props) {
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const handleDateChange = (date) => {
@@ -19,6 +20,7 @@ function ReportBill(props) {
 	};
 	return (
 		<Fragment>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center"> รายงานสรุปยอดค่าเช่า(รายเดือน)</h1>
 				<Grid container spacing={3}>

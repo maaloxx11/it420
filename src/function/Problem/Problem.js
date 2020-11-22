@@ -12,8 +12,11 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
 import ReturnHome from "../../ReturnHome.js";
+import { useCookies } from "react-cookie";
+import ReturnLogin from "../../ReturnLogin.js";
 function Problem() {
 	const date = new Date();
+	const [token] = useCookies(["mr-token"]);
 	let problem_date =
 		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 	const [room_id, SetRoomID] = useState("");
@@ -36,7 +39,7 @@ function Problem() {
 			setErrorRoomID(true);
 			setErrorRoomIDDeatail("หมายเลขห้องต้องเป็นตัวเลขเท่านั้น");
 		} else {
-			API.searchRoom(room_id)
+			API.searchRoom(room_id,token["mr-token"])
 				.then((resp) => resp.json())
 				.then((resp) => SetRoom(resp))
 				.catch((error) => console.log(error));
@@ -57,7 +60,7 @@ function Problem() {
 	}, [room, room_id]);
 	const Submit = () => {
 		if (room_id !== "" && promblem_description !== "" && problem_date !== "") {
-			API.ProblemCreate({ room_id, promblem_description, problem_date });
+			API.ProblemCreate({ room_id, promblem_description, problem_date },token["mr-token"]);
 			setOpen(true);
 			setOpenDetail("บันทึกข้อมูลเรื่องร้องเรียน-ปัญหาเสร็จสิ้น");
 		} else {
@@ -65,9 +68,9 @@ function Problem() {
 			setOpenDetail("กรุณาตรวจสอบการกรอกข้อมูลอีกครั้ง");
 		}
 	};
-	console.log(room);
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center"> เพิ่มข้อมูลเรื่องร้องเรียน-ปัญหา</h1>
 				<Grid container spacing={3}>

@@ -11,12 +11,13 @@ import Button from "@material-ui/core/Button";
 import PrintIcon from "@material-ui/icons/Print";
 import Box from "@material-ui/core/Box";
 import { Redirect } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import ReturnHome from "../../ReturnHome.js";
 function CreateReportTs(props) {
 	function print() {
 		window.print();
 	}
-
+	const [token] = useCookies(["mr-token"]);
 	const date_now = new Date();
 	const [tsl, SetTS] = useState(null);
 	const [monthstartshow, SetStart] = useState("");
@@ -48,28 +49,30 @@ function CreateReportTs(props) {
 	};
 
 	useEffect(() => {
-		if (props.dates !== "" && props.datee !== "") {
-			if (year === "") {
-				Setyear(props.dates.getFullYear());
-				Setmonth_st(props.dates.getMonth() + 1);
-				Setmonth_ed(props.datee.getMonth() + 1);
-			}
-			if ((year !== "", month_st !== "", month_ed !== "")) {
-				if (tsl === null) {
-					API.SearchDateTS(year, month_st, month_ed, day)
-						.then((resp) => resp.json())
-						.then((resp) => SetTS(resp))
-						.catch((error) => console.log(error));
+		if (token["mr-token"]) {
+			if (props.dates !== "" && props.datee !== "") {
+				if (year === "") {
+					Setyear(props.dates.getFullYear());
+					Setmonth_st(props.dates.getMonth() + 1);
+					Setmonth_ed(props.datee.getMonth() + 1);
 				}
-				if (month_st !== null && month_ed !== null) {
-					SetStart(moth_th_full[month_st - 1]);
-					if (month_st !== month_ed) {
-						SetEnd("    -    " + moth_th_full[month_ed - 1]);
+				if ((year !== "", month_st !== "", month_ed !== "")) {
+					if (tsl === null) {
+						API.SearchDateTS(year, month_st, month_ed, day, token["mr-token"])
+							.then((resp) => resp.json())
+							.then((resp) => SetTS(resp))
+							.catch((error) => console.log(error));
+					}
+					if (month_st !== null && month_ed !== null) {
+						SetStart(moth_th_full[month_st - 1]);
+						if (month_st !== month_ed) {
+							SetEnd("    -    " + moth_th_full[month_ed - 1]);
+						}
 					}
 				}
 			}
 		}
-	}, [year, month_st, month_ed, day, props, moth_th_full, tsl]);
+	}, [year, month_st, month_ed, day, props, moth_th_full, tsl, token]);
 
 	let moth_th = {
 		0: "ม.ค.",

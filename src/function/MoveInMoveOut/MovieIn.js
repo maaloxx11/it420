@@ -19,6 +19,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
 import ReturnHome from "../../ReturnHome.js";
+import { useCookies } from "react-cookie";
+import ReturnLogin from "../../ReturnLogin.js";
 import "date-fns";
 import {
 	MuiPickersUtilsProvider,
@@ -37,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MovieIn() {
 	const classes = useStyles();
+	const [token] = useCookies(["mr-token"]);
 	const [date, setSelectedDate] = useState(new Date());
 	const [renter, setRenter] = useState("");
 	const [renter_id, setRenterID] = useState("");
@@ -59,34 +62,38 @@ function MovieIn() {
 		setOpenConfirm(false);
 	};
 	useEffect(() => {
-		if (room_type !== "") {
-			API.roomCheck({ room_type })
-				.then((resp) => resp.json())
-				.then((resp) => setRoom(resp))
-				.catch((error) => console.log(error));
-		}
+		if (token["mr-token"]) {
+			if (room_type !== "") {
+				API.roomCheck({ room_type }, token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => setRoom(resp))
+					.catch((error) => console.log(error));
+			}
 
-		if (renter.detail === "Not found.") {
-			setErrorRenterID(true);
-			setErrorRenterIDDeatail("ไม่พบข้อมูลในระบบ");
-		} else {
-			setErrorRenterID(false);
-			setErrorRenterIDDeatail("");
+			if (renter.detail === "Not found.") {
+				setErrorRenterID(true);
+				setErrorRenterIDDeatail("ไม่พบข้อมูลในระบบ");
+			} else {
+				setErrorRenterID(false);
+				setErrorRenterIDDeatail("");
+			}
 		}
-	}, [room_type, renter]);
+	}, [room_type, renter, token]);
 	useEffect(() => {
-		if (room_type !== "" && rooms.length === 0) {
-			setErrorRoom(true);
-			setErrorRoomDeatail("ไม่พบห้องว่างในระบบกรุณาเลือกประเภทห้องใหม่");
-		} else {
-			setErrorRoom(false);
-			setErrorRoomDeatail("");
+		if (token["mr-token"]) {
+			if (room_type !== "" && rooms.length === 0) {
+				setErrorRoom(true);
+				setErrorRoomDeatail("ไม่พบห้องว่างในระบบกรุณาเลือกประเภทห้องใหม่");
+			} else {
+				setErrorRoom(false);
+				setErrorRoomDeatail("");
+			}
+			if (sendTotal === true) {
+				API.UpdateTotalFirst(room_id, token["mr-token"]);
+				console.log(room_id);
+			}
 		}
-		if (sendTotal === true) {
-			API.UpdateTotalFirst(room_id);
-			console.log(room_id);
-		}
-	}, [room_type, rooms, sendTotal, room_id]);
+	}, [room_type, rooms, sendTotal, room_id, token]);
 
 	const handleChange = (evt) => {
 		setRoomID(evt.target.value);
@@ -113,7 +120,7 @@ function MovieIn() {
 			setErrorRenterID(true);
 			setErrorRenterIDDeatail("หมายเลขผู้เช่าต้องเป็นตัวเลขเท่านั้น");
 		} else {
-			API.searchRenter(renter_id)
+			API.searchRenter(renter_id, token["mr-token"])
 				.then((resp) => resp.json())
 				.then((resp) => setRenter(resp))
 				.catch((error) => console.log(error));
@@ -123,15 +130,24 @@ function MovieIn() {
 	};
 	const CreateMoveIn = () => {
 		if (room_id !== "" && errorRenterID !== true && renter_id !== "") {
-			API.MoveinCreate({
-				room_id,
-				renter_id,
-				move_in_date,
-			})
+			API.MoveinCreate(
+				{
+					room_id,
+					renter_id,
+					move_in_date,
+				},
+				token["mr-token"]
+			)
 				.then(
-					API.updateRoomStatus(room_id, { room_id, room_status, room_type })
+					API.updateRoomStatus(
+						room_id,
+						{ room_id, room_status, room_type },
+						token["mr-token"]
+					)
 				)
-				.then(API.CreateServiceCharge({ room_id, deadline_date }))
+				.then(
+					API.CreateServiceCharge({ room_id, deadline_date }, token["mr-token"])
+				)
 				.then(setRenterID(""), setRoomType(""))
 				.catch((error) => console.log(error));
 			setsendTotal(true);
@@ -148,6 +164,7 @@ function MovieIn() {
 
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center">บันทึกข้อมูลการเข้าพัก</h1>
 				<Grid container spacing={3}>

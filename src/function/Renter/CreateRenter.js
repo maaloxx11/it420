@@ -11,7 +11,10 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service.js";
 import ReturnHome from "../../ReturnHome.js";
+import { useCookies } from "react-cookie";
+import ReturnLogin from "../../ReturnLogin.js";
 function CreateRoom() {
+	const [token] = useCookies(["mr-token"]);
 	const [renter_id, setRenterID] = useState("");
 	const [renter, setRenter] = useState(null);
 	const [firstname, setFirstName] = useState("");
@@ -33,25 +36,27 @@ function CreateRoom() {
 		setOpenConfirm(false);
 	};
 	useEffect(() => {
-		if (!/^[0-9]/.test(renter_id) && renter_id !== "") {
-			setErrorRenterID(true);
-			setErrorRenterIDDeatail("หมายเลขผู้เช่าต้องเป็นตัวเลขเท่านั้น");
-		} else {
-			setErrorRenterID(false);
-			setErrorRenterIDDeatail("");
-			API.searchRenter(renter_id)
-				.then((resp) => resp.json())
-				.then((resp) => setRenter(resp))
-				.catch((error) => console.log(error));
+		if (token["mr-token"]) {
+			if (!/^[0-9]/.test(renter_id) && renter_id !== "") {
+				setErrorRenterID(true);
+				setErrorRenterIDDeatail("หมายเลขผู้เช่าต้องเป็นตัวเลขเท่านั้น");
+			} else {
+				setErrorRenterID(false);
+				setErrorRenterIDDeatail("");
+				API.searchRenter(renter_id, token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => setRenter(resp))
+					.catch((error) => console.log(error));
+			}
+			if (!/^[0-9]/.test(telephone) && telephone !== "") {
+				setErrorTel(true);
+				setErrorTelDeatail("หมายเลขโทรศัพท์ต้องเป็นตัวเลขเท่านั้น");
+			} else {
+				setErrorTel(false);
+				setErrorTelDeatail("");
+			}
 		}
-		if (!/^[0-9]/.test(telephone) && telephone !== "") {
-			setErrorTel(true);
-			setErrorTelDeatail("หมายเลขโทรศัพท์ต้องเป็นตัวเลขเท่านั้น");
-		} else {
-			setErrorTel(false);
-			setErrorTelDeatail("");
-		}
-	}, [renter_id, telephone]);
+	}, [renter_id, telephone, token]);
 
 	useEffect(() => {
 		if (renter !== null && renter !== "") {
@@ -72,13 +77,16 @@ function CreateRoom() {
 			errorRenterID !== true &&
 			errorTel !== true
 		) {
-			API.createRenter({
-				renter_id,
-				firstname,
-				lastname,
-				address,
-				telephone,
-			})
+			API.createRenter(
+				{
+					renter_id,
+					firstname,
+					lastname,
+					address,
+					telephone,
+				},
+				token["mr-token"]
+			)
 				.then((resp) => console.log(resp))
 				.catch((error) => console.log(error));
 			setRenterID("");
@@ -98,6 +106,7 @@ function CreateRoom() {
 		date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center">เพิ่มข้อมูลผู้เช่า</h1>
 				<Grid container spacing={3}>

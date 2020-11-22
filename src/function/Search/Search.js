@@ -16,7 +16,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { API } from "../../api-service";
-
+import ReturnLogin from "../../ReturnLogin.js";
+import { useCookies } from "react-cookie";
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Search() {
+	const [token] = useCookies(["mr-token"]);
 	const classes = useStyles();
 	const [type, setType] = useState("");
 	const [rooms, setRoom] = useState(null);
@@ -53,24 +55,24 @@ function Search() {
 			} else {
 				if (id === "") {
 					if (type === 1) {
-						API.searchRoomAll()
+						API.searchRoomAll(token["mr-token"])
 							.then((resp) => resp.json())
 							.then((resp) => setRoom(resp))
 							.catch((error) => console.log(error));
 					} else if (type === 2) {
-						API.searchRenterAll()
+						API.searchRenterAll(token["mr-token"])
 							.then((resp) => resp.json())
 							.then((resp) => setRenter(resp))
 							.catch((error) => console.log(error));
 					}
 				} else {
 					if (type === 1) {
-						API.searchRoom(id)
+						API.searchRoom(id, token["mr-token"])
 							.then((resp) => resp.json())
 							.then((resp) => setRoom([resp]))
 							.catch((error) => console.log(error));
 					} else if (type === 2) {
-						API.searchRenter(id)
+						API.searchRenter(id, token["mr-token"])
 							.then((resp) => resp.json())
 							.then((resp) => setRenter([resp]))
 							.catch((error) => console.log(error));
@@ -85,13 +87,15 @@ function Search() {
 		}
 	};
 	useEffect(() => {
-		if (renters === null) {
-			API.searchTSAll()
-				.then((resp) => resp.json())
-				.then((resp) => setTS(resp))
-				.catch((error) => console.log(error));
+		if (token["mr-token"]) {
+			if (renters === null) {
+				API.searchTSAll(token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => setTS(resp))
+					.catch((error) => console.log(error));
+			}
 		}
-	}, [renters]);
+	}, [renters, token]);
 
 	let room_def = {
 		1: "ห้องเปล่า",
@@ -105,6 +109,7 @@ function Search() {
 	};
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center">สืบค้นข้อมูล</h1>
 

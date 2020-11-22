@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-
+import ReturnLogin from "./ReturnLogin.js";
 const useStyles = makeStyles((theme) => ({
 	marginButton: {
 		margin: theme.spacing(2),
@@ -14,8 +14,8 @@ const useStyles = makeStyles((theme) => ({
 function Home() {
 	const classes = useStyles();
 	return (
-		
-		<div >
+		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md" align="center">
 				<h1>ระบบจัดการอะพาร์ตเมนต์</h1>
 				<Link to="/roommenu">
@@ -99,24 +99,24 @@ function Home() {
 					</Button>
 				</Link>
 				<Link to="/problemmenu">
-				<Button
-					variant="contained"
-					color="primary"
-					size="large"
-					className={classes.marginButton}
-				>
-					จัดการเรื่องร้องเรียน-ปัญหา
-				</Button>
+					<Button
+						variant="contained"
+						color="primary"
+						size="large"
+						className={classes.marginButton}
+					>
+						จัดการเรื่องร้องเรียน-ปัญหา
+					</Button>
 				</Link>
 				<Link to="/reportmenu">
-				<Button
-					variant="contained"
-					color="primary"
-					size="large"
-					className={classes.marginButton}
-				>
-					จัดพิมพ์รายงานแสดงผลการดำเนินงาน
-				</Button>
+					<Button
+						variant="contained"
+						color="primary"
+						size="large"
+						className={classes.marginButton}
+					>
+						จัดพิมพ์รายงานแสดงผลการดำเนินงาน
+					</Button>
 				</Link>
 			</Container>
 		</div>

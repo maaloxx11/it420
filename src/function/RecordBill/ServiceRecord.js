@@ -10,23 +10,30 @@ import Grid from "@material-ui/core/Grid";
 import PrintIcon from "@material-ui/icons/Print";
 import { API } from "../../api-service";
 import { Link } from "react-router-dom";
+import ReturnLogin from "../../ReturnLogin.js";
+import { useCookies } from "react-cookie";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 
 function ServiceRecord(props) {
+	const [token] = useCookies(["mr-token"]);
 	const [records, SetRecord] = useState([]);
-
 	useEffect(() => {
-		API.searchServiceCharge()
-			.then((resp) => resp.json())
-			.then((resp) => SetRecord(resp))
-			.catch((error) => console.log(error));
-	}, []);
+		if (token["mr-token"]) {
+			API.searchServiceCharge(token["mr-token"])
+				.then((resp) => resp.json())
+				.then((resp) => SetRecord(resp))
+				.catch((error) => console.log(error));
+		}
+	}, [token]);
+	console.log(token["mr-token"]);
 	const recordClicked = (servicecharge) => (evt) => {
 		props.recordClicked(servicecharge);
 	};
 	let debt_status = { 1: "มียอดค้างชำระ", 0: "ไม่มียอดค้างชำระ" };
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
+
 			<Container maxWidth="md">
 				<h1 align="center">บันทึกการใช้บริการ และจัดพิมพ์ใบแจ้งหนี้</h1>
 				<Table aria-label="simple table">

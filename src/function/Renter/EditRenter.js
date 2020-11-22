@@ -12,7 +12,10 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service.js";
 import ReturnHome from "../../ReturnHome.js";
+import ReturnLogin from "../../ReturnLogin.js";
+import { useCookies } from "react-cookie";
 function EditRenter() {
+	const [token] = useCookies(["mr-token"]);
 	const [renter, setRenter] = useState(null);
 	const [renter_id, setRenterID] = useState("");
 	const [firstname, setFirstName] = useState("");
@@ -49,7 +52,7 @@ function EditRenter() {
 			setErrorRenterID(true);
 			setErrorRenterIDDeatail("หมายเลขผู้เช่าต้องเป็นตัวเลขเท่านั้น");
 		} else {
-			API.searchRenter(renter_id)
+			API.searchRenter(renter_id, token["mr-token"])
 				.then((resp) => resp.json())
 				.then((resp) => setRenter(resp))
 				.catch((error) => console.log(error));
@@ -89,14 +92,18 @@ function EditRenter() {
 			errorRenterID !== true &&
 			errorTel !== true
 		) {
-			API.editRenter(renter_id, {
+			API.editRenter(
 				renter_id,
-				firstname,
-				lastname,
-				address,
-				telephone,
-				date,
-			}).catch((error) => console.log(error));
+				{
+					renter_id,
+					firstname,
+					lastname,
+					address,
+					telephone,
+					date,
+				},
+				token["mr-token"]
+			).catch((error) => console.log(error));
 			Reset();
 			setRenterID("");
 			setRenter(null);
@@ -110,6 +117,7 @@ function EditRenter() {
 
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center">แก้ไขข้อมูลผู้เช่า</h1>
 				<Grid container spacing={3}>

@@ -17,6 +17,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
 import ReturnHome from "../../ReturnHome.js";
+import ReturnLogin from "../../ReturnLogin.js";
+import { useCookies } from "react-cookie";
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(0),
@@ -34,6 +36,7 @@ function AddBill(props) {
 		3: "ห้องแอร์",
 		4: "ห้องเฟอร์นิเจอร์+แอร์",
 	};
+	const [token] = useCookies(["mr-token"]);
 	const date = new Date();
 	const classes = useStyles();
 	const [room_id, setRoomId] = useState("");
@@ -62,6 +65,7 @@ function AddBill(props) {
 	};
 	const handleClose = () => {
 		setOpen(false);
+		setOpenConfirm(false);
 	};
 	let room_status = 1;
 	let debt_status = { 1: "มียอดค้างชำระ", 0: "ไม่มียอดค้างชำระ" };
@@ -76,7 +80,7 @@ function AddBill(props) {
 	}
 	useEffect(() => {
 		if (servicecharges.length === 0) {
-			API.searchServiceCharge()
+			API.searchServiceCharge(token["mr-token"])
 				.then((resp) => resp.json())
 				.then((resp) => setServiceCharge(resp))
 				.catch((error) => console.log(error));
@@ -88,7 +92,7 @@ function AddBill(props) {
 			setStatus(debt_status[props.servicecharge.payment_status]);
 		}
 		if (room_id !== "" && room === null) {
-			API.searchRoom(room_id)
+			API.searchRoom(room_id, token["mr-token"])
 				.then((resp) => resp.json())
 				.then((resp) => setRoom(resp))
 				.catch((error) => console.log(error));
@@ -96,6 +100,12 @@ function AddBill(props) {
 		if (!/^[0-9]/.test(electric_meter_new) && electric_meter_new !== "") {
 			setErrorEM(true);
 			setErrorEMDeatail("เลขมิเตอร์ไฟฟ้าต้องเป็นตัวเลขเท่านั้น");
+		} else if (
+			Number(electric_meter_new) < 0 ||
+			(Number(electric_meter_new) > 9999 && electric_meter_new !== "")
+		) {
+			setErrorEM(true);
+			setErrorEMDeatail("เลขมิเตอร์ไฟฟ้าต้องอยู่ระหว่าง0-9999");
 		} else {
 			setErrorEM(false);
 			setErrorEMDeatail("");
@@ -103,6 +113,12 @@ function AddBill(props) {
 		if (!/^[0-9]/.test(water_meter_new) && water_meter_new !== "") {
 			setErrorWM(true);
 			setErrorWMDeatail("เลขมิเตอร์น้ำต้องเป็นตัวเลขเท่านั้น");
+		} else if (
+			Number(water_meter_new) < 0 ||
+			(Number(water_meter_new) > 9999 && water_meter_new !== "")
+		) {
+			setErrorWM(true);
+			setErrorWMDeatail("เลขมิเตอร์น้ำต้องอยู่ระหว่าง0-9999");
 		} else {
 			setErrorWM(false);
 			setErrorWMDeatail("");
@@ -115,6 +131,7 @@ function AddBill(props) {
 		room,
 		electric_meter_new,
 		water_meter_new,
+		token,
 	]);
 	const Reset = () => {
 		setRoomType("");
@@ -131,19 +148,29 @@ function AddBill(props) {
 	};
 
 	useEffect(() => {
-		if (room !== null) {
-			setRoomTypeDef(room_def[room.room_type]);
-			setRoomType(room.room_type);
-			setEMeterO(room.electric_meter_new);
-			setWMeterO(room.water_meter_new);
-			setAddDateLast(Selservicecharges.add_date);
-			setId(Selservicecharges.id);
-			setStatus(debt_status[Selservicecharges.payment_status]);
+		if (token["mr-token"]) {
+			if (room !== null) {
+				setRoomTypeDef(room_def[room.room_type]);
+				setRoomType(room.room_type);
+				setEMeterO(room.electric_meter_new);
+				setWMeterO(room.water_meter_new);
+				setAddDateLast(Selservicecharges.add_date);
+				setId(Selservicecharges.id);
+				setStatus(debt_status[Selservicecharges.payment_status]);
+			}
+			if (sendTotal === true) {
+				API.Total(room_id, token["mr-token"]);
+			}
 		}
-		if (sendTotal === true) {
-			API.Total(room_id);
-		}
-	}, [room, debt_status, room_def, Selservicecharges, sendTotal, room_id]);
+	}, [
+		room,
+		debt_status,
+		room_def,
+		Selservicecharges,
+		sendTotal,
+		room_id,
+		token,
+	]);
 
 	const handleChange = (evt) => {
 		setRoomId("");
@@ -164,22 +191,30 @@ function AddBill(props) {
 			errorWM !== true &&
 			status !== "มียอดค้างชำระ"
 		) {
-			API.editRoom(room_id, {
+			API.editRoom(
 				room_id,
-				room_status,
-				room_type,
-				water_meter_new,
-				water_meter_old,
-				electric_meter_new,
-				electric_meter_old,
-			});
-			API.updateRecord(id, {
+				{
+					room_id,
+					room_status,
+					room_type,
+					water_meter_new,
+					water_meter_old,
+					electric_meter_new,
+					electric_meter_old,
+				},
+				token["mr-token"]
+			);
+			API.updateRecord(
 				id,
-				room_id,
-				add_date,
-				deadline_date,
-				payment_status,
-			});
+				{
+					id,
+					room_id,
+					add_date,
+					deadline_date,
+					payment_status,
+				},
+				token["mr-token"]
+			);
 			Reset();
 			setsendTotal(true);
 			setOpen(true);
@@ -192,6 +227,7 @@ function AddBill(props) {
 
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center">บันทึกค่าบริการ</h1>
 
@@ -300,7 +336,9 @@ function AddBill(props) {
 							defaultValue={add_date}
 						/>
 					</Grid>
-					<Grid item xs={12} sm={6}><ReturnHome></ReturnHome></Grid>
+					<Grid item xs={12} sm={6}>
+						<ReturnHome></ReturnHome>
+					</Grid>
 
 					<Grid item xs={12} sm={6}>
 						<Button

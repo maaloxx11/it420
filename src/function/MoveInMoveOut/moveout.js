@@ -19,6 +19,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { API } from "../../api-service";
 import ReturnHome from "../../ReturnHome.js";
+import { useCookies } from "react-cookie";
+import ReturnLogin from "../../ReturnLogin.js";
 import "date-fns";
 import {
 	MuiPickersUtilsProvider,
@@ -38,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MovieOut() {
+	const [token] = useCookies(["mr-token"]);
 	const classes = useStyles();
 	const [renter_id, setRenterID] = useState("");
 	const [room_id, setRoomID] = useState("");
@@ -82,16 +85,24 @@ function MovieOut() {
 			move_out_date !== "" &&
 			debt !== "คุณมียอดค้าชำระ"
 		) {
-			API.updateMoveOut(id, {
-				room_id,
-				renter_id,
-				move_in_date,
-				move_out_date,
-			}).catch((error) => console.log(error));
+			API.updateMoveOut(
+				id,
+				{
+					room_id,
+					renter_id,
+					move_in_date,
+					move_out_date,
+				},
+				token["mr-token"]
+			).catch((error) => console.log(error));
 			Reset();
 			setRenterID("");
-			API.UpdateSVStatus(room_id).catch((error) => console.log(error));
-			API.UpdateRoomStatusMoveout(room_id).catch((error) => console.log(error));
+			API.UpdateSVStatus(room_id, token["mr-token"]).catch((error) =>
+				console.log(error)
+			);
+			API.UpdateRoomStatusMoveout(room_id, token["mr-token"]).catch((error) =>
+				console.log(error)
+			);
 			setOpen(true);
 			setOpenDetail("บันทึกวันย้ายออกเสร็จสิ้น");
 		} else {
@@ -124,7 +135,7 @@ function MovieOut() {
 			setErrorRenterID(true);
 			setErrorRenterIDDeatail("หมายเลขผู้เช่าต้องเป็นตัวเลขเท่านั้น");
 		} else {
-			API.searchRenterTs({ renter_id })
+			API.searchRenterTs({ renter_id }, token["mr-token"])
 				.then((resp) => resp.json())
 				.then((resp) => setRoom(resp))
 				.catch((error) => console.log(error));
@@ -132,18 +143,20 @@ function MovieOut() {
 	};
 
 	useEffect(() => {
-		if (renter !== null) {
-			setFirstname(renter.firstname);
+		if (token["mr-token"]) {
+			if (renter !== null) {
+				setFirstname(renter.firstname);
+			}
+			if (room_id !== "") {
+				setID(Selroom.id);
+				setMovein(Selroom.move_in_date);
+				API.searchPayment(room_id, token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => setServicecharge(resp))
+					.catch((error) => console.log(error));
+			}
 		}
-		if (room_id !== "") {
-			setID(Selroom.id);
-			setMovein(Selroom.move_in_date);
-			API.searchPayment(room_id)
-				.then((resp) => resp.json())
-				.then((resp) => setServicecharge(resp))
-				.catch((error) => console.log(error));
-		}
-	}, [renter, room_id, rooms, Selroom]);
+	}, [renter, room_id, rooms, Selroom, token]);
 
 	useEffect(() => {
 		if (service !== null && service.length > 0) {
@@ -154,7 +167,7 @@ function MovieOut() {
 
 		if (rooms !== null && renter === null) {
 			if (rooms.length !== 0) {
-				API.searchRenter(renter_id)
+				API.searchRenter(renter_id, token["mr-token"])
 					.then((resp) => resp.json())
 					.then((resp) => setRenter(resp))
 					.catch((error) => console.log(error));
@@ -165,7 +178,7 @@ function MovieOut() {
 				setErrorRenterIDDeatail("ไม่พบข้อมูลในระบบ");
 			}
 		}
-	}, [service, debt_status, rooms, renter_id, renter]);
+	}, [service, debt_status, rooms, renter_id, renter, token]);
 	const handleRoomChange = (evt) => {
 		setRoomID(evt.target.value);
 	};
@@ -175,6 +188,7 @@ function MovieOut() {
 
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center">บันทึกข้อมูลการย้ายออก</h1>
 				<Grid container spacing={3}>
@@ -277,7 +291,9 @@ function MovieOut() {
 							/>
 						</MuiPickersUtilsProvider>
 					</Grid>
-					<Grid item xs={12} sm={6}><ReturnHome></ReturnHome></Grid>
+					<Grid item xs={12} sm={6}>
+						<ReturnHome></ReturnHome>
+					</Grid>
 					<Grid item xs={12} sm={6}>
 						<Button
 							variant="contained"
@@ -331,7 +347,6 @@ function MovieOut() {
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
-					
 						<Button onClick={handleClose} color="primary">
 							ปิด
 						</Button>

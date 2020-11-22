@@ -13,6 +13,7 @@ import thLocale from "date-fns/locale/th";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { Link } from "react-router-dom";
 import FormHelperText from "@material-ui/core/FormHelperText";
+import ReturnLogin from "../../ReturnLogin.js";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 function ReportTransition(props) {
 	const [selectedDateStart, setSelectedDateStart] = useState(new Date());
@@ -36,6 +37,10 @@ function ReportTransition(props) {
 			setDisplay(0);
 			setError(true);
 			setErrorDetail("ปีเริ่มต้นกับปีสิ้นสุดต้องเป็นปีเดียวกัน");
+		} else if (selectedDateStart > selectedDateEnd) {
+			setDisplay(0);
+			setError(true);
+			setErrorDetail("ช่วงเวลาเริ่มต้นต้องน้อยกว่าหรือเท่ากับสิ้นสุด");
 		} else {
 			setDisplay(1);
 			setError(false);
@@ -54,6 +59,7 @@ function ReportTransition(props) {
 
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			<Container maxWidth="md">
 				<h1 align="center">
 					{" "}

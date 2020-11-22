@@ -12,11 +12,13 @@ import PrintIcon from "@material-ui/icons/Print";
 import Box from "@material-ui/core/Box";
 import { Redirect } from "react-router-dom";
 import ReturnHome from "../../ReturnHome.js";
+import { useCookies } from "react-cookie";
 function CreateReportBill(props) {
 	function print() {
 		window.print();
 	}
 	let date = props.date;
+	const [token] = useCookies(["mr-token"]);
 	const date_now = new Date();
 	const [payments, SetPayment] = useState(null);
 	const [svl, SetSV] = useState(null);
@@ -27,23 +29,25 @@ function CreateReportBill(props) {
 	let day = new Date(year, month, 0).getDate();
 
 	useEffect(() => {
-		if (props.date !== "") {
-			if (year === "") {
-				Setyear(props.date.getFullYear());
-				Setmonth(props.date.getMonth() + 1);
-			}
-			if (year !== "" && month !== "") {
-				API.SearchDateBill(year, month, day)
-					.then((resp) => resp.json())
-					.then((resp) => SetPayment(resp))
-					.catch((error) => console.log(error));
-				API.searchServiceChargeBill()
-					.then((resp) => resp.json())
-					.then((resp) => SetSV(resp))
-					.catch((error) => console.log(error));
+		if (token["mr-token"]) {
+			if (props.date !== "") {
+				if (year === "") {
+					Setyear(props.date.getFullYear());
+					Setmonth(props.date.getMonth() + 1);
+				}
+				if (year !== "" && month !== "") {
+					API.SearchDateBill(year, month, day, token["mr-token"])
+						.then((resp) => resp.json())
+						.then((resp) => SetPayment(resp))
+						.catch((error) => console.log(error));
+					API.searchServiceChargeBill(token["mr-token"])
+						.then((resp) => resp.json())
+						.then((resp) => SetSV(resp))
+						.catch((error) => console.log(error));
+				}
 			}
 		}
-	}, [year, month, day, props]);
+	}, [year, month, day, props, token]);
 	console.log(payments);
 	let moth_th = {
 		0: "มกราคม",
@@ -150,7 +154,7 @@ function CreateReportBill(props) {
 					</Grid>
 					<br></br>
 					<Box display="block" displayPrint="none" m={1}>
-					<Grid container spacing={3}>
+						<Grid container spacing={3}>
 							<Grid item xs={12} sm={6}>
 								<ReturnHome></ReturnHome>
 							</Grid>
