@@ -7,13 +7,12 @@ import TableRow from "@material-ui/core/TableRow";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import PrintIcon from "@material-ui/icons/Print";
 import { API } from "../../api-service";
 import { Link } from "react-router-dom";
 import ReturnLogin from "../../ReturnLogin.js";
 import { useCookies } from "react-cookie";
 import PostAddIcon from "@material-ui/icons/PostAdd";
-
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 function ServiceRecord(props) {
 	const [token] = useCookies(["mr-token"]);
 	const [records, SetRecord] = useState([]);
@@ -85,7 +84,7 @@ function ServiceRecord(props) {
 							variant="contained"
 							color="primary"
 							size="large"
-							startIcon={<PrintIcon />}
+							startIcon={<PlaylistAddIcon />}
 						>
 							บันทึกข้อมูลค่าบริการ
 						</Button>

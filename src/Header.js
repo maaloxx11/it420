@@ -291,7 +291,7 @@ export default function PersistentDrawerLeft() {
 						<ListItemIcon style={{ color: "red" }}>
 							<ExitToAppIcon />
 						</ListItemIcon>
-						<ListItemText primary="ออดจากระบบ" style={{ color: "red" }} />
+						<ListItemText primary="ออกจากระบบ" style={{ color: "red" }} />
 					</ListItem>
 				</Drawer>
 				<main

@@ -13,7 +13,7 @@ import { API } from "../../api-service";
 import { Redirect } from "react-router-dom";
 import ReturnHome from "../../ReturnHome.js";
 import { useCookies } from "react-cookie";
-
+import ReturnLogin from "../../ReturnLogin.js";
 function ServiceRate(props) {
 	const [token] = useCookies(["mr-token"]);
 	const [price_num, setNewPrice] = useState("");
@@ -45,7 +45,11 @@ function ServiceRate(props) {
 
 	const UpdateClicked = () => {
 		if (price_num !== "" && errorPrice !== true) {
-			API.updatePrice(props.price.price_id, { price_num, price_description },token["mr-token"])
+			API.updatePrice(
+				props.price.price_id,
+				{ price_num, price_description },
+				token["mr-token"]
+			)
 				.then((resp) => console.log(resp))
 				.catch((error) => console.log(error));
 			setNewPrice("");
@@ -59,6 +63,7 @@ function ServiceRate(props) {
 
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			{props.price ? (
 				<Container maxWidth="md">
 					<h1 align="center">กำหนดอัตรค่าบริการ</h1>

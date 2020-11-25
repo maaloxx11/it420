@@ -35,7 +35,7 @@ function ReportMenu() {
 						size="large"
 						className={classes.marginButton}
 					>
-						รายงานแสดงจำนวนคนเข้าพักและย้ายออก(ตามช่วงเวลาที่กำหนด)
+						รายงานแสดงจำนวนคนเข้าพักและย้ายออก
 					</Button>
 				</Link>
 			</Container>

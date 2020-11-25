@@ -14,6 +14,7 @@ import { API } from "../../api-service";
 import { Redirect } from "react-router-dom";
 import ReturnHome from "../../ReturnHome.js";
 import { useCookies } from "react-cookie";
+import ReturnLogin from "../../ReturnLogin.js";
 function Receipt(props) {
 	const [room_id, setRoom] = useState("");
 	const [total, setTotal] = useState(0);
@@ -59,6 +60,7 @@ function Receipt(props) {
 
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			{props.room ? (
 				<Container maxWidth="md" align="center">
 					<h1 align="center">ใบเสร็จชำระค่าห้อง</h1>

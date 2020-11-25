@@ -14,6 +14,7 @@ import { API } from "../../api-service";
 import { Redirect } from "react-router-dom";
 import ReturnHome from "../../ReturnHome.js";
 import { useCookies } from "react-cookie";
+import ReturnLogin from "../../ReturnLogin.js";
 function CreateBill(props) {
 	let sv = props.servicecharge;
 	const date = new Date();
@@ -64,6 +65,7 @@ function CreateBill(props) {
 	}
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			{props.servicecharge ? (
 				<div>
 					{room ? (

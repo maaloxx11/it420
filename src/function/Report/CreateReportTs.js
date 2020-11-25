@@ -13,6 +13,7 @@ import Box from "@material-ui/core/Box";
 import { Redirect } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import ReturnHome from "../../ReturnHome.js";
+import ReturnLogin from "../../ReturnLogin.js";
 function CreateReportTs(props) {
 	function print() {
 		window.print();
@@ -151,6 +152,7 @@ function CreateReportTs(props) {
 	});
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			{props.dates ? (
 				<Container maxWidth="md">
 					<Grid container spacing={3}>

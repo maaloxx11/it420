@@ -1,6 +1,6 @@
 export class API {
 	static createRoom(body, token) {
-		return fetch(`http://127.0.0.1:8000/api/room/`, {
+		return fetch(`https://niruna.herokuapp.com/api/room/`, {
 			method: "POST",
 			headers: {
 				"content-Type": "application/json",
@@ -10,7 +10,7 @@ export class API {
 		}).then((resp) => resp.json());
 	}
 	static createRenter(body, token) {
-		return fetch(`http://127.0.0.1:8000/api/renter/`, {
+		return fetch(`https://niruna.herokuapp.com/api/renter/`, {
 			method: "POST",
 			headers: {
 				"content-Type": "application/json",
@@ -20,7 +20,7 @@ export class API {
 		}).then((resp) => resp.json());
 	}
 	static updatePrice(price_id, body, token) {
-		return fetch(`http://127.0.0.1:8000/api/price/${price_id}/`, {
+		return fetch(`https://niruna.herokuapp.com/api/price/${price_id}/`, {
 			method: "PUT",
 			headers: {
 				"content-Type": "application/json",
@@ -30,7 +30,7 @@ export class API {
 		}).then((resp) => resp.json());
 	}
 	static searchRenter(renter_id, token) {
-		return fetch(`http://127.0.0.1:8000/api/renter/${renter_id}/`, {
+		return fetch(`https://niruna.herokuapp.com/api/renter/${renter_id}/`, {
 			method: "GET",
 			headers: {
 				"content-Type": "application/json",
@@ -40,7 +40,7 @@ export class API {
 	}
 	static roomCheck(room_type, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/room/?room_type=${
+			`https://niruna.herokuapp.com/api/room/?room_type=${
 				room_type.room_type
 			}&room_status=${0}`,
 			{
@@ -53,7 +53,7 @@ export class API {
 		);
 	}
 	static MoveinCreate(body, token) {
-		return fetch(`http://127.0.0.1:8000/api/transition/`, {
+		return fetch(`https://niruna.herokuapp.com/api/transition/`, {
 			method: "POST",
 			headers: {
 				"content-Type": "application/json",
@@ -63,7 +63,7 @@ export class API {
 		}).then((resp) => resp.json());
 	}
 	static searchRoom(room_id, token) {
-		return fetch(`http://127.0.0.1:8000/api/room/${room_id}/`, {
+		return fetch(`https://niruna.herokuapp.com/api/room/${room_id}/`, {
 			method: "GET",
 			headers: {
 				"content-Type": "application/json",
@@ -72,7 +72,7 @@ export class API {
 		});
 	}
 	static updateRoomStatus(room_id, body, token) {
-		return fetch(`http://127.0.0.1:8000/api/room/${room_id}/`, {
+		return fetch(`https://niruna.herokuapp.com/api/room/${room_id}/`, {
 			method: "PUT",
 			headers: {
 				"content-Type": "application/json",
@@ -82,7 +82,7 @@ export class API {
 		}).then((resp) => resp.json());
 	}
 	static editRoom(room_id, body, token) {
-		return fetch(`http://127.0.0.1:8000/api/room/${room_id}/`, {
+		return fetch(`https://niruna.herokuapp.com/api/room/${room_id}/`, {
 			method: "PUT",
 			headers: {
 				"content-Type": "application/json",
@@ -92,7 +92,7 @@ export class API {
 		}).then((resp) => resp.json());
 	}
 	static editRenter(renter_id, body, token) {
-		return fetch(`http://127.0.0.1:8000/api/renter/${renter_id}/`, {
+		return fetch(`https://niruna.herokuapp.com/api/renter/${renter_id}/`, {
 			method: "PUT",
 			headers: {
 				"content-Type": "application/json",
@@ -102,7 +102,7 @@ export class API {
 		}).then((resp) => resp.json());
 	}
 	static CreateServiceCharge(body, token) {
-		return fetch(`http://127.0.0.1:8000/api/servicecharge/`, {
+		return fetch(`https://niruna.herokuapp.com/api/servicecharge/`, {
 			method: "POST",
 			headers: {
 				"content-Type": "application/json",
@@ -113,7 +113,7 @@ export class API {
 	}
 	static searchRenterTs(renter_id, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/transition/?renter_id=${renter_id.renter_id}&move_out_date=true`,
+			`https://niruna.herokuapp.com/api/transition/?renter_id=${renter_id.renter_id}&move_out_date=true`,
 			{
 				method: "GET",
 				headers: {
@@ -125,7 +125,7 @@ export class API {
 	}
 	static searchDebt(room_id, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/servicecharge/?room_id=${room_id}`,
+			`https://niruna.herokuapp.com/api/servicecharge/?room_id=${room_id}`,
 			{
 				method: "GET",
 				headers: {
@@ -136,7 +136,7 @@ export class API {
 		);
 	}
 	static updateMoveOut(id, body, token) {
-		return fetch(`http://127.0.0.1:8000/api/transition/${id}/`, {
+		return fetch(`https://niruna.herokuapp.com/api/transition/${id}/`, {
 			method: "PUT",
 			headers: {
 				"content-Type": "application/json",
@@ -146,7 +146,7 @@ export class API {
 		}).then((resp) => resp.json());
 	}
 	static searchServiceCharge(token) {
-		return fetch(`http://127.0.0.1:8000/api/servicecharge/?status=1`, {
+		return fetch(`https://niruna.herokuapp.com/api/servicecharge/?status=1`, {
 			method: "GET",
 			headers: {
 				"content-Type": "application/json",
@@ -155,7 +155,7 @@ export class API {
 		});
 	}
 	static searchServiceChargeBill(token) {
-		return fetch(`http://127.0.0.1:8000/api/servicecharge/`, {
+		return fetch(`https://niruna.herokuapp.com/api/servicecharge/`, {
 			method: "GET",
 			headers: {
 				"content-Type": "application/json",
@@ -166,7 +166,7 @@ export class API {
 
 	static Total(room_id, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/room/${room_id}/addservicecharge/`,
+			`https://niruna.herokuapp.com/api/room/${room_id}/addservicecharge/`,
 			{
 				method: "POST",
 				headers: {
@@ -177,7 +177,7 @@ export class API {
 		).then((resp) => resp.json());
 	}
 	static updateRecord(id, body, token) {
-		return fetch(`http://127.0.0.1:8000/api/servicecharge/${id}/`, {
+		return fetch(`https://niruna.herokuapp.com/api/servicecharge/${id}/`, {
 			method: "PUT",
 			headers: {
 				"content-Type": "application/json",
@@ -188,7 +188,7 @@ export class API {
 	}
 	static searchRenterTsBill(room_id, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/transition/?renter_id=${room_id.room_id}&move_out_date=true`,
+			`https://niruna.herokuapp.com/api/transition/?renter_id=${room_id.room_id}&move_out_date=true`,
 			{
 				method: "GET",
 				headers: {
@@ -199,7 +199,7 @@ export class API {
 		);
 	}
 	static searchPrice(token) {
-		return fetch("http://127.0.0.1:8000/api/price/", {
+		return fetch("https://niruna.herokuapp.com/api/price/", {
 			method: "GET",
 			headers: {
 				"content-Type": "application/json",
@@ -209,7 +209,7 @@ export class API {
 	}
 	static searchPayment(room_id, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/servicecharge/?room_id=${room_id}&payment_status=1`,
+			`https://niruna.herokuapp.com/api/servicecharge/?room_id=${room_id}&payment_status=1`,
 			{
 				method: "GET",
 				headers: {
@@ -220,7 +220,7 @@ export class API {
 		);
 	}
 	static searchPriceLate(token) {
-		return fetch(`http://127.0.0.1:8000/api/price/?price_id=late`, {
+		return fetch(`https://niruna.herokuapp.com/api/price/?price_id=late`, {
 			method: "GET",
 			headers: {
 				"content-Type": "application/json",
@@ -229,7 +229,7 @@ export class API {
 		});
 	}
 	static PaymentCreate(body, token) {
-		return fetch(`http://127.0.0.1:8000/api/payment/`, {
+		return fetch(`https://niruna.herokuapp.com/api/payment/`, {
 			method: "POST",
 			headers: {
 				"content-Type": "application/json",
@@ -240,7 +240,7 @@ export class API {
 	}
 	static UpdatePaymentStatus(sc_id, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/servicecharge/${sc_id}/updatepaymentstatus/`,
+			`https://niruna.herokuapp.com/api/servicecharge/${sc_id}/updatepaymentstatus/`,
 			{
 				method: "POST",
 				headers: {
@@ -251,16 +251,19 @@ export class API {
 		);
 	}
 	static searchRoomAll(token) {
-		return fetch(`http://127.0.0.1:8000/api/room/?o=room_type&a=room_status`, {
-			method: "GET",
-			headers: {
-				"content-Type": "application/json",
-				Authorization: `Token ${token}`,
-			},
-		});
+		return fetch(
+			`https://niruna.herokuapp.com/api/room/?o=room_type&a=room_status`,
+			{
+				method: "GET",
+				headers: {
+					"content-Type": "application/json",
+					Authorization: `Token ${token}`,
+				},
+			}
+		);
 	}
 	static searchRenterAll(token) {
-		return fetch(`http://127.0.0.1:8000/api/renter/`, {
+		return fetch(`https://niruna.herokuapp.com/api/renter/`, {
 			method: "GET",
 			headers: {
 				"content-Type": "application/json",
@@ -269,7 +272,7 @@ export class API {
 		});
 	}
 	static searchTSAll(token) {
-		return fetch(`http://127.0.0.1:8000/api/transition/`, {
+		return fetch(`https://niruna.herokuapp.com/api/transition/`, {
 			method: "GET",
 			headers: {
 				"content-Type": "application/json",
@@ -278,7 +281,7 @@ export class API {
 		});
 	}
 	static ProblemCreate(body, token) {
-		return fetch(`http://127.0.0.1:8000/api/problem/`, {
+		return fetch(`https://niruna.herokuapp.com/api/problem/`, {
 			method: "POST",
 			headers: {
 				"content-Type": "application/json",
@@ -288,7 +291,7 @@ export class API {
 		}).then((resp) => resp.json());
 	}
 	static ViewProblem(token) {
-		return fetch(`http://127.0.0.1:8000/api/problem/`, {
+		return fetch(`https://niruna.herokuapp.com/api/problem/`, {
 			method: "GET",
 			headers: {
 				"content-Type": "application/json",
@@ -299,7 +302,7 @@ export class API {
 
 	static SearchDateBill(year, month, date, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/payment/?start_date=${year}-${
+			`https://niruna.herokuapp.com/api/payment/?start_date=${year}-${
 				month - 1
 			}-26&end_date=${year}-${month}-25`,
 			{
@@ -313,7 +316,7 @@ export class API {
 	}
 	static SearchDateTS(year, month_st, month_ed, date, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/transition/?start_date=${year}-${month_st}-1&end_date=${year}-${month_ed}-${date}`,
+			`https://niruna.herokuapp.com/api/transition/?start_date=${year}-${month_st}-1&end_date=${year}-${month_ed}-${date}`,
 			{
 				method: "GET",
 				headers: {
@@ -325,7 +328,7 @@ export class API {
 	}
 	static UpdateSVStatus(room_id, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/room/${room_id}/updateservicestatus/`,
+			`https://niruna.herokuapp.com/api/room/${room_id}/updateservicestatus/`,
 			{
 				method: "POST",
 				headers: {
@@ -336,17 +339,20 @@ export class API {
 		).then((resp) => resp.json());
 	}
 	static UpdateTotalFirst(room_id, token) {
-		return fetch(`http://127.0.0.1:8000/api/room/${room_id}/updatetoatal/`, {
-			method: "POST",
-			headers: {
-				"content-Type": "application/json",
-				Authorization: `Token ${token}`,
-			},
-		}).then((resp) => resp.json());
+		return fetch(
+			`https://niruna.herokuapp.com/api/room/${room_id}/updatetoatal/`,
+			{
+				method: "POST",
+				headers: {
+					"content-Type": "application/json",
+					Authorization: `Token ${token}`,
+				},
+			}
+		).then((resp) => resp.json());
 	}
 	static UpdateRoomStatusMoveout(room_id, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/room/${room_id}/updateroomstatus/`,
+			`https://niruna.herokuapp.com/api/room/${room_id}/updateroomstatus/`,
 			{
 				method: "POST",
 				headers: {
@@ -357,17 +363,20 @@ export class API {
 		).then((resp) => resp.json());
 	}
 	static searchPriceRoom(price_id, token) {
-		return fetch(`http://127.0.0.1:8000/api/price/?price_id=${price_id}`, {
-			method: "GET",
-			headers: {
-				"content-Type": "application/json",
-				Authorization: `Token ${token}`,
-			},
-		});
+		return fetch(
+			`https://niruna.herokuapp.com/api/price/?price_id=${price_id}`,
+			{
+				method: "GET",
+				headers: {
+					"content-Type": "application/json",
+					Authorization: `Token ${token}`,
+				},
+			}
+		);
 	}
 	static searchPaymentRecipt(room_id, token) {
 		return fetch(
-			`http://127.0.0.1:8000/api/servicecharge/?room_id=${room_id}&status=1`,
+			`https://niruna.herokuapp.com/api/servicecharge/?room_id=${room_id}&status=1`,
 			{
 				method: "GET",
 				headers: {
@@ -378,7 +387,7 @@ export class API {
 		);
 	}
 	static loginUser(body, token) {
-		return fetch(`http://127.0.0.1:8000/auth/`, {
+		return fetch(`https://niruna.herokuapp.com/auth/`, {
 			method: "POST",
 			headers: {
 				"content-Type": "application/json",

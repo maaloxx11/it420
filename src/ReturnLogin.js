@@ -4,7 +4,11 @@ import { useCookies } from "react-cookie";
 function ReturnLogin() {
 	const [token] = useCookies(["mr-token"]);
 	return (
-		<div>{token["mr-token"] ? null : <Redirect to="/login"></Redirect>}</div>
+		<div>
+			{token["mr-token"] && token["mr-token"] !== "undefined" ? null : (
+				<Redirect to="/login"></Redirect>
+			)}
+		</div>
 	);
 }
 

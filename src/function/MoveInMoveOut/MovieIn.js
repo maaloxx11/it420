@@ -249,6 +249,7 @@ function MovieIn() {
 						<MuiPickersUtilsProvider utils={DateFnsUtils}>
 							<KeyboardDatePicker
 								disableToolbar
+								disablePast
 								variant="inline"
 								format="yyyy/MM/dd"
 								margin="normal"

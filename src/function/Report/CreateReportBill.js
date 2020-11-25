@@ -13,6 +13,8 @@ import Box from "@material-ui/core/Box";
 import { Redirect } from "react-router-dom";
 import ReturnHome from "../../ReturnHome.js";
 import { useCookies } from "react-cookie";
+import ReturnLogin from "../../ReturnLogin.js";
+
 function CreateReportBill(props) {
 	function print() {
 		window.print();
@@ -20,11 +22,12 @@ function CreateReportBill(props) {
 	let date = props.date;
 	const [token] = useCookies(["mr-token"]);
 	const date_now = new Date();
-	const [payments, SetPayment] = useState(null);
+	const [payments, SetPayment] = useState([]);
 	const [svl, SetSV] = useState(null);
 	const [total, SetTotal] = useState(0);
 	const [year, Setyear] = useState("");
 	const [month, Setmonth] = useState("");
+	const [fetch, SetFetch] = useState(false);
 
 	let day = new Date(year, month, 0).getDate();
 
@@ -35,20 +38,36 @@ function CreateReportBill(props) {
 					Setyear(props.date.getFullYear());
 					Setmonth(props.date.getMonth() + 1);
 				}
-				if (year !== "" && month !== "") {
-					API.SearchDateBill(year, month, day, token["mr-token"])
-						.then((resp) => resp.json())
-						.then((resp) => SetPayment(resp))
-						.catch((error) => console.log(error));
-					API.searchServiceChargeBill(token["mr-token"])
-						.then((resp) => resp.json())
-						.then((resp) => SetSV(resp))
-						.catch((error) => console.log(error));
-				}
+			}
+			if (payments.length !== 0 && total === 0) {
+				const result = payments.reduce((sum, number) => {
+					return sum + number.total_payment;
+				}, 0);
+				SetTotal(result);
 			}
 		}
-	}, [year, month, day, props, token]);
-	console.log(payments);
+	}, [props, token, year, payments, total]);
+
+	useEffect(() => {
+		if (token["mr-token"]) {
+			if (
+				year !== "" &&
+				month !== "" &&
+				payments.length === 0 &&
+				fetch === false
+			) {
+				API.SearchDateBill(year, month, day, token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => SetPayment(resp))
+					.catch((error) => console.log(error));
+				API.searchServiceChargeBill(token["mr-token"])
+					.then((resp) => resp.json())
+					.then((resp) => SetSV(resp))
+					.catch((error) => console.log(error));
+				SetFetch(true);
+			}
+		}
+	}, [year, month, day, token, payments, svl]);
 	let moth_th = {
 		0: "มกราคม",
 		1: "กุมภาพันธ์",
@@ -69,15 +88,10 @@ function CreateReportBill(props) {
 		(date_now.getMonth() + 1) +
 		"/" +
 		date_now.getDate();
-	if (payments !== null && total === 0) {
-		const result = payments.reduce((sum, number) => {
-			return sum + number.total_payment;
-		}, 0);
-		SetTotal(result);
-	}
 
 	return (
 		<div>
+			<ReturnLogin></ReturnLogin>
 			{props.date ? (
 				<Container maxWidth="md">
 					<Grid container spacing={3}>
@@ -105,7 +119,7 @@ function CreateReportBill(props) {
 									<TableCell align="right">ค่าเช่ารายเดือน</TableCell>
 								</TableRow>
 							</TableHead>
-							{payments && svl ? (
+							{payments.length !== 0 && svl ? (
 								<TableBody>
 									{payments.map((payment) => {
 										return (

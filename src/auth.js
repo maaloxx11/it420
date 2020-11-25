@@ -9,18 +9,29 @@ import { useCookies } from "react-cookie";
 function Auth() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [Send, setSend] = useState(false);
+	const [error, setSetError] = useState(false);
+	const [errordetail, setSetErrorDetail] = useState(false);
 	const [token, setToken] = useCookies(["mr-token"]);
-	useEffect(() => {
-		if (token["mr-token"]) window.location.href = "/";
-	}, [token]);
 	const loginClicked = () => {
+		setSend(true);
 		API.loginUser({ username, password })
 			.then((resp) => setToken("mr-token", resp.token))
 			.catch((error) => console.error(error));
 	};
+	useEffect(() => {
+		if (token["mr-token"] === "undefined" && Send === true) {
+			setSetError(true);
+			setSetErrorDetail("ไม่พบข้อมูลผู้ใช้ในระบบ");
+		} else {
+			setSetError(false);
+			setSetErrorDetail("");
+		}
+	}, [token, Send]);
+
 	return (
 		<div>
-			{token["mr-token"] ? (
+			{token["mr-token"] !== "undefined" && token["mr-token"] ? (
 				<Redirect to="/"></Redirect>
 			) : (
 				<Container maxWidth="sm">
@@ -32,6 +43,7 @@ function Auth() {
 							<TextField
 								required
 								id="standard-required"
+								error={error}
 								label="Username"
 								value={username}
 								onChange={(evt) => setUsername(evt.target.value)}
@@ -43,6 +55,8 @@ function Auth() {
 								id="standard-password-input"
 								label="Password"
 								type="password"
+								error={error}
+								helperText={errordetail}
 								autoComplete="current-password"
 								value={password}
 								onChange={(evt) => setPassword(evt.target.value)}

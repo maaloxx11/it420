@@ -63,13 +63,14 @@ function ReportTransition(props) {
 			<Container maxWidth="md">
 				<h1 align="center">
 					{" "}
-					รายงานแสดงจำนวนคนเข้าพักและย้ายออก(ตามช่วงเวลาที่กำหนด)
+					รายงานแสดงจำนวนคนเข้าพักและย้ายออก
 				</h1>
 				<Grid container spacing={3}>
 					<Grid item xs={12} sm={6}>
 						<MuiPickersUtilsProvider utils={DateFnsUtils} locale={thLocale}>
 							<DatePicker
 								variant="inline"
+								disableFuture
 								openTo="year"
 								views={["year", "month"]}
 								label="เดือน/ปี เริ่มต้น"
@@ -82,6 +83,7 @@ function ReportTransition(props) {
 						<MuiPickersUtilsProvider utils={DateFnsUtils} locale={thLocale}>
 							<DatePicker
 								variant="inline"
+								disableFuture={true}
 								openTo="year"
 								views={["year", "month"]}
 								label="เดือน/ปี สิ้นสุด"

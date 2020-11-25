@@ -125,7 +125,7 @@ function CreateRoom() {
 						<TextField
 							required
 							id="firstname"
-							label="ชื่อผูู้เช่า"
+							label="ชื่อผู้เช่า"
 							value={firstname}
 							onChange={(evt) => setFirstName(evt.target.value)}
 						/>
